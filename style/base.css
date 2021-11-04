@@ -1,0 +1,14 @@
+
+.sticky-button.jp-Button.minimal .jp-Icon {
+  color: orange;
+}
+
+.sticky-container {
+  position: absolute;
+  right: 0px;
+  width: 200px;
+  height: 100px;
+  font-size: 2em;
+  font-weight: 600;
+  background-color: hsla(0, 0%, 0%, 0.07);
+}
