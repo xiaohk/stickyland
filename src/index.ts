@@ -17,30 +17,42 @@ export class ButtonExtension implements DocumentRegistry.IWidgetExtension<Notebo
       console.log('button clicked');
       console.log(panel);
       console.log(context);
-      // NotebookActions.runAll(panel.content, context.sessionContext);
-      console.log(panel.constructor.name);
-      console.log(panel.content);
 
-      let stickyContainer = document.createElement('div');
-      stickyContainer.innerHTML = 'StickyLand';
+      // Check if we have already created stickyland
+      let stickyContainer: HTMLElement | null = document.querySelector('.sticky-container');
 
-      // Put the stickyContainer below the toolbar
-      const toolbarHeight = parseFloat(panel.toolbar.node.style.height);
-      stickyContainer.style.top = `${toolbarHeight}px`;
+      // Create it if we don't have it yet
+      if (stickyContainer === null) {
+        stickyContainer = document.createElement('div');
+        stickyContainer.classList.add('sticky-container');
+        stickyContainer.classList.add('hidden');
 
-      stickyContainer.classList.add('sticky-container');
-      panel.node.append(stickyContainer);
+        stickyContainer.innerHTML = 'StickyLand';
+
+        // Put the stickyContainer below the toolbar
+        const toolbarHeight = parseFloat(panel.toolbar.node.style.height);
+        stickyContainer.style.top = `${toolbarHeight}px`;
+
+        panel.node.append(stickyContainer);
+      }
+
+      // Check if we should show or hide this container
+      if (stickyContainer!.classList.contains('hidden')) {
+        stickyContainer!.classList.remove('hidden');
+      } else {
+        stickyContainer!.classList.add('hidden');
+      }
     };
 
     let button = new ToolbarButton({
       className: 'sticky-button',
       iconClass: 'far fa-sticky-note',
       onClick: onClickHandler,
-      tooltip: 'Open StickyLand'
+      tooltip: 'Show/Hide StickyLand'
     });
 
     // const numItems = toArray(panel.toolbar.children()).length;
-    const insertIndex = 9;
+    const insertIndex = 10;
     panel.toolbar.insertItem(insertIndex, 'stickyLand', button);
 
     return new DisposableDelegate(() => {

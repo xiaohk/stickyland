@@ -12,3 +12,8 @@
   font-weight: 600;
   background-color: hsla(0, 0%, 0%, 0.07);
 }
+
+.hidden {
+  visibility: hidden;
+}
+
