@@ -2,6 +2,8 @@ include LICENSE
 include *.md
 include pyproject.toml
 
+exclude *.ipynb
+
 include package.json
 include install.json
 include ts*.json
