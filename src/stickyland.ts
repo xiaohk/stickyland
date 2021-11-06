@@ -30,51 +30,109 @@ export class StickyLand extends Widget {
 
     this.sticky.addEventListener(
       'lm-drop',
-      event => {
-        event.preventDefault();
-        event.stopPropagation();
-        console.log('drag drop!');
-        console.log(event);
-      },
+      e => this.dragDropHandler(e as IDragEvent),
       true
     );
 
     this.sticky.addEventListener(
       'lm-dragenter',
-      event => {
-        event.preventDefault();
-        event.stopPropagation();
-        console.log('drag enter!');
-        console.log(event);
-      },
+      e => this.dragEnterHandler(e as IDragEvent),
       true
     );
 
     this.sticky.addEventListener(
       'lm-dragover',
-      event => {
-        event.preventDefault();
-        event.stopPropagation();
-        console.log('drag over!');
-        console.log(event);
-      },
+      e => this.dragOverHandler(e as IDragEvent),
       true
     );
 
     this.sticky.addEventListener(
       'lm-dragleave',
-      event => {
-        event.preventDefault();
-        event.stopPropagation();
-        console.log('drag leave!');
-        console.log(event);
-      },
+      e => this.dragLeaveHandler(e as IDragEvent),
       true
     );
 
     this.sticky.innerHTML = 'StickyLand';
-
-    // let override = Drag.overrideCursor('wait');
-    //  override.dispose();
   }
+
+  /**
+   * Handle drag drop event
+   *
+   * ### Note
+   * https://jupyterlab.github.io/lumino/dragdrop/interfaces/idragevent.html
+   * We need to call preventDefault() to cancel (dispose) the event to have our
+   * own action
+   *
+   * @param event Lumino IDragEVent
+   */
+  dragDropHandler = (event: IDragEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    console.log('drag drop!');
+    console.log(event);
+  };
+
+  /**
+   * Handle drag enter event
+   *
+   * ### Note
+   * https://jupyterlab.github.io/lumino/dragdrop/interfaces/idragevent.html
+   * We need to call preventDefault() to cancel (dispose) the event to have our
+   * own action
+   *
+   * @param event Lumino IDragEVent
+   */
+  dragEnterHandler = (event: IDragEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // First need to change the cursor from no drop to copy
+    // We can use the overrideCursor method from drag
+    // this.override = Drag.overrideCursor('copy');
+    // console.log(this.override);
+
+    console.log('drag enter!');
+    console.log(event);
+  };
+
+  /**
+   * Handle drag over events
+   *
+   * ### Note
+   * https://jupyterlab.github.io/lumino/dragdrop/interfaces/idragevent.html
+   * We need to call preventDefault() to cancel (dispose) the event to have our
+   * own action
+   *
+   * @param event Lumino IDragEVent
+   */
+  dragOverHandler = (event: IDragEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Changer the cursor style (only way to change cursor style here)
+    // Lumino's drag's dispatch checks the `dropAction` field to call
+    // overrideCursor() internally
+    // https://jupyterlab.github.io/lumino/dragdrop/interfaces/idragevent.html
+    // https://github.com/jupyterlab/lumino/blob/e6612f622c827b2e85cffb1858fcc3bf1b09be76/packages/dragdrop/src/index.ts#L474
+    event.dropAction = 'copy';
+  };
+
+  /**
+   * Handle drag leave event
+   *
+   * ### Note
+   * https://jupyterlab.github.io/lumino/dragdrop/interfaces/idragevent.html
+   * We need to call preventDefault() to cancel (dispose) the event to have our
+   * own action
+   *
+   * @param event Lumino IDragEVent
+   */
+  dragLeaveHandler = (event: IDragEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    console.log('drag leave!');
+    console.log(event);
+  };
 }

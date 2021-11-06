@@ -46,7 +46,7 @@ export class ButtonExtension
 
         panel.node.append(stickyContainer);
 
-        let stickyland = new StickyLand(stickyContainer);
+        const stickyland = new StickyLand(stickyContainer);
       }
 
       // Check if we should show or hide this container
