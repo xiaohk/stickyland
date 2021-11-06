@@ -6,16 +6,16 @@ import { toArray } from '@lumino/algorithm';
 
 export class StickyTab extends Widget {
   stickyContainer: HTMLElement;
-  stickyTabNode: HTMLElement;
+  node: HTMLElement;
 
   constructor(stickyContainer: HTMLElement) {
     super();
     this.stickyContainer = stickyContainer;
 
     // Add the tab element
-    this.stickyTabNode = document.createElement('div');
-    this.stickyTabNode.classList.add('sticky-tab');
-    this.stickyContainer.append(this.stickyTabNode);
+    this.node = document.createElement('div');
+    this.node.classList.add('sticky-tab');
+    this.stickyContainer.append(this.node);
 
     // Initialize the tab
   }

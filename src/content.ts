@@ -6,9 +6,18 @@ import { toArray } from '@lumino/algorithm';
 
 import { Dropzone } from './dropzone';
 
+enum ContentType {
+  Dropzone,
+  Code,
+  Markdown,
+  TableOfContent
+}
+
 export class StickyContent extends Widget {
   stickyContainer: HTMLElement;
   node: HTMLElement;
+  curContentType: ContentType;
+  curContent: Dropzone;
 
   constructor(stickyContainer: HTMLElement) {
     super();
@@ -24,10 +33,27 @@ export class StickyContent extends Widget {
     // this.node.innerHTML = 'Sticky Content';
 
     // Show a dropzone at the first
-    const dropzone = new Dropzone(this);
+    this.curContent = new Dropzone(this);
+    this.curContentType = ContentType.Dropzone;
   }
 
+  /**
+   * Handle drag enter according to the current content type
+   * @param event Lumino IDragEvent
+   */
   dragEnterHandler(event: IDragEvent) {
-    console.log('content drag enter');
+    if (this.curContentType === ContentType.Dropzone) {
+      this.curContent.dragEnterHandler(event);
+    }
+  }
+
+  /**
+   * Handle drag leave according to the current content type
+   * @param event Lumino IDragEvent
+   */
+  dragLeaveHandler(event: IDragEvent) {
+    if (this.curContentType === ContentType.Dropzone) {
+      this.curContent.dragLeaveHandler(event);
+    }
   }
 }

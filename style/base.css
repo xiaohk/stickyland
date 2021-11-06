@@ -52,7 +52,7 @@
   width: 100%;
   margin: 10px;
   border: 3px dashed var(--md-grey-400);
-  border-radius: 3px;
+  border-radius: 12px;
   transition: border 300ms ease-in-out;
   flex-grow: 1;
 }

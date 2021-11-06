@@ -29,7 +29,21 @@ export class Dropzone extends Widget {
     this.node.append(label);
   }
 
+  /**
+   * Handle drag enter (highlight the border)
+   * @param event Lumino IDragEvent
+   */
   dragEnterHandler(event: IDragEvent) {
-    console.log('content drag enter');
+    // Highlight the border to indicate dragover
+    this.node.classList.add('drag-over');
+  }
+
+  /**
+   * Handle drag leave (dehighlight the border)
+   * @param event Lumino IDragEvent
+   */
+  dragLeaveHandler(event: IDragEvent) {
+    // Dehighlight the border to indicate dragover
+    this.node.classList.remove('drag-over');
   }
 }

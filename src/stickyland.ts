@@ -95,7 +95,7 @@ export class StickyLand extends Widget {
     this.stickyContent.dragEnterHandler(event);
 
     console.log('drag enter!');
-    console.log(event);
+    // console.log(event);
   };
 
   /**
@@ -134,7 +134,10 @@ export class StickyLand extends Widget {
     event.preventDefault();
     event.stopPropagation();
 
+    // Change the view of content
+    this.stickyContent.dragLeaveHandler(event);
+
     console.log('drag leave!');
-    console.log(event);
+    // console.log(event);
   };
 }
