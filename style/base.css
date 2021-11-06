@@ -5,17 +5,18 @@
 
 .sticky-container {
   position: absolute;
+  z-index: 5;
   right: 0px;
   width: 300px;
   height: 300px;
-  opacity: 0.5;
+  opacity: 0.9;
 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   overflow: hidden;
 
-  border: 1px solid var(--md-grey-400);
+  border: 1px solid var(--md-grey-300);
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 }
@@ -24,17 +25,55 @@
   visibility: hidden;
 }
 
+.svg-icon {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  height: 1em;
+  width: 1em;
+}
+
+.svg-icon svg {
+  height: 100%;
+  width: 100%;
+}
+
+.button {
+  background-color: hsl(0, 0%, 100%);
+  border: 1px solid hsl(0, 0%, 85.9%);
+color: var(--jp-ui-font-color0);
+  cursor: pointer;
+
+  padding: 0px 5px;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: .375em;
+  box-shadow: none;
+
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  font-size: 0.6em;
+}
+
+.button:hover {
+  border-color: hsl(0, 0%, 71%);
+  color: hsl(0, 0%, 21.2%);
+}
+
 .sticky-tab {
   height: 24px;
   width: 100%;
   display: flex;
-  background-color: var(--md-grey-600);
+  opacity: 1;
+  background-color: var(--md-grey-400);
 }
 
 .sticky-content {
   flex-grow: 1;
   width: 100%;
-  background-color: var(--md-grey-100);
+  background-color: var(--md-grey-50);
 
   display: flex;
   justify-content: center;
@@ -46,23 +85,78 @@
   font-weight: 400;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
   width: 100%;
   margin: 10px;
+  flex-grow: 1;
   border: 3px dashed var(--md-grey-400);
   border-radius: 12px;
   transition: border 300ms ease-in-out;
-  flex-grow: 1;
 }
 
 .dropzone.drag-over {
-  border: 3px dashed var(--md-blue-800);
+  border: 3px dashed var(--md-blue-400);
 }
 
 .dropzone .dropzone-label {
   text-align: center;
-  margin: 10px;
-  color: var(--md-grey-800)
+  margin: 10px 10px 30px 10px;
+  color: var(--md-grey-700);
+  /* Avoid triggering drag over */
+  pointer-events: none;
+}
+
+.dropzone .svg-icon {
+  width: 2em;
+  height: 2em;
+  fill: var(--md-grey-400);
+  pointer-events: none;
+}
+
+.dropzone-bottom-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.dropzone-bottom-container .button{
+  height: 22px;
+}
+
+.dropzone-select-container {
+  position: relative;
+}
+
+.dropzone-select-container span {
+  top: 0px;
+  right: 5px;
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Use a slightly modified select style from jupyter lab toolbar */
+.dropzone-select-container select {
+  background-color: hsl(0, 0%, 100%);
+  border: 1px solid hsl(0, 0%, 85.9%);
+  border-radius: 0.375em;
+  box-shadow: none;
+  color: var(--jp-ui-font-color0);
+  display: block;
+  font-size: var(--jp-ui-font-size1);
+  height: 24px;
+  line-height: 14px;
+  padding: 0 25px 0 10px;
+  text-align: left;
+  cursor: pointer;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+.dropzone-select-container select:hover {
+  border-color: hsl(0, 0%, 71%);
+  color: hsl(0, 0%, 21.2%);
 }

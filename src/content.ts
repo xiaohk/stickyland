@@ -6,7 +6,7 @@ import { toArray } from '@lumino/algorithm';
 
 import { Dropzone } from './dropzone';
 
-enum ContentType {
+export enum ContentType {
   Dropzone,
   Code,
   Markdown,
