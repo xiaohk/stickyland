@@ -6,7 +6,7 @@ import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { toArray } from '@lumino/algorithm';
 import { StickyContent, ContentType } from './content';
 
-import iconAdd from './img/icon-add.svg';
+import iconAdd from '../style/img/icon-add.svg';
 
 /**
  * Class that implements the Dropzone state where the StickyContent is empty
