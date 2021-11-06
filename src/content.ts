@@ -4,9 +4,11 @@ import { Drag, IDragEvent } from '@lumino/dragdrop';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { toArray } from '@lumino/algorithm';
 
+import { Dropzone } from './dropzone';
+
 export class StickyContent extends Widget {
   stickyContainer: HTMLElement;
-  stickyContentNode: HTMLElement;
+  node: HTMLElement;
 
   constructor(stickyContainer: HTMLElement) {
     super();
@@ -14,12 +16,18 @@ export class StickyContent extends Widget {
 
     // Add the content element
     console.log('init content!');
-    this.stickyContentNode = document.createElement('div');
-    this.stickyContentNode.classList.add('sticky-content');
-    this.stickyContainer.append(this.stickyContentNode);
+    this.node = document.createElement('div');
+    this.node.classList.add('sticky-content');
+    this.stickyContainer.append(this.node);
 
     // Initialize the content
-    this.stickyContentNode.innerHTML = 'Sticky Content';
+    // this.node.innerHTML = 'Sticky Content';
+
+    // Show a dropzone at the first
+    const dropzone = new Dropzone(this);
   }
 
+  dragEnterHandler(event: IDragEvent) {
+    console.log('content drag enter');
+  }
 }

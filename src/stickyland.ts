@@ -34,29 +34,29 @@ export class StickyLand extends Widget {
     this.stickyContent = new StickyContent(this.stickyContainer);
 
     // Register the drag-and-drop events
-    // this.sticky.addEventListener(
-    //   'lm-drop',
-    //   e => this.dragDropHandler(e as IDragEvent),
-    //   true
-    // );
+    this.stickyContainer.addEventListener(
+      'lm-drop',
+      e => this.dragDropHandler(e as IDragEvent),
+      true
+    );
 
-    // this.sticky.addEventListener(
-    //   'lm-dragenter',
-    //   e => this.dragEnterHandler(e as IDragEvent),
-    //   true
-    // );
+    this.stickyContainer.addEventListener(
+      'lm-dragenter',
+      e => this.dragEnterHandler(e as IDragEvent),
+      true
+    );
 
-    // this.sticky.addEventListener(
-    //   'lm-dragover',
-    //   e => this.dragOverHandler(e as IDragEvent),
-    //   true
-    // );
+    this.stickyContainer.addEventListener(
+      'lm-dragover',
+      e => this.dragOverHandler(e as IDragEvent),
+      true
+    );
 
-    // this.sticky.addEventListener(
-    //   'lm-dragleave',
-    //   e => this.dragLeaveHandler(e as IDragEvent),
-    //   true
-    // );
+    this.stickyContainer.addEventListener(
+      'lm-dragleave',
+      e => this.dragLeaveHandler(e as IDragEvent),
+      true
+    );
   }
 
   /**
@@ -91,10 +91,8 @@ export class StickyLand extends Widget {
     event.preventDefault();
     event.stopPropagation();
 
-    // First need to change the cursor from no drop to copy
-    // We can use the overrideCursor method from drag
-    // this.override = Drag.overrideCursor('copy');
-    // console.log(this.override);
+    // Change the view of content
+    this.stickyContent.dragEnterHandler(event);
 
     console.log('drag enter!');
     console.log(event);
