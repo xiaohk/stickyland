@@ -15,44 +15,48 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { toArray } from '@lumino/algorithm';
 
+import { StickyTab } from './tab';
+import { StickyContent } from './content';
+
 export class StickyLand extends Widget {
   stickyContainer: HTMLElement;
-  sticky: HTMLElement;
+  stickyTab: StickyTab;
+  stickyContent: StickyContent;
 
   constructor(stickyContainer: HTMLElement) {
     super();
     this.stickyContainer = stickyContainer;
 
-    // Add a child element
-    this.sticky = document.createElement('div');
-    this.sticky.classList.add('sticky-panel');
-    this.stickyContainer.append(this.sticky);
+    // Add the tab element
+    this.stickyTab = new StickyTab(this.stickyContainer);
 
-    this.sticky.addEventListener(
-      'lm-drop',
-      e => this.dragDropHandler(e as IDragEvent),
-      true
-    );
+    // Add the content element (the content can be different cells)
+    this.stickyContent = new StickyContent(this.stickyContainer);
 
-    this.sticky.addEventListener(
-      'lm-dragenter',
-      e => this.dragEnterHandler(e as IDragEvent),
-      true
-    );
+    // Register the drag-and-drop events
+    // this.sticky.addEventListener(
+    //   'lm-drop',
+    //   e => this.dragDropHandler(e as IDragEvent),
+    //   true
+    // );
 
-    this.sticky.addEventListener(
-      'lm-dragover',
-      e => this.dragOverHandler(e as IDragEvent),
-      true
-    );
+    // this.sticky.addEventListener(
+    //   'lm-dragenter',
+    //   e => this.dragEnterHandler(e as IDragEvent),
+    //   true
+    // );
 
-    this.sticky.addEventListener(
-      'lm-dragleave',
-      e => this.dragLeaveHandler(e as IDragEvent),
-      true
-    );
+    // this.sticky.addEventListener(
+    //   'lm-dragover',
+    //   e => this.dragOverHandler(e as IDragEvent),
+    //   true
+    // );
 
-    this.sticky.innerHTML = 'StickyLand';
+    // this.sticky.addEventListener(
+    //   'lm-dragleave',
+    //   e => this.dragLeaveHandler(e as IDragEvent),
+    //   true
+    // );
   }
 
   /**
