@@ -3,6 +3,7 @@ import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { Drag, IDragEvent } from '@lumino/dragdrop';
 import { LabIcon, caretDownEmptyIcon } from '@jupyterlab/ui-components';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
+import { CodeCell, MarkdownCell, Cell } from '@jupyterlab/cells';
 import { toArray } from '@lumino/algorithm';
 import { StickyContent, ContentType } from './content';
 
@@ -15,10 +16,12 @@ import iconAdd from '../style/img/icon-add.svg';
 export class Dropzone extends Widget {
   stickyContent: StickyContent;
   node: HTMLElement;
+  doseReceiveDrop: Boolean;
 
   constructor(stickyContent: StickyContent) {
     super();
     this.stickyContent = stickyContent;
+    this.doseReceiveDrop = true;
 
     // Add a dropzone element (providing feedback of drag-and-drop)
     this.node = document.createElement('div');
@@ -96,7 +99,47 @@ export class Dropzone extends Widget {
    */
   dragEnterHandler(event: IDragEvent) {
     // Highlight the border to indicate dragover
-    this.node.classList.add('drag-over');
+    if (this.doseReceiveDrop) {
+      this.node.classList.add('drag-over');
+    }
+  }
+
+  /**
+   * Handle drag over (highlight the border)
+   * @param event Lumino IDragEvent
+   */
+  dragOverHandler(event: IDragEvent) {
+    // Highlight the border to indicate dragover
+    if (this.doseReceiveDrop) {
+      this.node.classList.add('drag-over');
+    }
+  }
+
+  /**
+   * Handle drag drop (highlight the border)
+   * @param event Lumino IDragEvent
+   */
+  dragDropHandler(event: IDragEvent) {
+    console.log('drop to dropzone');
+    console.log(event);
+
+    // Dehighlight the view
+    this.node.classList.remove('drag-over');
+    this.doseReceiveDrop = false;
+
+    // Query the notebook information
+    const notebook = event.source.parent as NotebookPanel;
+    let cell: Cell;
+
+    if (event.source.activeCell instanceof MarkdownCell) {
+      cell = notebook.content.activeCell as MarkdownCell;
+    } else {
+      cell = notebook.content.activeCell as CodeCell;
+    }
+
+    const clone = cell.clone();
+
+    // TODO: Need to find a way to put the cell widget into stickyland
   }
 
   /**

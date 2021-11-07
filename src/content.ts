@@ -48,6 +48,26 @@ export class StickyContent extends Widget {
   }
 
   /**
+   * Handle drag over according to the current content type
+   * @param event Lumino IDragEvent
+   */
+  dragOverHandler(event: IDragEvent) {
+    if (this.curContentType === ContentType.Dropzone) {
+      this.curContent.dragOverHandler(event);
+    }
+  }
+
+  /**
+   * Handle drop leave according to the current content type
+   * @param event Lumino IDragEvent
+   */
+  dragDropHandler(event: IDragEvent) {
+    if (this.curContentType === ContentType.Dropzone) {
+      this.curContent.dragDropHandler(event);
+    }
+  }
+
+  /**
    * Handle drag leave according to the current content type
    * @param event Lumino IDragEvent
    */

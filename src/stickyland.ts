@@ -73,8 +73,8 @@ export class StickyLand extends Widget {
     event.preventDefault();
     event.stopPropagation();
 
-    console.log('drag drop!');
-    console.log(event);
+    // Let the content handle drag drop
+    this.stickyContent.dragDropHandler(event);
   };
 
   /**
@@ -93,9 +93,6 @@ export class StickyLand extends Widget {
 
     // Change the view of content
     this.stickyContent.dragEnterHandler(event);
-
-    console.log('drag enter!');
-    // console.log(event);
   };
 
   /**
@@ -118,6 +115,9 @@ export class StickyLand extends Widget {
     // https://jupyterlab.github.io/lumino/dragdrop/interfaces/idragevent.html
     // https://github.com/jupyterlab/lumino/blob/e6612f622c827b2e85cffb1858fcc3bf1b09be76/packages/dragdrop/src/index.ts#L474
     event.dropAction = 'copy';
+
+    // Change the view of content
+    this.stickyContent.dragOverHandler(event);
   };
 
   /**
@@ -136,8 +136,5 @@ export class StickyLand extends Widget {
 
     // Change the view of content
     this.stickyContent.dragLeaveHandler(event);
-
-    console.log('drag leave!');
-    // console.log(event);
   };
 }

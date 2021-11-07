@@ -39,9 +39,9 @@
 }
 
 .button {
-  background-color: hsl(0, 0%, 100%);
   border: 1px solid hsl(0, 0%, 85.9%);
-color: var(--jp-ui-font-color0);
+  color: var(--jp-ui-font-color0);
+  background-color: white;
   cursor: pointer;
 
   padding: 0px 5px;
@@ -59,11 +59,15 @@ color: var(--jp-ui-font-color0);
 
 .button:hover {
   border-color: hsl(0, 0%, 71%);
-  color: hsl(0, 0%, 21.2%);
+}
+
+.button:active {
+  border-color: hsl(0, 0%, 40%);
+  background-color: var(--md-grey-100);
 }
 
 .sticky-tab {
-  height: 24px;
+  height: 28px;
   width: 100%;
   display: flex;
   opacity: 1;
@@ -140,7 +144,7 @@ color: var(--jp-ui-font-color0);
 
 /* Use a slightly modified select style from jupyter lab toolbar */
 .dropzone-select-container select {
-  background-color: hsl(0, 0%, 100%);
+  background-color: white;
   border: 1px solid hsl(0, 0%, 85.9%);
   border-radius: 0.375em;
   box-shadow: none;
@@ -158,5 +162,9 @@ color: var(--jp-ui-font-color0);
 
 .dropzone-select-container select:hover {
   border-color: hsl(0, 0%, 71%);
-  color: hsl(0, 0%, 21.2%);
+}
+
+.dropzone-select-container select:active {
+  background-color: var(--md-grey-100);
+  border-color: hsl(0, 0%, 40%);
 }
