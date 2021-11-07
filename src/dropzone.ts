@@ -16,7 +16,7 @@ import iconAdd from '../style/img/icon-add.svg';
 export class Dropzone extends Widget {
   stickyContent: StickyContent;
   node: HTMLElement;
-  doseReceiveDrop: Boolean;
+  doseReceiveDrop: boolean;
 
   constructor(stickyContent: StickyContent) {
     super();

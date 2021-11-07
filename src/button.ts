@@ -7,7 +7,7 @@ import {
   MainAreaWidget,
   ToolbarButton
 } from '@jupyterlab/apputils';
-import { Widget } from '@lumino/widgets';
+import { Widget, BoxLayout } from '@lumino/widgets';
 import { Message } from '@lumino/messaging';
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
@@ -18,6 +18,12 @@ import { StickyLand } from './stickyland';
 export class ButtonExtension
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
 {
+  stickyLand: StickyLand | null;
+
+  constructor() {
+    this.stickyLand = null;
+  }
+
   createNew(
     panel: NotebookPanel,
     context: DocumentRegistry.IContext<INotebookModel>
@@ -26,35 +32,27 @@ export class ButtonExtension
      * Handler for the click event.
      */
     const onClickHandler = () => {
-      console.log('button clicked, yo!');
       console.log(panel);
       console.log(context);
 
       // Check if we have already created stickyland
-      let stickyContainer: HTMLElement | null =
-        document.querySelector('.sticky-container');
 
       // Create it if we don't have it yet
-      if (stickyContainer === null) {
-        stickyContainer = document.createElement('div');
-        stickyContainer.classList.add('sticky-container');
-        stickyContainer.classList.add('hidden');
-
-        // Put the stickyContainer below the toolbar
-        const toolbarHeight = parseFloat(panel.toolbar.node.style.height);
-        stickyContainer.style.top = `${toolbarHeight}px`;
-
-        panel.node.append(stickyContainer);
-
-        const stickyland = new StickyLand(stickyContainer);
+      if (this.stickyLand === null) {
+        this.stickyLand = new StickyLand(panel);
       }
 
       // Check if we should show or hide this container
-      if (stickyContainer?.classList.contains('hidden')) {
-        stickyContainer?.classList.remove('hidden');
+      if (this.stickyLand.isHidden()) {
+        this.stickyLand.show();
       } else {
-        stickyContainer?.classList.add('hidden');
+        this.stickyLand.hide();
       }
+
+      // Alternative way to insert StickyLand to the notebook widget (boxLayout)
+      // const stickyLand = new StickyLand();
+      // const panelLayout = panel.layout as BoxLayout;
+      // panelLayout.addWidget(stickyLand);
     };
 
     const button = new ToolbarButton({
