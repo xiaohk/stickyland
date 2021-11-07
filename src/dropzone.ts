@@ -13,13 +13,13 @@ import iconAdd from '../style/img/icon-add.svg';
  * Class that implements the Dropzone state where the StickyContent is empty
  * and waiting for users to drop some cells.
  */
-export class Dropzone extends Widget {
+export class Dropzone implements IDisposable {
   stickyContent: StickyContent;
   node: HTMLElement;
   doseReceiveDrop: boolean;
+  isDisposed = false;
 
   constructor(stickyContent: StickyContent) {
-    super();
     this.stickyContent = stickyContent;
     this.doseReceiveDrop = true;
 
@@ -93,6 +93,11 @@ export class Dropzone extends Widget {
     });
   }
 
+  dispose() {
+    this.node.remove();
+    this.isDisposed = true;
+  }
+
   /**
    * Handle drag enter (highlight the border)
    * @param event Lumino IDragEvent
@@ -139,7 +144,13 @@ export class Dropzone extends Widget {
 
     const clone = cell.clone();
 
-    // TODO: Need to find a way to put the cell widget into stickyland
+    // Create a new tab and populate it with the corresponding cell
+    // Swap the dropzone with the new tab
+
+    // TODO: Temp: only handle md cell
+    if (cell instanceof MarkdownCell) {
+      this.stickyContent.swapOutDropZone(clone, ContentType.Markdown, notebook);
+    }
   }
 
   /**

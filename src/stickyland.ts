@@ -38,7 +38,7 @@ export class StickyLand {
     this.stickyTab = new StickyTab(this.node);
 
     // Add the content element (the content can be different cells)
-    this.stickyContent = new StickyContent(this.node);
+    this.stickyContent = new StickyContent(this.node, panel);
 
     // Register the drag-and-drop events
     this.node.addEventListener(

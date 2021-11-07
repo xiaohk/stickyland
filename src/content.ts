@@ -1,10 +1,12 @@
-import { Widget } from '@lumino/widgets';
+import { Widget, SingletonLayout } from '@lumino/widgets';
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { Drag, IDragEvent } from '@lumino/dragdrop';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
+import { CodeCell, MarkdownCell, Cell } from '@jupyterlab/cells';
 import { toArray } from '@lumino/algorithm';
 
 import { Dropzone } from './dropzone';
+import { StickyMarkdown } from './markdown';
 
 export enum ContentType {
   Dropzone,
@@ -16,12 +18,13 @@ export enum ContentType {
 export class StickyContent extends Widget {
   stickyContainer: HTMLElement;
   node: HTMLElement;
-  curContentType: ContentType;
-  curContent: Dropzone;
+  curContent: Dropzone | StickyMarkdown;
+  panel: NotebookPanel;
 
-  constructor(stickyContainer: HTMLElement) {
+  constructor(stickyContainer: HTMLElement, panel: NotebookPanel) {
     super();
     this.stickyContainer = stickyContainer;
+    this.panel = panel;
 
     // Add the content element
     console.log('init content!');
@@ -29,12 +32,26 @@ export class StickyContent extends Widget {
     this.node.classList.add('sticky-content');
     this.stickyContainer.append(this.node);
 
-    // Initialize the content
-    // this.node.innerHTML = 'Sticky Content';
-
-    // Show a dropzone at the first
+    // Show a dropzone at first
     this.curContent = new Dropzone(this);
-    this.curContentType = ContentType.Dropzone;
+  }
+
+  swapOutDropZone(
+    cell: Cell,
+    newCellType: ContentType,
+    notebook: NotebookPanel
+  ) {
+    if (newCellType === ContentType.Markdown) {
+      // Remove the dropzone
+      this.curContent.dispose();
+
+      // Initialize a markdown cell
+      this.curContent = new StickyMarkdown(
+        this,
+        cell as MarkdownCell,
+        notebook
+      );
+    }
   }
 
   /**
@@ -42,7 +59,7 @@ export class StickyContent extends Widget {
    * @param event Lumino IDragEvent
    */
   dragEnterHandler(event: IDragEvent) {
-    if (this.curContentType === ContentType.Dropzone) {
+    if (this.curContent instanceof Dropzone) {
       this.curContent.dragEnterHandler(event);
     }
   }
@@ -52,7 +69,7 @@ export class StickyContent extends Widget {
    * @param event Lumino IDragEvent
    */
   dragOverHandler(event: IDragEvent) {
-    if (this.curContentType === ContentType.Dropzone) {
+    if (this.curContent instanceof Dropzone) {
       this.curContent.dragOverHandler(event);
     }
   }
@@ -62,7 +79,7 @@ export class StickyContent extends Widget {
    * @param event Lumino IDragEvent
    */
   dragDropHandler(event: IDragEvent) {
-    if (this.curContentType === ContentType.Dropzone) {
+    if (this.curContent instanceof Dropzone) {
       this.curContent.dragDropHandler(event);
     }
   }
@@ -72,7 +89,7 @@ export class StickyContent extends Widget {
    * @param event Lumino IDragEvent
    */
   dragLeaveHandler(event: IDragEvent) {
-    if (this.curContentType === ContentType.Dropzone) {
+    if (this.curContent instanceof Dropzone) {
       this.curContent.dragLeaveHandler(event);
     }
   }
