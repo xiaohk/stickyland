@@ -20,6 +20,7 @@ import { StickyContent, ContentType } from './content';
 export class StickyMarkdown implements IDisposable {
   stickyContent: StickyContent;
   node: HTMLElement;
+  cellNode: HTMLElement;
   cell: MarkdownCell;
   notebook: NotebookPanel;
   isDisposed = false;
@@ -75,20 +76,46 @@ export class StickyMarkdown implements IDisposable {
     ];
     const toolbar = this.createToolbar(toolBarItems);
     this.stickyContent.headerNode.appendChild(toolbar);
+
+    // Clean the markdown cell
+    // Need to append the node to DOM first so we can do the cleaning
+    this.cellNode = this.cell.node;
+    this.cellNode.classList.add('hidden');
+    this.node.appendChild(this.cellNode);
+
+    this.cleanCellClone();
   }
+
+  cleanCellClone = () => {
+    // Remove the left region (prompt and collapser), header and footer
+    console.log(this.cellNode);
+    console.log(this.cellNode.querySelector('.jp-Cell-inputCollapser'));
+    this.cellNode.querySelector('.jp-Cell-inputCollapser')?.remove();
+    this.cellNode.querySelector('.jp-InputArea-prompt')?.remove();
+    this.cellNode.querySelector('.jp-CellHeader')?.remove();
+    this.cellNode.querySelector('.jp-CellFooter')?.remove();
+
+    // Add class name to the rendered region
+    this.cellNode
+      .querySelector('.jp-MarkdownOutput')
+      ?.classList.add('sticky-md-output');
+
+    this.cellNode.classList.add('sticky-md-cell');
+    this.cellNode.classList.remove('hidden');
+  };
 
   /**
    * Create a toolbar element
    * @param items List of toolbar item names and onclick handlers
    */
-  createToolbar(
+  createToolbar = (
     items: {
       name: string;
       title: string;
       icon: LabIcon;
       onClick: (e: Event) => any;
     }[]
-  ): HTMLElement {
+  ): HTMLElement => {
     const toolbar = document.createElement('div');
     toolbar.classList.add('sticky-toolbar', 'jp-Toolbar');
 
@@ -123,7 +150,7 @@ export class StickyMarkdown implements IDisposable {
     });
 
     return toolbar;
-  }
+  };
 
   editClicked = (event: Event) => {
     event.preventDefault();
@@ -136,27 +163,25 @@ export class StickyMarkdown implements IDisposable {
     event.preventDefault();
     event.stopPropagation();
 
-    this.node.appendChild(this.cell.node);
-
-    // this.cell.inputArea.showEditor();
+    this.cell.inputArea.showEditor();
     console.log(this.cell.inputArea);
 
     console.log('Run clicked!');
   };
 
-  launchClicked(event: Event) {
+  launchClicked = (event: Event) => {
     event.preventDefault();
     event.stopPropagation();
 
     console.log('Launch clicked!');
-  }
+  };
 
-  closeClicked(event: Event) {
+  closeClicked = (event: Event) => {
     event.preventDefault();
     event.stopPropagation();
 
     console.log('Close clicked!');
-  }
+  };
 
   dispose() {
     this.node.remove();

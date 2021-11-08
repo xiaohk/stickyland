@@ -3,3 +3,11 @@
   flex-direction: column;
   width: 100%;
 }
+
+.sticky-md-cell {
+  overflow: auto;
+}
+
+.sticky-md-output {
+  padding: 0 8px;
+}
