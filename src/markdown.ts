@@ -33,10 +33,12 @@ export class StickyMarkdown implements IDisposable {
     this.cell = cell;
     this.notebook = notebook;
 
+    console.log(this.cell);
+
     // Add a dropzone element (providing feedback of drag-and-drop)
     this.node = document.createElement('div');
     this.node.classList.add('sticky-md');
-    this.stickyContent.node.append(this.node);
+    this.stickyContent.contentNode.appendChild(this.node);
 
     console.log(notebook.model);
 
@@ -72,13 +74,7 @@ export class StickyMarkdown implements IDisposable {
       }
     ];
     const toolbar = this.createToolbar(toolBarItems);
-    this.node.appendChild(toolbar);
-
-    // Add a text label
-    const label = document.createElement('span');
-    label.classList.add('md-label');
-    label.innerHTML = 'markdown cell';
-    this.node.appendChild(label);
+    this.stickyContent.headerNode.appendChild(toolbar);
   }
 
   /**
@@ -129,19 +125,24 @@ export class StickyMarkdown implements IDisposable {
     return toolbar;
   }
 
-  editClicked(event: Event) {
+  editClicked = (event: Event) => {
     event.preventDefault();
     event.stopPropagation();
 
     console.log('Edit clicked!');
-  }
+  };
 
-  runClicked(event: Event) {
+  runClicked = (event: Event) => {
     event.preventDefault();
     event.stopPropagation();
 
+    this.node.appendChild(this.cell.node);
+
+    // this.cell.inputArea.showEditor();
+    console.log(this.cell.inputArea);
+
     console.log('Run clicked!');
-  }
+  };
 
   launchClicked(event: Event) {
     event.preventDefault();

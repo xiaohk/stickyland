@@ -15,22 +15,32 @@ export enum ContentType {
   TableOfContent
 }
 
-export class StickyContent extends Widget {
+export class StickyContent {
   stickyContainer: HTMLElement;
-  node: HTMLElement;
+  wrapperNode: HTMLElement;
+  headerNode: HTMLElement;
+  contentNode: HTMLElement;
   curContent: Dropzone | StickyMarkdown;
   panel: NotebookPanel;
 
   constructor(stickyContainer: HTMLElement, panel: NotebookPanel) {
-    super();
     this.stickyContainer = stickyContainer;
     this.panel = panel;
 
     // Add the content element
     console.log('init content!');
-    this.node = document.createElement('div');
-    this.node.classList.add('sticky-content');
-    this.stickyContainer.append(this.node);
+    this.wrapperNode = document.createElement('div');
+    this.wrapperNode.classList.add('sticky-content');
+    this.stickyContainer.appendChild(this.wrapperNode);
+
+    // Add a header and a content
+    this.headerNode = document.createElement('div');
+    this.headerNode.classList.add('header');
+    this.wrapperNode.appendChild(this.headerNode);
+
+    this.contentNode = document.createElement('div');
+    this.contentNode.classList.add('content');
+    this.wrapperNode.appendChild(this.contentNode);
 
     // Show a dropzone at first
     this.curContent = new Dropzone(this);

@@ -26,7 +26,7 @@ export class Dropzone implements IDisposable {
     // Add a dropzone element (providing feedback of drag-and-drop)
     this.node = document.createElement('div');
     this.node.classList.add('dropzone');
-    this.stickyContent.node.append(this.node);
+    this.stickyContent.contentNode.append(this.node);
 
     // Initialize the content
 
