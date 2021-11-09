@@ -16,9 +16,11 @@
   align-items: flex-start;
   overflow: hidden;
 
-  border: 1px solid var(--md-grey-300);
+  /* border: 1px solid var(--md-grey-300); */
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
+
+  box-shadow: -1px 1px 3px hsla(0, 0%, 0%, 0.15), -1px 1px 20px hsla(0, 0%, 0%, 0.1);
 }
 
 .hidden {
@@ -72,7 +74,7 @@
   display: flex;
   opacity: 1;
   background-color: var(--md-grey-400);
-  border-top-left-radius: 5px;
+  /* border-top-left-radius: 5px; */
 }
 
 .sticky-content {
@@ -92,11 +94,16 @@
 .sticky-content .content {
   flex-grow: 1;
   width: 100%;
-  background-color: var(--md-grey-50);
-  border-bottom-left-radius: 5px;
+  background-color: white;
+  padding-bottom: 5px;
+  /* border-bottom-left-radius: 5px; */
 
   display: flex;
   justify-content: center;
   align-items: stretch;
   overflow: scroll;
+}
+
+.sticky-content .CodeMirror.cm-s-jupyter {
+  background: transparent;
 }

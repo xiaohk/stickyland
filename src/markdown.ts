@@ -10,6 +10,7 @@ import {
 } from '@jupyterlab/ui-components';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { CodeCell, MarkdownCell, Cell } from '@jupyterlab/cells';
+import { ICodeMirror } from '@jupyterlab/codemirror';
 import { toArray } from '@lumino/algorithm';
 import { StickyContent, ContentType } from './content';
 
@@ -23,6 +24,7 @@ export class StickyMarkdown implements IDisposable {
   cellNode: HTMLElement;
   cell: MarkdownCell;
   notebook: NotebookPanel;
+  iCodeMirror: ICodeMirror;
   isDisposed = false;
 
   constructor(
@@ -82,6 +84,14 @@ export class StickyMarkdown implements IDisposable {
     this.cellNode = this.cell.node;
     this.cellNode.classList.add('hidden');
     this.node.appendChild(this.cellNode);
+
+    // Bind the Codemirror
+    const codeMirrorNode = this.cell.node.querySelector(
+      '.CodeMirror'
+    ) as unknown;
+    this.iCodeMirror = codeMirrorNode as ICodeMirror;
+
+    console.log(this.iCodeMirror.CodeMirror);
 
     this.cleanCellClone();
   }
@@ -156,6 +166,10 @@ export class StickyMarkdown implements IDisposable {
     event.preventDefault();
     event.stopPropagation();
 
+    // Show the editing area
+    this.cell.rendered = false;
+    console.log(this.cell.inputArea);
+
     console.log('Edit clicked!');
   };
 
@@ -163,8 +177,10 @@ export class StickyMarkdown implements IDisposable {
     event.preventDefault();
     event.stopPropagation();
 
-    this.cell.inputArea.showEditor();
-    console.log(this.cell.inputArea);
+    console.log(this.cell.editorWidget.node);
+    this.cell.editorWidget.node.scrollIntoView(false);
+
+    console.log(this.cell.editor.getCursorPosition());
 
     console.log('Run clicked!');
   };
@@ -173,6 +189,13 @@ export class StickyMarkdown implements IDisposable {
     event.preventDefault();
     event.stopPropagation();
 
+    // this.cell.editor.revealPosition(this.cell.editor.getCursorPosition());
+    console.log(
+      this.cell.editor.getCoordinateForPosition(
+        this.cell.editor.getCursorPosition()
+      )
+    );
+    console.log(this.cell.editorWidget.node.offsetHeight);
     console.log('Launch clicked!');
   };
 
