@@ -8,7 +8,12 @@ import {
   launcherIcon,
   closeIcon
 } from '@jupyterlab/ui-components';
-import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
+import {
+  NotebookPanel,
+  INotebookModel,
+  INotebookTracker,
+  NotebookActions
+} from '@jupyterlab/notebook';
 import { CodeCell, MarkdownCell, Cell } from '@jupyterlab/cells';
 import { ICodeMirror } from '@jupyterlab/codemirror';
 import CodeMirror from 'codemirror';
@@ -44,7 +49,6 @@ export class StickyMarkdown implements IDisposable {
   ): StickyMarkdown {
     const md = new StickyMarkdown();
     md.stickyContent = stickyContent;
-    md.cell = cell;
     md.notebook = notebook;
 
     // Clone the cell
@@ -93,6 +97,30 @@ export class StickyMarkdown implements IDisposable {
     md.cleanCellClone();
 
     return md;
+  }
+
+  /**
+   * Factory function for StickyMarkdown when creating if from a new markdown
+   * cell. This function would append a new markdown cell to the main notebook.
+   * @param stickyContent The sticky content that contains this markdown cell
+   * @param notebook The current notebook
+   * @returns A new StickyMarkdown object
+   */
+  static createFromNewCell(
+    stickyContent: StickyContent,
+    notebook: NotebookPanel
+  ): StickyMarkdown {
+    // Append a new markdown cell to the main notebook
+    NotebookActions.insertBelow(notebook.content);
+    NotebookActions.changeCellType(notebook.content, 'markdown');
+
+    const newCell = notebook.content.activeCell as MarkdownCell;
+
+    // Activate the original active cell
+    notebook.content.activeCellIndex = notebook.content.activeCellIndex - 1;
+
+    // Construct StickyMarkdown using the new cell as an existing cell
+    return this.createFromExistingCell(stickyContent, newCell, notebook);
   }
 
   /**

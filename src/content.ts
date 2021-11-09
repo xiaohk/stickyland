@@ -9,10 +9,10 @@ import { Dropzone } from './dropzone';
 import { StickyMarkdown } from './markdown';
 
 export enum ContentType {
-  Dropzone,
-  Code,
-  Markdown,
-  TableOfContent
+  Dropzone = 'Dropzone',
+  Code = 'Code',
+  Markdown = 'Markdown',
+  TableOfContent = 'TableOfContent'
 }
 
 export class StickyContent {
@@ -21,11 +21,11 @@ export class StickyContent {
   headerNode: HTMLElement;
   contentNode: HTMLElement;
   curContent: Dropzone | StickyMarkdown;
-  panel: NotebookPanel;
+  notebook: NotebookPanel;
 
   constructor(stickyContainer: HTMLElement, panel: NotebookPanel) {
     this.stickyContainer = stickyContainer;
-    this.panel = panel;
+    this.notebook = panel;
 
     // Add the content element
     console.log('init content!');
@@ -46,11 +46,12 @@ export class StickyContent {
     this.curContent = new Dropzone(this);
   }
 
-  swapOutDropZone(
-    cell: Cell,
-    newCellType: ContentType,
-    notebook: NotebookPanel
-  ) {
+  /**
+   * Replace the dropzone content with a clone of an existing cell
+   * @param cell Existing cell that the users drag over
+   * @param newCellType Cell type of the current cell
+   */
+  swapDropzoneWithExistingCell(cell: Cell, newCellType: ContentType) {
     if (newCellType === ContentType.Markdown) {
       // Remove the dropzone
       this.curContent.dispose();
@@ -59,8 +60,23 @@ export class StickyContent {
       this.curContent = StickyMarkdown.createFromExistingCell(
         this,
         cell as MarkdownCell,
-        notebook
+        this.notebook
       );
+    }
+  }
+
+  /**
+   * Replace the dropzone content with a new cell. This operation will append a
+   * new cell to the main notebook.
+   * @param newCellType New cell type
+   */
+  swapDropzoneWithNewCell(newCellType: ContentType) {
+    if (newCellType === ContentType.Markdown) {
+      // Remove the dropzone
+      this.curContent.dispose();
+
+      // Initialize a markdown cell
+      this.curContent = StickyMarkdown.createFromNewCell(this, this.notebook);
     }
   }
 

@@ -18,6 +18,8 @@ export class Dropzone implements IDisposable {
   node: HTMLElement;
   doseReceiveDrop: boolean;
   isDisposed = false;
+  select: HTMLSelectElement;
+  selectButton: HTMLButtonElement;
 
   constructor(stickyContent: StickyContent) {
     this.stickyContent = stickyContent;
@@ -60,9 +62,9 @@ export class Dropzone implements IDisposable {
     selectContainer.classList.add('dropzone-select-container');
     bottomContainer.append(selectContainer);
 
-    const select = document.createElement('select');
-    select.classList.add('dropzone-select');
-    selectContainer.append(select);
+    this.select = document.createElement('select') as HTMLSelectElement;
+    this.select.classList.add('dropzone-select');
+    selectContainer.append(this.select);
 
     // Add a small caret down icon (from jp)
     const selectIcon = document.createElement('span');
@@ -71,11 +73,12 @@ export class Dropzone implements IDisposable {
       container: selectIcon
     });
 
-    const selectButton = document.createElement('button');
-    selectButton.classList.add('dropzone-button', 'button');
-    bottomContainer.append(selectButton);
-    selectButton.type = 'button';
-    selectButton.innerText = 'Create';
+    this.selectButton = document.createElement('button') as HTMLButtonElement;
+    this.selectButton.classList.add('dropzone-button', 'button');
+    bottomContainer.append(this.selectButton);
+    this.selectButton.type = 'button';
+    this.selectButton.innerText = 'Create';
+    this.selectButton.addEventListener('click', this.createClickHandler);
 
     // Add options to the select list
     const newCellOptions = [
@@ -89,7 +92,7 @@ export class Dropzone implements IDisposable {
       const option = document.createElement('option');
       option.value = ContentType[o.type];
       option.innerText = o.name;
-      select.append(option);
+      this.select.append(option);
     });
   }
 
@@ -102,29 +105,29 @@ export class Dropzone implements IDisposable {
    * Handle drag enter (highlight the border)
    * @param event Lumino IDragEvent
    */
-  dragEnterHandler(event: IDragEvent) {
+  dragEnterHandler = (event: IDragEvent) => {
     // Highlight the border to indicate dragover
     if (this.doseReceiveDrop) {
       this.node.classList.add('drag-over');
     }
-  }
+  };
 
   /**
    * Handle drag over (highlight the border)
    * @param event Lumino IDragEvent
    */
-  dragOverHandler(event: IDragEvent) {
+  dragOverHandler = (event: IDragEvent) => {
     // Highlight the border to indicate dragover
     if (this.doseReceiveDrop) {
       this.node.classList.add('drag-over');
     }
-  }
+  };
 
   /**
    * Handle drag drop (highlight the border)
    * @param event Lumino IDragEvent
    */
-  dragDropHandler(event: IDragEvent) {
+  dragDropHandler = (event: IDragEvent) => {
     console.log('drop to dropzone');
     console.log(event);
 
@@ -147,16 +150,49 @@ export class Dropzone implements IDisposable {
 
     // TODO: Temp: only handle md cell
     if (cell instanceof MarkdownCell) {
-      this.stickyContent.swapOutDropZone(cell, ContentType.Markdown, notebook);
+      this.stickyContent.swapDropzoneWithExistingCell(
+        cell,
+        ContentType.Markdown
+      );
     }
-  }
+  };
 
   /**
    * Handle drag leave (dehighlight the border)
    * @param event Lumino IDragEvent
    */
-  dragLeaveHandler(event: IDragEvent) {
+  dragLeaveHandler = (event: IDragEvent) => {
     // Dehighlight the border to indicate dragover
     this.node.classList.remove('drag-over');
-  }
+  };
+
+  /**
+   * Handle mouse click on the create button
+   * @param event Mouse movement event
+   */
+  createClickHandler = (event: MouseEvent) => {
+    // Query the current value of the cell type dropdown
+    const curOption = <ContentType>this.select.value;
+    switch (curOption) {
+      case ContentType.Code:
+        console.log('Creating a new code cell!');
+        break;
+
+      case ContentType.Markdown:
+        console.log('Creating a new markdown cell!');
+        this.stickyContent.swapDropzoneWithNewCell(ContentType.Markdown);
+        break;
+
+      case ContentType.TableOfContent:
+        console.log('Creating a new table of content cell!');
+        break;
+
+      case ContentType.Dropzone:
+        // Noop if users do not select a new cell type
+        break;
+
+      default:
+        break;
+    }
+  };
 }
