@@ -142,14 +142,12 @@ export class Dropzone implements IDisposable {
       cell = notebook.content.activeCell as CodeCell;
     }
 
-    const clone = cell.clone();
-
     // Create a new tab and populate it with the corresponding cell
     // Swap the dropzone with the new tab
 
     // TODO: Temp: only handle md cell
     if (cell instanceof MarkdownCell) {
-      this.stickyContent.swapOutDropZone(clone, ContentType.Markdown, notebook);
+      this.stickyContent.swapOutDropZone(cell, ContentType.Markdown, notebook);
     }
   }
 

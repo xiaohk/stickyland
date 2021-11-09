@@ -23,6 +23,7 @@ export class StickyMarkdown implements IDisposable {
   stickyContent: StickyContent;
   node: HTMLElement;
   cellNode: HTMLElement;
+  originalCell: MarkdownCell;
   cell: MarkdownCell;
   notebook: NotebookPanel;
   codemirror: CodeMirror.Editor;
@@ -37,6 +38,16 @@ export class StickyMarkdown implements IDisposable {
     this.cell = cell;
     this.notebook = notebook;
 
+    // Clone the cell
+    this.originalCell = cell;
+    this.cell = this.originalCell.clone();
+
+    // Collapse the original cell
+    if (!this.originalCell.inputHidden) {
+      this.originalCell.inputHidden = true;
+    }
+
+    console.log(this.originalCell);
     console.log(this.cell);
 
     // Add a dropzone element (providing feedback of drag-and-drop)
@@ -109,8 +120,6 @@ export class StickyMarkdown implements IDisposable {
    */
   cleanCellClone = () => {
     // Remove the left region (prompt and collapser), header and footer
-    console.log(this.cellNode);
-    console.log(this.cellNode.querySelector('.jp-Cell-inputCollapser'));
     this.cellNode.querySelector('.jp-Cell-inputCollapser')?.remove();
     this.cellNode.querySelector('.jp-InputArea-prompt')?.remove();
     this.cellNode.querySelector('.jp-CellHeader')?.remove();
