@@ -11,6 +11,7 @@ import {
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { CodeCell, MarkdownCell, Cell } from '@jupyterlab/cells';
 import { ICodeMirror } from '@jupyterlab/codemirror';
+import CodeMirror from 'codemirror';
 import { toArray } from '@lumino/algorithm';
 import { StickyContent, ContentType } from './content';
 
@@ -24,7 +25,7 @@ export class StickyMarkdown implements IDisposable {
   cellNode: HTMLElement;
   cell: MarkdownCell;
   notebook: NotebookPanel;
-  iCodeMirror: ICodeMirror;
+  codemirror: CodeMirror.Editor;
   isDisposed = false;
 
   constructor(
@@ -41,6 +42,8 @@ export class StickyMarkdown implements IDisposable {
     // Add a dropzone element (providing feedback of drag-and-drop)
     this.node = document.createElement('div');
     this.node.classList.add('sticky-md');
+    // Need to add tabindex so it can receive keyboard events
+    this.node.setAttribute('tabindex', '0');
     this.stickyContent.contentNode.appendChild(this.node);
 
     console.log(notebook.model);
@@ -89,13 +92,21 @@ export class StickyMarkdown implements IDisposable {
     const codeMirrorNode = this.cell.node.querySelector(
       '.CodeMirror'
     ) as unknown;
-    this.iCodeMirror = codeMirrorNode as ICodeMirror;
 
-    console.log(this.iCodeMirror.CodeMirror);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this.codemirror = codeMirrorNode.CodeMirror as CodeMirror.Editor;
+    console.log(this.codemirror);
+
+    // Bind events
+    this.bindEventHandlers();
 
     this.cleanCellClone();
   }
 
+  /**
+   * Strip unnecessary elements from the nodes before appending it to stickyland
+   */
   cleanCellClone = () => {
     // Remove the left region (prompt and collapser), header and footer
     console.log(this.cellNode);
@@ -112,6 +123,48 @@ export class StickyMarkdown implements IDisposable {
 
     this.cellNode.classList.add('sticky-md-cell');
     this.cellNode.classList.remove('hidden');
+  };
+
+  /**
+   * Bind event handlers for sticky markdown cell.
+   */
+  bindEventHandlers = () => {
+    // Double click the rendered view should trigger editor
+    this.node.addEventListener('dblclick', (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (this.cell.rendered) {
+        this.enterEditor();
+      }
+    });
+
+    // Click on the rendered view should focus the current element
+    this.node.addEventListener('click', (e: MouseEvent) => {
+      if (this.cell.rendered) {
+        this.node.focus();
+      }
+    });
+
+    // Bind keyboard short cuts
+    this.node.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        if (e.shiftKey || e.ctrlKey) {
+          // [Shift + enter] or [control + enter] render the markdown cell
+          if (!this.cell.rendered) {
+            this.quitEditor();
+          }
+          e.preventDefault();
+          e.stopPropagation();
+        } else {
+          // [Enter] in rendered mode triggers the editor
+          if (this.cell.rendered) {
+            this.enterEditor();
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }
+      }
+    });
   };
 
   /**
@@ -162,40 +215,54 @@ export class StickyMarkdown implements IDisposable {
     return toolbar;
   };
 
+  /**
+   * Helper function to enter the editor mode.
+   */
+  enterEditor = () => {
+    // Trigger the editor
+    this.cell.rendered = false;
+
+    // Move the cursor on the first line before the first character
+    this.cell.editor.focus();
+    this.cell.editor.setCursorPosition({ line: 0, column: 0 });
+  };
+
+  /**
+   * Helper function to quit the editor mode.
+   */
+  quitEditor = () => {
+    // Trigger the rendered output
+    this.cell.rendered = true;
+
+    // Focus the cell node so we can listen to keyboard events
+    this.node.focus();
+  };
+
   editClicked = (event: Event) => {
     event.preventDefault();
     event.stopPropagation();
 
     // Show the editing area
-    this.cell.rendered = false;
-    console.log(this.cell.inputArea);
-
-    console.log('Edit clicked!');
+    if (this.cell.rendered) {
+      this.enterEditor();
+    }
   };
 
   runClicked = (event: Event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    console.log(this.cell.editorWidget.node);
-    this.cell.editorWidget.node.scrollIntoView(false);
-
-    console.log(this.cell.editor.getCursorPosition());
-
-    console.log('Run clicked!');
+    // Render the markdown
+    if (!this.cell.rendered) {
+      this.quitEditor();
+    }
   };
 
   launchClicked = (event: Event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    // this.cell.editor.revealPosition(this.cell.editor.getCursorPosition());
-    console.log(
-      this.cell.editor.getCoordinateForPosition(
-        this.cell.editor.getCursorPosition()
-      )
-    );
-    console.log(this.cell.editorWidget.node.offsetHeight);
+    console.log(this.cell.editor.getCursorPosition());
     console.log('Launch clicked!');
   };
 
