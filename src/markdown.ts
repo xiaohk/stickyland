@@ -18,6 +18,7 @@ import { CodeCell, MarkdownCell, Cell } from '@jupyterlab/cells';
 import { ICodeMirror } from '@jupyterlab/codemirror';
 import CodeMirror from 'codemirror';
 import { toArray } from '@lumino/algorithm';
+import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { StickyContent, ContentType } from './content';
 
 /**
@@ -30,6 +31,7 @@ export class StickyMarkdown implements IDisposable {
   cellNode!: HTMLElement;
   originalCell!: MarkdownCell;
   cell!: MarkdownCell;
+  renderer!: IRenderMime.IRenderer;
   notebook!: NotebookPanel;
   codemirror!: CodeMirror.Editor;
   isDisposed = false;
@@ -62,6 +64,11 @@ export class StickyMarkdown implements IDisposable {
 
     console.log(md.originalCell);
     console.log(md.cell);
+
+    // Save a reference to the cell's renderer (private)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    md.renderer = md.cell._renderer;
 
     // Add a dropzone element (providing feedback of drag-and-drop)
     md.node = document.createElement('div');
@@ -140,6 +147,9 @@ export class StickyMarkdown implements IDisposable {
 
     this.cellNode.classList.add('sticky-md-cell');
     this.cellNode.classList.remove('hidden');
+
+    // Render the latex on the clone node
+    this.renderLatex();
   };
 
   /**
@@ -253,6 +263,31 @@ export class StickyMarkdown implements IDisposable {
 
     // Focus the cell node so we can listen to keyboard events
     this.node.focus();
+
+    /**
+     * Since we are not attaching the renderer widget to any other widget, the
+     * onAttach method is never called, so the latex typesetter is never called
+     * We need to manually call it after rendering the node
+     */
+    this.renderLatex();
+  };
+
+  /**
+   * A helper function to force render latex after timeout.
+   * @param timeout Call the latex renderer after `timeout` ms
+   */
+  renderLatex = (timeout = 100) => {
+    /**
+     * Since we are not attaching the renderer widget to any other widget, the
+     * onAttach method is never called, so the latex typesetter is never called
+     * We need to manually call it after rendering the node
+     * https://github.com/jupyterlab/jupyterlab/blob/d48e0c04efb786561137fb20773fc15788507f0a/packages/rendermime/src/widgets.ts#L225
+     */
+    setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.renderer.latexTypesetter?.typeset(this.renderer.node);
+    }, timeout);
   };
 
   editClicked = (event: Event) => {
@@ -280,6 +315,7 @@ export class StickyMarkdown implements IDisposable {
     event.stopPropagation();
 
     console.log(this.cell.editor.getCursorPosition());
+
     console.log('Launch clicked!');
   };
 
