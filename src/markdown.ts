@@ -20,99 +20,79 @@ import { StickyContent, ContentType } from './content';
  * and waiting for users to drop some cells.
  */
 export class StickyMarkdown implements IDisposable {
-  stickyContent: StickyContent;
-  node: HTMLElement;
-  cellNode: HTMLElement;
-  originalCell: MarkdownCell;
-  cell: MarkdownCell;
-  notebook: NotebookPanel;
-  codemirror: CodeMirror.Editor;
+  stickyContent!: StickyContent;
+  node!: HTMLElement;
+  cellNode!: HTMLElement;
+  originalCell!: MarkdownCell;
+  cell!: MarkdownCell;
+  notebook!: NotebookPanel;
+  codemirror!: CodeMirror.Editor;
   isDisposed = false;
 
-  constructor(
+  /**
+   * Factory function for StickyMarkdown when creating if from an existing cell
+   * through dragging
+   * @param stickyContent The sticky content that contains this markdown cell
+   * @param cell The existing markdown cell
+   * @param notebook The current notebook
+   * @returns A new StickyMarkdown object
+   */
+  static createFromExistingCell(
     stickyContent: StickyContent,
     cell: MarkdownCell,
     notebook: NotebookPanel
-  ) {
-    this.stickyContent = stickyContent;
-    this.cell = cell;
-    this.notebook = notebook;
+  ): StickyMarkdown {
+    const md = new StickyMarkdown();
+    md.stickyContent = stickyContent;
+    md.cell = cell;
+    md.notebook = notebook;
 
     // Clone the cell
-    this.originalCell = cell;
-    this.cell = this.originalCell.clone();
+    md.originalCell = cell;
+    md.cell = md.originalCell.clone();
 
     // Collapse the original cell
-    if (!this.originalCell.inputHidden) {
-      this.originalCell.inputHidden = true;
+    if (!md.originalCell.inputHidden) {
+      md.originalCell.inputHidden = true;
     }
 
-    console.log(this.originalCell);
-    console.log(this.cell);
+    console.log(md.originalCell);
+    console.log(md.cell);
 
     // Add a dropzone element (providing feedback of drag-and-drop)
-    this.node = document.createElement('div');
-    this.node.classList.add('sticky-md');
+    md.node = document.createElement('div');
+    md.node.classList.add('sticky-md');
     // Need to add tabindex so it can receive keyboard events
-    this.node.setAttribute('tabindex', '0');
-    this.stickyContent.contentNode.appendChild(this.node);
+    md.node.setAttribute('tabindex', '0');
+    md.stickyContent.contentNode.appendChild(md.node);
 
     console.log(notebook.model);
 
-    // Initialize the content
-    // const layout = panel.layout as BoxLayout;
-    // layout.addWidget(cell);
-
     // Add a toolbar
-    const toolBarItems = [
-      {
-        name: 'run',
-        title: 'Run the cell',
-        icon: runIcon,
-        onClick: this.runClicked
-      },
-      {
-        name: 'edit',
-        title: 'Edit the cell',
-        icon: editIcon,
-        onClick: this.editClicked
-      },
-      {
-        name: 'launch',
-        title: 'Make the cell float',
-        icon: launcherIcon,
-        onClick: this.launchClicked
-      },
-      {
-        name: 'close',
-        title: 'Remove the cell',
-        icon: closeIcon,
-        onClick: this.closeClicked
-      }
-    ];
-    const toolbar = this.createToolbar(toolBarItems);
-    this.stickyContent.headerNode.appendChild(toolbar);
+    const toolbar = md.createToolbar(md.toolBarItems);
+    md.stickyContent.headerNode.appendChild(toolbar);
 
     // Clean the markdown cell
     // Need to append the node to DOM first so we can do the cleaning
-    this.cellNode = this.cell.node;
-    this.cellNode.classList.add('hidden');
-    this.node.appendChild(this.cellNode);
+    md.cellNode = md.cell.node;
+    md.cellNode.classList.add('hidden');
+    md.node.appendChild(md.cellNode);
 
     // Bind the Codemirror
-    const codeMirrorNode = this.cell.node.querySelector(
-      '.CodeMirror'
-    ) as unknown;
+    const codeMirrorNode = md.cell.node.querySelector('.CodeMirror') as unknown;
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    this.codemirror = codeMirrorNode.CodeMirror as CodeMirror.Editor;
-    console.log(this.codemirror);
+    md.codemirror = codeMirrorNode.CodeMirror as CodeMirror.Editor;
+    console.log(md.codemirror);
 
     // Bind events
-    this.bindEventHandlers();
+    md.bindEventHandlers();
 
-    this.cleanCellClone();
+    // Clean the unnecessary elements from the node clone
+    md.cleanCellClone();
+
+    return md;
   }
 
   /**
@@ -281,6 +261,33 @@ export class StickyMarkdown implements IDisposable {
 
     console.log('Close clicked!');
   };
+
+  toolBarItems = [
+    {
+      name: 'run',
+      title: 'Run the cell',
+      icon: runIcon,
+      onClick: this.runClicked
+    },
+    {
+      name: 'edit',
+      title: 'Edit the cell',
+      icon: editIcon,
+      onClick: this.editClicked
+    },
+    {
+      name: 'launch',
+      title: 'Make the cell float',
+      icon: launcherIcon,
+      onClick: this.launchClicked
+    },
+    {
+      name: 'close',
+      title: 'Remove the cell',
+      icon: closeIcon,
+      onClick: this.closeClicked
+    }
+  ];
 
   dispose() {
     this.node.remove();

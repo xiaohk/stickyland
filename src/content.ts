@@ -56,7 +56,7 @@ export class StickyContent {
       this.curContent.dispose();
 
       // Initialize a markdown cell
-      this.curContent = new StickyMarkdown(
+      this.curContent = StickyMarkdown.createFromExistingCell(
         this,
         cell as MarkdownCell,
         notebook
