@@ -138,23 +138,19 @@ export class Dropzone implements IDisposable {
     // Query the notebook information
     const notebook = event.source.parent as NotebookPanel;
     let cell: Cell;
+    let cellContentType: ContentType;
 
     if (event.source.activeCell instanceof MarkdownCell) {
       cell = notebook.content.activeCell as MarkdownCell;
+      cellContentType = ContentType.Markdown;
     } else {
       cell = notebook.content.activeCell as CodeCell;
+      cellContentType = ContentType.Code;
     }
 
     // Create a new tab and populate it with the corresponding cell
     // Swap the dropzone with the new tab
-
-    // TODO: Temp: only handle md cell
-    if (cell instanceof MarkdownCell) {
-      this.stickyContent.swapDropzoneWithExistingCell(
-        cell,
-        ContentType.Markdown
-      );
-    }
+    this.stickyContent.swapDropzoneWithExistingCell(cell, cellContentType);
   };
 
   /**

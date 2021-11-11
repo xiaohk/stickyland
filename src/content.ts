@@ -52,16 +52,26 @@ export class StickyContent {
    * @param newCellType Cell type of the current cell
    */
   swapDropzoneWithExistingCell(cell: Cell, newCellType: ContentType) {
-    if (newCellType === ContentType.Markdown) {
-      // Remove the dropzone
-      this.curContent.dispose();
+    // Remove the dropzone
+    this.curContent.dispose();
 
-      // Initialize a markdown cell
-      this.curContent = StickyMarkdown.createFromExistingCell(
-        this,
-        cell as MarkdownCell,
-        this.notebook
-      );
+    // Add a new cell
+    switch (newCellType) {
+      case ContentType.Markdown:
+        // Initialize a markdown cell
+        this.curContent = StickyMarkdown.createFromExistingCell(
+          this,
+          cell as MarkdownCell,
+          this.notebook
+        );
+        break;
+
+      case ContentType.Code:
+        console.log('code cell!');
+        break;
+
+      default:
+        break;
     }
   }
 

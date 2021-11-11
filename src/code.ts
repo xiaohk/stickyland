@@ -22,9 +22,9 @@ import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { StickyContent, ContentType } from './content';
 
 /**
- * Class that implements the Markdown cell in StickyLand.
+ * Class that implements the Code cell in StickyLand.
  */
-export class StickyMarkdown implements IDisposable {
+export class StickyCode implements IDisposable {
   stickyContent!: StickyContent;
   node!: HTMLElement;
   cellNode!: HTMLElement;
@@ -36,19 +36,19 @@ export class StickyMarkdown implements IDisposable {
   isDisposed = false;
 
   /**
-   * Factory function for StickyMarkdown when creating if from an existing cell
+   * Factory function for StickyCode when creating if from an existing cell
    * through dragging
    * @param stickyContent The sticky content that contains this markdown cell
    * @param cell The existing markdown cell
    * @param notebook The current notebook
-   * @returns A new StickyMarkdown object
+   * @returns A new StickyCode object
    */
   static createFromExistingCell(
     stickyContent: StickyContent,
     cell: MarkdownCell,
     notebook: NotebookPanel
-  ): StickyMarkdown {
-    const md = new StickyMarkdown();
+  ): StickyCode {
+    const md = new StickyCode();
     md.stickyContent = stickyContent;
     md.notebook = notebook;
 
@@ -106,16 +106,16 @@ export class StickyMarkdown implements IDisposable {
   }
 
   /**
-   * Factory function for StickyMarkdown when creating if from a new markdown
+   * Factory function for StickyCode when creating if from a new markdown
    * cell. This function would append a new markdown cell to the main notebook.
    * @param stickyContent The sticky content that contains this markdown cell
    * @param notebook The current notebook
-   * @returns A new StickyMarkdown object
+   * @returns A new StickyCode object
    */
   static createFromNewCell(
     stickyContent: StickyContent,
     notebook: NotebookPanel
-  ): StickyMarkdown {
+  ): StickyCode {
     // Append a new markdown cell to the main notebook
     NotebookActions.insertBelow(notebook.content);
     NotebookActions.changeCellType(notebook.content, 'markdown');
@@ -125,7 +125,7 @@ export class StickyMarkdown implements IDisposable {
     // Activate the original active cell
     notebook.content.activeCellIndex = notebook.content.activeCellIndex - 1;
 
-    // Construct StickyMarkdown using the new cell as an existing cell
+    // Construct StickyCode using the new cell as an existing cell
     return this.createFromExistingCell(stickyContent, newCell, notebook);
   }
 
@@ -134,21 +134,16 @@ export class StickyMarkdown implements IDisposable {
    */
   cleanCellClone = () => {
     // Remove the left region (prompt and collapser), header and footer
-    this.cellNode.querySelector('.jp-Cell-inputCollapser')?.remove();
-    this.cellNode.querySelector('.jp-InputArea-prompt')?.remove();
-    this.cellNode.querySelector('.jp-CellHeader')?.remove();
-    this.cellNode.querySelector('.jp-CellFooter')?.remove();
-
-    // Add class name to the rendered region
-    this.cellNode
-      .querySelector('.jp-MarkdownOutput')
-      ?.classList.add('sticky-md-output');
-
-    this.cellNode.classList.add('sticky-md-cell');
-    this.cellNode.classList.remove('hidden');
-
-    // Render the latex on the clone node
-    this.renderLatex();
+    // this.cellNode.querySelector('.jp-Cell-inputCollapser')?.remove();
+    // this.cellNode.querySelector('.jp-InputArea-prompt')?.remove();
+    // this.cellNode.querySelector('.jp-CellHeader')?.remove();
+    // this.cellNode.querySelector('.jp-CellFooter')?.remove();
+    // // Add class name to the rendered region
+    // this.cellNode
+    //   .querySelector('.jp-MarkdownOutput')
+    //   ?.classList.add('sticky-md-output');
+    // this.cellNode.classList.add('sticky-md-cell');
+    // this.cellNode.classList.remove('hidden');
   };
 
   /**
