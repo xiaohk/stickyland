@@ -1,20 +1,20 @@
-.sticky-md {
+.sticky-code {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.sticky-md-cell {
+.sticky-code-cell {
   overflow-y: auto;
-  overflow-wrap: break-word;
+  /* overflow-wrap: break-word; */
   padding-bottom: 0px;
 }
 
-.sticky-md-output {
+.sticky-code-output {
   padding: 0 8px;
 }
 
-.sticky-md .jp-CodeMirrorEditor.jp-mod-focused {
+.sticky-code .jp-CodeMirrorEditor.jp-mod-focused {
   border: var(--jp-border-width) solid var(--jp-cell-editor-active-border-color);
   box-shadow: var(--jp-input-box-shadow);
   background-color: var(--jp-cell-editor-active-background);
@@ -24,18 +24,22 @@
 Notebook's height to determine when to scroll! Need to cascade down the 100%
 height. CodeMirror is such a lifesaver but so hard to debug!!
 */
-.sticky-md-cell .jp-Cell-inputWrapper {
-  height: 100%;
+.sticky-code-cell .jp-Cell-inputWrapper {
+  /* height: 100%; */
+  /* width: 100%; */
 }
 
-.sticky-md-cell .jp-InputArea {
-  height: 100%;
+.sticky-code-cell .jp-InputArea {
+  /* height: 100%; */
+  /* width: 100%; */
 }
 
-.sticky-md-cell .jp-CodeMirrorEditor {
-  height: 100%;
+.sticky-code-cell .jp-CodeMirrorEditor {
+  /* height: 100%; */
+  /* width: 100%; */
 }
 
-.sticky-md-cell .CodeMirror {
-  height: 100%;
+.sticky-code-cell .CodeMirror {
+  height: auto;
+  /* width: 100%; */
 }

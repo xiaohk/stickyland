@@ -65,8 +65,30 @@ export class StickyCode implements IDisposable {
 
     // Need to append the node to DOM first so we can do the cleaning
     cd.cellNode = cd.cell.node;
-    // cd.cellNode.classList.add('hidden');
+    cd.cellNode.classList.add('hidden');
     cd.node.appendChild(cd.cellNode);
+
+    // Add a toolbar
+    const toolbar = cd.createToolbar(cd.toolBarItems);
+    cd.stickyContent.headerNode.appendChild(toolbar);
+
+    // Bind the Codemirror
+    const codeMirrorNode = cd.cell.node.querySelector('.CodeMirror') as unknown;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    cd.codemirror = codeMirrorNode.CodeMirror as CodeMirror.Editor;
+
+    // Wow, for some reason the clone somehow has a different codemirror config
+    // from the original cell, need to reset it here
+    // https://codemirror.net/doc/manual.html#setOption
+    cd.codemirror.setOption('lineWrapping', false);
+    console.log(cd.codemirror);
+
+    // Bind events
+    // cd.bindEventHandlers();
+
+    // Clean the unnecessary elements from the node clone
+    cd.cleanCellClone();
 
     console.log(notebook.model);
 
@@ -102,16 +124,19 @@ export class StickyCode implements IDisposable {
    */
   cleanCellClone = () => {
     // Remove the left region (prompt and collapser), header and footer
-    // this.cellNode.querySelector('.jp-Cell-inputCollapser')?.remove();
-    // this.cellNode.querySelector('.jp-InputArea-prompt')?.remove();
-    // this.cellNode.querySelector('.jp-CellHeader')?.remove();
-    // this.cellNode.querySelector('.jp-CellFooter')?.remove();
-    // // Add class name to the rendered region
-    // this.cellNode
-    //   .querySelector('.jp-MarkdownOutput')
-    //   ?.classList.add('sticky-md-output');
-    // this.cellNode.classList.add('sticky-md-cell');
-    // this.cellNode.classList.remove('hidden');
+    this.cellNode.querySelector('.jp-Cell-inputCollapser')?.remove();
+    this.cellNode.querySelector('.jp-OutputCollapser')?.remove();
+    this.cellNode.querySelector('.jp-InputArea-prompt')?.remove();
+    this.cellNode.querySelector('.jp-CellHeader')?.remove();
+    this.cellNode.querySelector('.jp-CellFooter')?.remove();
+
+    // Add class name to the rendered region
+    this.cellNode
+      .querySelector('.jp-OutputArea')
+      ?.classList.add('sticky-code-output');
+    this.cellNode.classList.add('sticky-code-cell');
+
+    this.cellNode.classList.remove('hidden');
   };
 
   /**
@@ -229,12 +254,6 @@ export class StickyCode implements IDisposable {
       title: 'Run the cell',
       icon: runIcon,
       onClick: this.runClicked
-    },
-    {
-      name: 'edit',
-      title: 'Edit the cell',
-      icon: editIcon,
-      onClick: this.editClicked
     },
     {
       name: 'launch',
