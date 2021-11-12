@@ -14,7 +14,8 @@ import {
   INotebookTracker,
   NotebookActions
 } from '@jupyterlab/notebook';
-import { CodeCell, MarkdownCell, Cell } from '@jupyterlab/cells';
+import { IChangedArgs } from '@jupyterlab/coreutils';
+import { CodeCell, ICodeCellModel, Cell, ICellModel } from '@jupyterlab/cells';
 import { ICodeMirror } from '@jupyterlab/codemirror';
 import CodeMirror from 'codemirror';
 import { toArray } from '@lumino/algorithm';
@@ -29,10 +30,13 @@ export class StickyCode implements IDisposable {
   node!: HTMLElement;
   cellNode!: HTMLElement;
   originalCell!: CodeCell;
+  originalExecutionCounter!: HTMLElement | null;
   cell!: CodeCell;
   renderer!: IRenderMime.IRenderer;
   notebook!: NotebookPanel;
   codemirror!: CodeMirror.Editor;
+  private _executionCount!: number | null;
+  executionCounter!: HTMLElement;
   isDisposed = false;
 
   /**
@@ -55,6 +59,11 @@ export class StickyCode implements IDisposable {
     // Clone the cell
     cd.originalCell = cell;
     cd.cell = cd.originalCell.clone();
+
+    // Register the original execution counter node
+    cd.originalExecutionCounter = cd.originalCell.node.querySelector(
+      '.jp-InputArea-prompt'
+    );
 
     // Attach the clone node to stickyland
     cd.node = document.createElement('div');
@@ -84,6 +93,10 @@ export class StickyCode implements IDisposable {
     cd.codemirror.setOption('lineWrapping', false);
     console.log(cd.codemirror);
 
+    cd.executionCount = cd.cell.model.executionCount;
+
+    cd.cell.model.stateChanged.connect(cd.handleStateChange, cd);
+
     // Bind events
     // cd.bindEventHandlers();
 
@@ -93,6 +106,68 @@ export class StickyCode implements IDisposable {
     console.log(notebook.model);
 
     return cd;
+  }
+
+  /**
+   * Helper function to handle code model state changes. The state change signal
+   * is emitted with anything (input, output, etc.). This function follows the
+   * signal pattern from lumino
+   * (https://github.com/jupyterlab/extension-examples/tree/master/signals)
+   * @param model CodeCellModel
+   * @param args Arguments emitted from the model emitter, an example of the
+   * signal structure is listed
+   * [here](https://github.com/jupyterlab/jupyterlab/blob/5755ea86fef3fdbba10cd05b23703b9d60b53226/packages/cells/src/model.ts#L774)
+   * The args is {name: str, oldValue: any, newValue: any}
+   */
+  handleStateChange = (
+    model: ICellModel,
+    args: IChangedArgs<any, any, string>
+  ) => {
+    const codeModel = model as ICodeCellModel;
+
+    switch (args.name) {
+      case 'executionCount':
+        // Update the execution count
+        this.executionCount = codeModel.executionCount;
+        break;
+      default:
+        break;
+    }
+
+    // A hack to know if user executes the code (the "correct" way would be to
+    // listen to the notebookAction's execution signal)
+    // Here we just quickly query if the prompt has become '[*]'
+    // console.log(this.originalExecutionCounter?.innerHTML);
+    // if (this.originalExecutionCounter?.innerHTML === '[*]:') {
+    //   // Set the counter to star
+    //   console.log('to star');
+    //   this.executionCounter.innerText = '[*]';
+    // }
+
+    console.log(model, args);
+
+    console.log(this.executionCount);
+  };
+
+  /**
+   * Setter function for the executionCount. It also updates the count element
+   */
+  set executionCount(newCount: number | null) {
+    this._executionCount = newCount;
+
+    // Update the counter element
+    if (newCount !== null) {
+      this.executionCounter.innerText = `[${newCount}]`;
+    } else {
+      this.executionCounter.innerText = '[*]';
+    }
+  }
+
+  /**
+   * Getter function for the executionCount.
+   */
+  get executionCount() {
+    return this._executionCount;
   }
 
   /**
@@ -127,6 +202,7 @@ export class StickyCode implements IDisposable {
     this.cellNode.querySelector('.jp-Cell-inputCollapser')?.remove();
     this.cellNode.querySelector('.jp-OutputCollapser')?.remove();
     this.cellNode.querySelector('.jp-InputArea-prompt')?.remove();
+    this.cellNode.querySelector('.jp-OutputArea-prompt')?.remove();
     this.cellNode.querySelector('.jp-CellHeader')?.remove();
     this.cellNode.querySelector('.jp-CellFooter')?.remove();
 
@@ -183,13 +259,26 @@ export class StickyCode implements IDisposable {
     }[]
   ): HTMLElement => {
     const toolbar = document.createElement('div');
-    toolbar.classList.add('sticky-toolbar', 'jp-Toolbar');
+    toolbar.classList.add(
+      'sticky-toolbar',
+      'jp-Toolbar',
+      'sticky-code-toolbar'
+    );
+
+    const buttonGroup = document.createElement('div');
+    buttonGroup.classList.add('toolbar-buttons');
+
+    const statusGroup = document.createElement('div');
+    statusGroup.classList.add('toolbar-status');
+
+    toolbar.appendChild(buttonGroup);
+    toolbar.appendChild(statusGroup);
 
     // Add buttons into the toolbar
     items.forEach(d => {
       const item = document.createElement('div');
       item.classList.add('jp-ToolbarButton', 'jp-Toolbar-item');
-      toolbar.appendChild(item);
+      buttonGroup.appendChild(item);
 
       const itemElem = document.createElement('button');
       itemElem.classList.add(
@@ -214,6 +303,15 @@ export class StickyCode implements IDisposable {
         container: iconSpan
       });
     });
+
+    // Add the execution count and toggle into the toolbar
+    const toggle = document.createElement('div');
+    toggle.classList.add('jp-switch-track');
+    statusGroup.appendChild(toggle);
+
+    this.executionCounter = document.createElement('div');
+    this.executionCounter.classList.add('execution-counter');
+    statusGroup.appendChild(this.executionCounter);
 
     return toolbar;
   };
