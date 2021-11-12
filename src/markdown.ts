@@ -69,7 +69,7 @@ export class StickyMarkdown implements IDisposable {
     // @ts-ignore
     md.renderer = md.cell._renderer;
 
-    // Add a dropzone element (providing feedback of drag-and-drop)
+    // Add a markdown cell element
     md.node = document.createElement('div');
     md.node.classList.add('sticky-md');
     // Need to add tabindex so it can receive keyboard events

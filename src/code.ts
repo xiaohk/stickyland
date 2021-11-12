@@ -28,8 +28,8 @@ export class StickyCode implements IDisposable {
   stickyContent!: StickyContent;
   node!: HTMLElement;
   cellNode!: HTMLElement;
-  originalCell!: MarkdownCell;
-  cell!: MarkdownCell;
+  originalCell!: CodeCell;
+  cell!: CodeCell;
   renderer!: IRenderMime.IRenderer;
   notebook!: NotebookPanel;
   codemirror!: CodeMirror.Editor;
@@ -45,64 +45,32 @@ export class StickyCode implements IDisposable {
    */
   static createFromExistingCell(
     stickyContent: StickyContent,
-    cell: MarkdownCell,
+    cell: CodeCell,
     notebook: NotebookPanel
   ): StickyCode {
-    const md = new StickyCode();
-    md.stickyContent = stickyContent;
-    md.notebook = notebook;
+    const cd = new StickyCode();
+    cd.stickyContent = stickyContent;
+    cd.notebook = notebook;
 
     // Clone the cell
-    md.originalCell = cell;
-    md.cell = md.originalCell.clone();
+    cd.originalCell = cell;
+    cd.cell = cd.originalCell.clone();
 
-    // Collapse the original cell
-    if (!md.originalCell.inputHidden) {
-      md.originalCell.inputHidden = true;
-    }
-
-    console.log(md.originalCell);
-    console.log(md.cell);
-
-    // Save a reference to the cell's renderer (private)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    md.renderer = md.cell._renderer;
-
-    // Add a dropzone element (providing feedback of drag-and-drop)
-    md.node = document.createElement('div');
-    md.node.classList.add('sticky-md');
+    // Attach the clone node to stickyland
+    cd.node = document.createElement('div');
+    cd.node.classList.add('sticky-code');
     // Need to add tabindex so it can receive keyboard events
-    md.node.setAttribute('tabindex', '0');
-    md.stickyContent.contentNode.appendChild(md.node);
+    cd.node.setAttribute('tabindex', '0');
+    cd.stickyContent.contentNode.appendChild(cd.node);
+
+    // Need to append the node to DOM first so we can do the cleaning
+    cd.cellNode = cd.cell.node;
+    // cd.cellNode.classList.add('hidden');
+    cd.node.appendChild(cd.cellNode);
 
     console.log(notebook.model);
 
-    // Add a toolbar
-    const toolbar = md.createToolbar(md.toolBarItems);
-    md.stickyContent.headerNode.appendChild(toolbar);
-
-    // Clean the markdown cell
-    // Need to append the node to DOM first so we can do the cleaning
-    md.cellNode = md.cell.node;
-    md.cellNode.classList.add('hidden');
-    md.node.appendChild(md.cellNode);
-
-    // Bind the Codemirror
-    const codeMirrorNode = md.cell.node.querySelector('.CodeMirror') as unknown;
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    md.codemirror = codeMirrorNode.CodeMirror as CodeMirror.Editor;
-    console.log(md.codemirror);
-
-    // Bind events
-    md.bindEventHandlers();
-
-    // Clean the unnecessary elements from the node clone
-    md.cleanCellClone();
-
-    return md;
+    return cd;
   }
 
   /**
@@ -118,9 +86,9 @@ export class StickyCode implements IDisposable {
   ): StickyCode {
     // Append a new markdown cell to the main notebook
     NotebookActions.insertBelow(notebook.content);
-    NotebookActions.changeCellType(notebook.content, 'markdown');
+    NotebookActions.changeCellType(notebook.content, 'code');
 
-    const newCell = notebook.content.activeCell as MarkdownCell;
+    const newCell = notebook.content.activeCell as CodeCell;
 
     // Activate the original active cell
     notebook.content.activeCellIndex = notebook.content.activeCellIndex - 1;
@@ -154,16 +122,13 @@ export class StickyCode implements IDisposable {
     this.node.addEventListener('dblclick', (e: MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      if (this.cell.rendered) {
-        this.enterEditor();
-      }
     });
 
     // Click on the rendered view should focus the current element
     this.node.addEventListener('click', (e: MouseEvent) => {
-      if (this.cell.rendered) {
-        this.node.focus();
-      }
+      // if (this.cell.rendered) {
+      //   this.node.focus();
+      // }
     });
 
     // Bind keyboard short cuts
@@ -171,18 +136,10 @@ export class StickyCode implements IDisposable {
       if (e.key === 'Enter') {
         if (e.shiftKey || e.ctrlKey) {
           // [Shift + enter] or [control + enter] render the markdown cell
-          if (!this.cell.rendered) {
-            this.quitEditor();
-          }
           e.preventDefault();
           e.stopPropagation();
         } else {
           // [Enter] in rendered mode triggers the editor
-          if (this.cell.rendered) {
-            this.enterEditor();
-            e.preventDefault();
-            e.stopPropagation();
-          }
         }
       }
     });
@@ -236,62 +193,11 @@ export class StickyCode implements IDisposable {
     return toolbar;
   };
 
-  /**
-   * Helper function to enter the editor mode.
-   */
-  enterEditor = () => {
-    // Trigger the editor
-    this.cell.rendered = false;
-
-    // Move the cursor on the first line before the first character
-    this.cell.editor.focus();
-    this.cell.editor.setCursorPosition({ line: 0, column: 0 });
-  };
-
-  /**
-   * Helper function to quit the editor mode.
-   */
-  quitEditor = () => {
-    // Trigger the rendered output
-    this.cell.rendered = true;
-
-    // Focus the cell node so we can listen to keyboard events
-    this.node.focus();
-
-    /**
-     * Since we are not attaching the renderer widget to any other widget, the
-     * onAttach method is never called, so the latex typesetter is never called
-     * We need to manually call it after rendering the node
-     */
-    this.renderLatex();
-  };
-
-  /**
-   * A helper function to force render latex after timeout.
-   * @param timeout Call the latex renderer after `timeout` ms
-   */
-  renderLatex = (timeout = 100) => {
-    /**
-     * Since we are not attaching the renderer widget to any other widget, the
-     * onAttach method is never called, so the latex typesetter is never called
-     * We need to manually call it after rendering the node
-     * https://github.com/jupyterlab/jupyterlab/blob/d48e0c04efb786561137fb20773fc15788507f0a/packages/rendermime/src/widgets.ts#L225
-     */
-    setTimeout(() => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      this.renderer.latexTypesetter?.typeset(this.renderer.node);
-    }, timeout);
-  };
-
   editClicked = (event: Event) => {
     event.preventDefault();
     event.stopPropagation();
 
     // Show the editing area
-    if (this.cell.rendered) {
-      this.enterEditor();
-    }
   };
 
   runClicked = (event: Event) => {
@@ -299,9 +205,6 @@ export class StickyCode implements IDisposable {
     event.stopPropagation();
 
     // Render the markdown
-    if (!this.cell.rendered) {
-      this.quitEditor();
-    }
   };
 
   launchClicked = (event: Event) => {

@@ -7,6 +7,7 @@ import { toArray } from '@lumino/algorithm';
 
 import { Dropzone } from './dropzone';
 import { StickyMarkdown } from './markdown';
+import { StickyCode } from './code';
 
 export enum ContentType {
   Dropzone = 'Dropzone',
@@ -20,7 +21,7 @@ export class StickyContent {
   wrapperNode: HTMLElement;
   headerNode: HTMLElement;
   contentNode: HTMLElement;
-  curContent: Dropzone | StickyMarkdown;
+  curContent: Dropzone | StickyMarkdown | StickyCode;
   notebook: NotebookPanel;
 
   constructor(stickyContainer: HTMLElement, panel: NotebookPanel) {
@@ -68,6 +69,12 @@ export class StickyContent {
 
       case ContentType.Code:
         console.log('code cell!');
+        // Initialize a code cell
+        this.curContent = StickyCode.createFromExistingCell(
+          this,
+          cell as CodeCell,
+          this.notebook
+        );
         break;
 
       default:
