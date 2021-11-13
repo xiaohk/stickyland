@@ -19,7 +19,7 @@ import { IChangedArgs } from '@jupyterlab/coreutils';
 import { CodeCell, ICodeCellModel, Cell, ICellModel } from '@jupyterlab/cells';
 import { ICodeMirror } from '@jupyterlab/codemirror';
 import CodeMirror from 'codemirror';
-import { toArray } from '@lumino/algorithm';
+import { toArray, ArrayExt } from '@lumino/algorithm';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { StickyContent, ContentType } from './content';
 
@@ -108,7 +108,7 @@ export class StickyCode implements IDisposable {
     cd.cell.model.stateChanged.connect(cd.handleStateChange, cd);
 
     // Bind events
-    // cd.bindEventHandlers();
+    cd.bindEventHandlers();
 
     // Clean the unnecessary elements from the node clone
     cd.cleanCellClone();
@@ -144,7 +144,6 @@ export class StickyCode implements IDisposable {
     mutationList: MutationRecord[],
     observer: MutationObserver
   ) => {
-    console.log(mutationList);
     mutationList.forEach(d => {
       // Remove the prompt area when the output node is updated
       if (d.addedNodes !== null) {
@@ -276,37 +275,6 @@ export class StickyCode implements IDisposable {
   };
 
   /**
-   * Bind event handlers for sticky markdown cell.
-   */
-  bindEventHandlers = () => {
-    // Double click the rendered view should trigger editor
-    this.node.addEventListener('dblclick', (e: MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-    });
-
-    // Click on the rendered view should focus the current element
-    this.node.addEventListener('click', (e: MouseEvent) => {
-      // if (this.cell.rendered) {
-      //   this.node.focus();
-      // }
-    });
-
-    // Bind keyboard short cuts
-    this.node.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        if (e.shiftKey || e.ctrlKey) {
-          // [Shift + enter] or [control + enter] render the markdown cell
-          e.preventDefault();
-          e.stopPropagation();
-        } else {
-          // [Enter] in rendered mode triggers the editor
-        }
-      }
-    });
-  };
-
-  /**
    * Create a toolbar element
    * @param items List of toolbar item names and onclick handlers
    */
@@ -388,11 +356,32 @@ export class StickyCode implements IDisposable {
     return toolbar;
   };
 
-  editClicked = (event: Event) => {
-    event.preventDefault();
-    event.stopPropagation();
+  /**
+   * Run the code cell. The implementation logic is: (1) change the original cell
+   * as the active cell, (2) use the NotebookActions to run the current active
+   * cell
+   */
+  execute = () => {
+    // Find the cell index of the original cell
+    // Note it can change as users can insert cells above and below the cell
+    // Jupyter lab internally iterates through all widgets to find the index
+    // https://github.com/jupyterlab/jupyterlab/blob/5755ea86fef3fdbba10cd05b23703b9d60b53226/packages/notebook/src/widget.ts#L1803
+    const cellIndex = ArrayExt.findFirstIndex(
+      this.notebook.content.widgets,
+      widget => widget.node === this.originalCell.node
+    );
 
-    // Show the editing area
+    // Change the active cell to the original cell
+    this.notebook.content.activeCellIndex = cellIndex;
+
+    // Blur the focused editor
+    this.cell.editor.blur();
+
+    // Run the active cell
+    NotebookActions.run(
+      this.notebook.content,
+      this.notebook.context.sessionContext
+    );
   };
 
   runClicked = (event: Event) => {
@@ -400,6 +389,7 @@ export class StickyCode implements IDisposable {
     event.stopPropagation();
 
     // Run the cell
+    this.execute();
   };
 
   launchClicked = (event: Event) => {
@@ -438,6 +428,23 @@ export class StickyCode implements IDisposable {
       onClick: this.closeClicked
     }
   ];
+
+  /**
+   * Bind event handlers for sticky code cell.
+   */
+  bindEventHandlers = () => {
+    // Bind keyboard shortcuts
+    this.node.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        if (e.shiftKey || e.ctrlKey) {
+          // [Shift + enter] or [control + enter] runs the code cell
+          this.execute();
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }
+    });
+  };
 
   dispose() {
     this.node.remove();
