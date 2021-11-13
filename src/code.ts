@@ -47,6 +47,7 @@ export class StickyCode implements IDisposable {
   outputObserver!: MutationObserver;
 
   autoRun = false;
+  autoRunTimeout: number | null = null;
   isDisposed = false;
 
   /**
@@ -128,6 +129,28 @@ export class StickyCode implements IDisposable {
     if (cd.outputNode) {
       cd.outputObserver.observe(cd.outputNode, { childList: true });
     }
+
+    // Listen to the notebook execution events so we can auto-run the cell
+    NotebookActions.executionScheduled.connect((_, args) => {
+      // Schedule to run the code cell if auto-run is toggled and the current
+      // running cell is not the original cell
+      if (args.cell.node !== cd.originalCell.node && cd.autoRun) {
+        // We need to set a timeout to workaround the current executionScheduled
+        // emit order
+        // https://github.com/jupyterlab/jupyterlab/pull/11453
+
+        // Also users might run multiple cells at one time, we can set a short
+        // timeout so that we only run the sticky code cell once in a series of
+        // other executions of other cells
+        if (cd.autoRunTimeout !== null) {
+          clearTimeout(cd.autoRunTimeout);
+        }
+
+        cd.autoRunTimeout = setTimeout(() => {
+          cd.execute();
+        }, 200);
+      }
+    });
 
     console.log(notebook.model);
 
