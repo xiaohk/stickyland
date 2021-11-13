@@ -69,10 +69,12 @@
   opacity: 1;
 }
 
-.toolbar-status .toggle-label {
-  color: var(--jp-cell-prompt-not-active-font-color);
-  font-size: var(--jp-code-font-size);
-  opacity: var(--jp-cell-prompt-not-active-opacity);
+.toolbar-status .jp-switch[aria-checked="true"] .jp-switch-track {
+  background-color: var(--jp-brand-color1);
+}
+
+.toolbar-status .jp-switch:hover {
+  background-color: unset;
 }
 
 /* Need to set the CodeMirror's height to 100% otherwise it uses the whole

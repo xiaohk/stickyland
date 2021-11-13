@@ -6,7 +6,8 @@ import {
   runIcon,
   editIcon,
   launcherIcon,
-  closeIcon
+  closeIcon,
+  Switch
 } from '@jupyterlab/ui-components';
 import {
   NotebookPanel,
@@ -33,12 +34,14 @@ export class StickyCode implements IDisposable {
   originalCell!: CodeCell;
   originalExecutionCounter!: HTMLElement | null;
   cell!: CodeCell;
+  toggle!: Switch;
   renderer!: IRenderMime.IRenderer;
   notebook!: NotebookPanel;
   codemirror!: CodeMirror.Editor;
   private _executionCount!: number | null;
   executionCounter!: HTMLElement;
   codeObserver!: MutationObserver;
+  autoRun = false;
   isDisposed = false;
 
   /**
@@ -343,16 +346,23 @@ export class StickyCode implements IDisposable {
       });
     });
 
-    // Add the execution count and toggle into the toolbar
-    const toggleLabel = document.createElement('div');
-    toggleLabel.classList.add('toggle-label');
-    toggleLabel.innerText = 'auto-run';
-    statusGroup.appendChild(toggleLabel);
+    // Add a toggle switch into the toolbar
+    this.toggle = new Switch();
 
-    const toggle = document.createElement('div');
-    toggle.classList.add('jp-switch-track');
-    statusGroup.appendChild(toggle);
+    this.toggle.valueChanged.connect((_, args) => {
+      this.autoRun = args.newValue;
+    });
+    this.toggle.value = this.autoRun;
+    this.toggle.label = 'auto-run';
 
+    // Here we are not correctly attach the widget to a layout, so we need to
+    // manually trigger the event binding
+    const toggleSwitchNode = this.toggle.node.querySelector('.jp-switch');
+    toggleSwitchNode?.addEventListener('click', this.toggle);
+
+    statusGroup.appendChild(this.toggle.node);
+
+    // Add an execution counter into the toolbar
     this.executionCounter = document.createElement('div');
     this.executionCounter.classList.add('execution-counter');
     statusGroup.appendChild(this.executionCounter);
@@ -414,6 +424,7 @@ export class StickyCode implements IDisposable {
   dispose() {
     this.node.remove();
     this.codeObserver.disconnect();
+    this.toggle.dispose();
     this.isDisposed = true;
   }
 }
