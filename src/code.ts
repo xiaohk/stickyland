@@ -29,6 +29,7 @@ export class StickyCode implements IDisposable {
   stickyContent!: StickyContent;
   node!: HTMLElement;
   cellNode!: HTMLElement;
+  editorNode!: HTMLElement | null;
   originalCell!: CodeCell;
   originalExecutionCounter!: HTMLElement | null;
   cell!: CodeCell;
@@ -37,6 +38,7 @@ export class StickyCode implements IDisposable {
   codemirror!: CodeMirror.Editor;
   private _executionCount!: number | null;
   executionCounter!: HTMLElement;
+  codeObserver!: MutationObserver;
   isDisposed = false;
 
   /**
@@ -103,10 +105,39 @@ export class StickyCode implements IDisposable {
     // Clean the unnecessary elements from the node clone
     cd.cleanCellClone();
 
+    // Add a mutation observer so we can style the execution counter based on
+    // the code focus
+    cd.codeObserver = new MutationObserver(cd.codeClassMutationHandler);
+    cd.editorNode = cd.cellNode.querySelector('.jp-CodeMirrorEditor');
+    if (cd.editorNode) {
+      cd.codeObserver.observe(cd.editorNode, { attributes: true });
+    }
+
     console.log(notebook.model);
 
     return cd;
   }
+
+  /**
+   * We use a mutation observer to detect if user focuses on the code cell in
+   * StickyLand. Remember to disconnect the observer in the dispose() method.
+   * @param mutationList Array of mutation records
+   * @param observer The observer itself
+   */
+  codeClassMutationHandler = (
+    mutationList: MutationRecord[],
+    observer: MutationObserver
+  ) => {
+    mutationList.forEach(d => {
+      if (d.attributeName === 'class') {
+        if (this.editorNode?.classList.contains('jp-mod-focused')) {
+          this.executionCounter.classList.add('mod-focused');
+        } else {
+          this.executionCounter.classList.remove('mod-focused');
+        }
+      }
+    });
+  };
 
   /**
    * Helper function to handle code model state changes. The state change signal
@@ -369,6 +400,7 @@ export class StickyCode implements IDisposable {
 
   dispose() {
     this.node.remove();
+    this.codeObserver.disconnect();
     this.isDisposed = true;
   }
 }

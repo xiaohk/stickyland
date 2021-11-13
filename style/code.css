@@ -51,6 +51,11 @@
   text-overflow: ellipsis;
 }
 
+.toolbar-status .execution-counter.mod-focused {
+  color: var(--jp-cell-inprompt-font-color);
+  opacity: 1;
+}
+
 /* Need to set the CodeMirror's height to 100% otherwise it uses the whole
 Notebook's height to determine when to scroll! Need to cascade down the 100%
 height. CodeMirror is such a lifesaver but so hard to debug!!
