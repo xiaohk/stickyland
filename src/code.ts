@@ -27,20 +27,25 @@ import { StickyContent, ContentType } from './content';
  * Class that implements the Code cell in StickyLand.
  */
 export class StickyCode implements IDisposable {
-  stickyContent!: StickyContent;
   node!: HTMLElement;
   cellNode!: HTMLElement;
   editorNode!: HTMLElement | null;
-  originalCell!: CodeCell;
+  outputNode!: HTMLElement | null;
   originalExecutionCounter!: HTMLElement | null;
+  private _executionCount!: number | null;
+  executionCounter!: HTMLElement;
+
+  stickyContent!: StickyContent;
+  originalCell!: CodeCell;
   cell!: CodeCell;
   toggle!: Switch;
   renderer!: IRenderMime.IRenderer;
   notebook!: NotebookPanel;
   codemirror!: CodeMirror.Editor;
-  private _executionCount!: number | null;
-  executionCounter!: HTMLElement;
+
   codeObserver!: MutationObserver;
+  outputObserver!: MutationObserver;
+
   autoRun = false;
   isDisposed = false;
 
@@ -116,10 +121,37 @@ export class StickyCode implements IDisposable {
       cd.codeObserver.observe(cd.editorNode, { attributes: true });
     }
 
+    // Add an output area observer because we need to remove the left prompt
+    // area every time the output area is updated
+    cd.outputObserver = new MutationObserver(cd.codeOutputMutationHandler);
+    cd.outputNode = cd.cellNode.querySelector('.jp-OutputArea');
+    if (cd.outputNode) {
+      cd.outputObserver.observe(cd.outputNode, { childList: true });
+    }
+
     console.log(notebook.model);
 
     return cd;
   }
+
+  /**
+   * We use a mutation observer to detect if the output area is redrawn.
+   * Remember to disconnect the observer in the dispose() method.
+   * @param mutationList Array of mutation records
+   * @param observer The observer itself
+   */
+  codeOutputMutationHandler = (
+    mutationList: MutationRecord[],
+    observer: MutationObserver
+  ) => {
+    console.log(mutationList);
+    mutationList.forEach(d => {
+      // Remove the prompt area when the output node is updated
+      if (d.addedNodes !== null) {
+        this.outputNode?.querySelector('.jp-OutputPrompt')?.remove();
+      }
+    });
+  };
 
   /**
    * We use a mutation observer to detect if user focuses on the code cell in
@@ -175,20 +207,6 @@ export class StickyCode implements IDisposable {
       default:
         break;
     }
-
-    // A hack to know if user executes the code (the "correct" way would be to
-    // listen to the notebookAction's execution signal)
-    // Here we just quickly query if the prompt has become '[*]'
-    // console.log(this.originalExecutionCounter?.innerHTML);
-    // if (this.originalExecutionCounter?.innerHTML === '[*]:') {
-    //   // Set the counter to star
-    //   console.log('to star');
-    //   this.executionCounter.innerText = '[*]';
-    // }
-
-    console.log(model, args);
-
-    console.log(this.executionCount);
   };
 
   /**
@@ -244,7 +262,7 @@ export class StickyCode implements IDisposable {
     this.cellNode.querySelector('.jp-Cell-inputCollapser')?.remove();
     this.cellNode.querySelector('.jp-OutputCollapser')?.remove();
     this.cellNode.querySelector('.jp-InputArea-prompt')?.remove();
-    this.cellNode.querySelector('.jp-OutputArea-prompt')?.remove();
+    this.cellNode.querySelector('.jp-OutputPrompt')?.remove();
     this.cellNode.querySelector('.jp-CellHeader')?.remove();
     this.cellNode.querySelector('.jp-CellFooter')?.remove();
 
@@ -381,7 +399,7 @@ export class StickyCode implements IDisposable {
     event.preventDefault();
     event.stopPropagation();
 
-    // Render the markdown
+    // Run the cell
   };
 
   launchClicked = (event: Event) => {
