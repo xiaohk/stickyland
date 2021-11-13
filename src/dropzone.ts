@@ -20,10 +20,15 @@ export class Dropzone implements IDisposable {
   isDisposed = false;
   select: HTMLSelectElement;
   selectButton: HTMLButtonElement;
+  static numDz: number = 0;
 
   constructor(stickyContent: StickyContent) {
     this.stickyContent = stickyContent;
     this.doseReceiveDrop = true;
+
+    // Connect to corresponding tab
+    this.stickyContent.wrapperNode.id = "New Cell " + Dropzone.numDz;
+    Dropzone.numDz++;
 
     // Add a dropzone element (providing feedback of drag-and-drop)
     this.node = document.createElement('div');

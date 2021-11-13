@@ -34,6 +34,7 @@ export class StickyMarkdown implements IDisposable {
   notebook!: NotebookPanel;
   codemirror!: CodeMirror.Editor;
   isDisposed = false;
+  static numMd: number = 0;
 
   /**
    * Factory function for StickyMarkdown when creating if from an existing cell
@@ -51,6 +52,16 @@ export class StickyMarkdown implements IDisposable {
     const md = new StickyMarkdown();
     md.stickyContent = stickyContent;
     md.notebook = notebook;
+
+    // Connect to corresponding tab
+    var tab = document.getElementsByName(md.stickyContent.wrapperNode.id);
+    console.log(tab[0])
+    tab[0].textContent = "md" + StickyMarkdown.numMd;
+    console.log(tab[0])
+    tab[0].setAttribute("name", "md" + StickyMarkdown.numMd);
+    
+    md.stickyContent.wrapperNode.id = "md" + StickyMarkdown.numMd;
+    StickyMarkdown.numMd ++;
 
     // Clone the cell
     md.originalCell = cell;

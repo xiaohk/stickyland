@@ -68,13 +68,93 @@
   background-color: var(--md-grey-100);
 }
 
-.sticky-tab {
+.sticky-tab-bar {
   height: 28px;
   width: 100%;
-  display: flex;
+  /* display: flex; */
   opacity: 1;
   background-color: var(--md-grey-400);
+  border-top: 5px solid var(--md-grey-400);
+  border-bottom: none;
   /* border-top-left-radius: 5px; */
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.sticky-tab button.current {
+  /* background-color: inherit; */
+  background: var(--jp-layout-color1);
+  color: rgba(0, 0, 0, 1);
+  /* min-height: 24; */
+  /* height: 26; */
+  /* transform: translateY(1); */
+  margin-left: 0;
+  flex: 0 1 100px;
+  text-align: left;
+  min-width: 40px;
+  line-height: 26px;
+  padding: 0px 8px;
+  /* border: 1px solid var(--md-grey-400); */
+  border-top: 2px solid #1976D2;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 0;
+  position: relative;
+  /* display: flex;
+  flex-direction: row; */
+  /* box-sizing: border-box; */
+  overflow: hidden;
+  touch-action: none;
+
+  /* float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s; */
+  
+}
+
+.sticky-tab button {
+  /* background-color: inherit; */
+  background: var(--md-grey-200);
+  color: rgba(0, 0, 0, 1);
+  min-height: 24;
+  /* height: 26; */
+  /* transform: translateY(1); */
+  margin-left: 0;
+  flex: 0 1 100px;
+  text-align: left;
+  min-width: 40px;
+  line-height: 26px;
+  padding: 0px 8px;
+  border: 1px solid var(--md-grey-400);
+  border-radius: 0;
+  /* border-left: none;
+  border-right: none;
+  border-bottom: none; */
+  /* border-top: 2px solid #1976D2; */
+  position: relative;
+  /* display: flex;
+  flex-direction: row; */
+  /* box-sizing: border-box; */
+  overflow: hidden;
+  touch-action: none;
+
+  /* float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s; */
+  
+}
+
+.sticky-tab button:hover {
+  background: white;
 }
 
 .sticky-content {
