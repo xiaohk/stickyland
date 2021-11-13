@@ -161,6 +161,14 @@ export class StickyCode implements IDisposable {
         // Update the execution count
         this.executionCount = codeModel.executionCount;
         break;
+      case 'isDirty':
+        // Color the execution based on the dirty state
+        if (args.newValue) {
+          this.executionCounter.classList.add('dirty');
+        } else {
+          this.executionCounter.classList.remove('dirty');
+        }
+        break;
       default:
         break;
     }
@@ -336,6 +344,11 @@ export class StickyCode implements IDisposable {
     });
 
     // Add the execution count and toggle into the toolbar
+    const toggleLabel = document.createElement('div');
+    toggleLabel.classList.add('toggle-label');
+    toggleLabel.innerText = 'auto-run';
+    statusGroup.appendChild(toggleLabel);
+
     const toggle = document.createElement('div');
     toggle.classList.add('jp-switch-track');
     statusGroup.appendChild(toggle);

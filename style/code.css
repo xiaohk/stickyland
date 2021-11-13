@@ -38,7 +38,6 @@
   flex-direction: row;
   align-items: center;
   gap: 5px;
-  padding-right: 3px;
 }
 
 .toolbar-status .execution-counter {
@@ -49,11 +48,31 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 48px;
+  display: flex;
+  justify-content: center;
 }
 
 .toolbar-status .execution-counter.mod-focused {
   color: var(--jp-cell-inprompt-font-color);
   opacity: 1;
+}
+
+.toolbar-status .execution-counter.dirty {
+  color: var(--jp-warn-color1);
+  opacity: 1;
+}
+
+.toolbar-status .execution-counter.dirty::before {
+  color: var(--jp-warn-color1);
+  content: '•';
+  opacity: 1;
+}
+
+.toolbar-status .toggle-label {
+  color: var(--jp-cell-prompt-not-active-font-color);
+  font-size: var(--jp-code-font-size);
+  opacity: var(--jp-cell-prompt-not-active-opacity);
 }
 
 /* Need to set the CodeMirror's height to 100% otherwise it uses the whole
