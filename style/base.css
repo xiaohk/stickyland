@@ -118,6 +118,18 @@
   
 }
 
+.sticky-tab button.add-cell {
+  /* background: var(--md-grey-200);
+  color: rgba(0, 0, 0, 1); */
+  /* border: none; */
+  flex: 0 0 20px;
+  /* max-width: 25px; */
+  /* margin-left: auto; */
+  /* position: absolute;
+  right: 0; */
+  /* align-self: flex-end; */
+}
+
 .sticky-tab button {
   /* background-color: inherit; */
   background: var(--md-grey-200);
@@ -156,6 +168,8 @@
 .sticky-tab button:hover {
   background: white;
 }
+
+
 
 .sticky-content {
   height: calc(100% - 28px);

@@ -21,11 +21,11 @@ export class StickyContent {
   headerNode: HTMLElement;
   contentNode: HTMLElement;
   curContent: Dropzone | StickyMarkdown;
-  notebook: NotebookPanel;
+  static notebook: NotebookPanel;
 
   constructor(stickyContainer: HTMLElement, panel: NotebookPanel) {
     this.stickyContainer = stickyContainer;
-    this.notebook = panel;
+    StickyContent.notebook = panel;
 
     // Add the content element
     console.log('init content!');
@@ -62,7 +62,7 @@ export class StickyContent {
         this.curContent = StickyMarkdown.createFromExistingCell(
           this,
           cell as MarkdownCell,
-          this.notebook
+          StickyContent.notebook
         );
         break;
 
@@ -86,7 +86,7 @@ export class StickyContent {
       this.curContent.dispose();
 
       // Initialize a markdown cell
-      this.curContent = StickyMarkdown.createFromNewCell(this, this.notebook);
+      this.curContent = StickyMarkdown.createFromNewCell(this, StickyContent.notebook);
     }
   }
 

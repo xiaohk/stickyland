@@ -55,9 +55,7 @@ export class StickyMarkdown implements IDisposable {
 
     // Connect to corresponding tab
     var tab = document.getElementsByName(md.stickyContent.wrapperNode.id);
-    console.log(tab[0])
     tab[0].textContent = "md" + StickyMarkdown.numMd;
-    console.log(tab[0])
     tab[0].setAttribute("name", "md" + StickyMarkdown.numMd);
     
     md.stickyContent.wrapperNode.id = "md" + StickyMarkdown.numMd;
