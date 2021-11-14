@@ -6,6 +6,7 @@ import {
   runIcon,
   editIcon,
   launcherIcon,
+  ellipsesIcon,
   closeIcon,
   Switch
 } from '@jupyterlab/ui-components';
@@ -38,6 +39,7 @@ export class StickyCode implements IDisposable {
   originalExecutionCounter!: HTMLElement | null;
   private _executionCount!: number | null;
   executionCounter!: HTMLElement;
+  placeholder!: HTMLElement;
 
   stickyContent!: StickyContent;
   originalCell!: CodeCell;
@@ -155,6 +157,24 @@ export class StickyCode implements IDisposable {
         }, 200);
       }
     });
+
+    // Add a hidden placeholder element before the input area. We show it when
+    // users collapse the input
+    cd.placeholder = document.createElement('div');
+    cd.placeholder.classList.add('jp-Placeholder-content', 'no-display');
+    cd.placeholder.addEventListener('click', cd.expandClicked);
+
+    if (cd.cell.node.firstElementChild !== null) {
+      cd.cell.node.insertBefore(
+        cd.placeholder,
+        cd.cell.node.firstChild as HTMLElement
+      );
+    }
+
+    const placeholderIcon = document.createElement('div');
+    placeholderIcon.classList.add('jp-MoreHorizIcon', 'placeholder-icon');
+    ellipsesIcon.element({ container: placeholderIcon });
+    cd.placeholder.appendChild(placeholderIcon);
 
     console.log(notebook.model);
 
@@ -455,8 +475,6 @@ export class StickyCode implements IDisposable {
     this.cell.inputHidden = true;
 
     // Swap the icon in the toolbar
-    console.log(this.node.querySelector('.button-collapse'));
-
     this.stickyContent.headerNode
       .querySelector('.button-collapse')
       ?.parentElement?.classList.add('no-display');
@@ -465,7 +483,8 @@ export class StickyCode implements IDisposable {
       .querySelector('.button-expand')
       ?.parentElement?.classList.remove('no-display');
 
-    console.log('Collapse clicked!');
+    // Show the input placeholder
+    this.placeholder.classList.remove('no-display');
   };
 
   expandClicked = (event: Event) => {
@@ -484,7 +503,8 @@ export class StickyCode implements IDisposable {
       .querySelector('.button-expand')
       ?.parentElement?.classList.add('no-display');
 
-    console.log('Expand clicked!');
+    // Hide the input placeholder
+    this.placeholder.classList.add('no-display');
   };
 
   toolBarItems = [
