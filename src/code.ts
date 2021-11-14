@@ -77,6 +77,10 @@ export class StickyCode implements IDisposable {
     cd.originalCell = cell;
     cd.cell = cd.originalCell.clone();
 
+    // Collapse the original cell (both input and output)
+    cd.originalCell.inputHidden = true;
+    cd.originalCell.outputHidden = true;
+
     // Register the original execution counter node
     cd.originalExecutionCounter = cd.originalCell.node.querySelector(
       '.jp-InputArea-prompt'
@@ -241,6 +245,14 @@ export class StickyCode implements IDisposable {
       case 'executionCount':
         // Update the execution count
         this.executionCount = codeModel.executionCount;
+
+        // JupyterLab redraws the output area when code is executed, so we need
+        // to hide the original output every time here
+        // https://github.com/jupyterlab/jupyterlab/blob/e4e323992d24f6c5e48d181381e23c547b665b15/packages/notebook/src/actions.tsx#L1156
+        if (this.originalCell.inputHidden) {
+          this.originalCell.outputHidden = true;
+        }
+
         break;
       case 'isDirty':
         // Color the execution based on the dirty state
