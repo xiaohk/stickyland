@@ -49,7 +49,7 @@ export class Dropzone implements IDisposable {
     // Add a text label
     const label = document.createElement('span');
     label.classList.add('dropzone-label');
-    label.innerHTML = 'Create a cell or drag one here';
+    label.innerText = 'Drag a cell here or create a new one';
     this.node.append(label);
 
     // Add bottom container
@@ -172,6 +172,7 @@ export class Dropzone implements IDisposable {
     switch (curOption) {
       case ContentType.Code:
         console.log('Creating a new code cell!');
+        this.stickyContent.swapDropzoneWithNewCell(ContentType.Code);
         break;
 
       case ContentType.Markdown:

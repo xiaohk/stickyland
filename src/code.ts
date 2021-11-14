@@ -33,6 +33,7 @@ import iconExpand from '../style/img/icon-expand.svg';
  */
 export class StickyCode implements IDisposable {
   node!: HTMLElement;
+  toolbar!: HTMLElement;
   cellNode!: HTMLElement;
   editorNode!: HTMLElement | null;
   outputNode!: HTMLElement | null;
@@ -99,8 +100,8 @@ export class StickyCode implements IDisposable {
     cd.node.appendChild(cd.cellNode);
 
     // Add a toolbar
-    const toolbar = cd.createToolbar(cd.toolBarItems);
-    cd.stickyContent.headerNode.appendChild(toolbar);
+    cd.toolbar = cd.createToolbar(cd.toolBarItems);
+    cd.stickyContent.headerNode.appendChild(cd.toolbar);
 
     // Bind the Codemirror
     const codeMirrorNode = cd.cell.node.querySelector('.CodeMirror') as unknown;
@@ -289,8 +290,8 @@ export class StickyCode implements IDisposable {
   }
 
   /**
-   * Factory function for StickyCode when creating if from a new markdown
-   * cell. This function would append a new markdown cell to the main notebook.
+   * Factory function for StickyCode when creating if from a new code cell.
+   * This function would append a new markdown cell to the main notebook.
    * @param stickyContent The sticky content that contains this markdown cell
    * @param notebook The current notebook
    * @returns A new StickyCode object
@@ -299,7 +300,7 @@ export class StickyCode implements IDisposable {
     stickyContent: StickyContent,
     notebook: NotebookPanel
   ): StickyCode {
-    // Append a new markdown cell to the main notebook
+    // Append a new code cell to the main notebook
     NotebookActions.insertBelow(notebook.content);
     NotebookActions.changeCellType(notebook.content, 'code');
 
@@ -476,6 +477,16 @@ export class StickyCode implements IDisposable {
     event.preventDefault();
     event.stopPropagation();
 
+    // Show the original cell
+    this.originalCell.inputHidden = false;
+    this.originalCell.outputHidden = false;
+
+    // TEMP: replace the current content with the dropzone
+    this.stickyContent.showDropzone();
+
+    // Remove the code cell
+    this.dispose();
+
     console.log('Close clicked!');
   };
 
@@ -579,9 +590,14 @@ export class StickyCode implements IDisposable {
   };
 
   dispose() {
-    this.node.remove();
+    // Disconnect signal handlers
     this.codeObserver.disconnect();
     this.toggle.dispose();
+
+    // Remove nodes
+    this.node.remove();
+    this.toolbar.remove();
+
     this.isDisposed = true;
   }
 }

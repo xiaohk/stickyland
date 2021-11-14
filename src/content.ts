@@ -48,11 +48,18 @@ export class StickyContent {
   }
 
   /**
+   * Replace the current content with a dropzone
+   */
+  showDropzone = () => {
+    this.curContent = new Dropzone(this);
+  };
+
+  /**
    * Replace the dropzone content with a clone of an existing cell
    * @param cell Existing cell that the users drag over
    * @param newCellType Cell type of the current cell
    */
-  swapDropzoneWithExistingCell(cell: Cell, newCellType: ContentType) {
+  swapDropzoneWithExistingCell = (cell: Cell, newCellType: ContentType) => {
     // Remove the dropzone
     this.curContent.dispose();
 
@@ -80,60 +87,73 @@ export class StickyContent {
       default:
         break;
     }
-  }
+  };
 
   /**
    * Replace the dropzone content with a new cell. This operation will append a
    * new cell to the main notebook.
    * @param newCellType New cell type
    */
-  swapDropzoneWithNewCell(newCellType: ContentType) {
-    if (newCellType === ContentType.Markdown) {
-      // Remove the dropzone
-      this.curContent.dispose();
+  swapDropzoneWithNewCell = (newCellType: ContentType) => {
+    switch (newCellType) {
+      case ContentType.Code:
+        // Remove the dropzone
+        this.curContent.dispose();
 
-      // Initialize a markdown cell
-      this.curContent = StickyMarkdown.createFromNewCell(this, this.notebook);
+        // Initialize a new code cell
+        this.curContent = StickyCode.createFromNewCell(this, this.notebook);
+        break;
+
+      case ContentType.Markdown:
+        // Remove the dropzone
+        this.curContent.dispose();
+
+        // Initialize a markdown cell
+        this.curContent = StickyMarkdown.createFromNewCell(this, this.notebook);
+        break;
+
+      default:
+        break;
     }
-  }
+  };
 
   /**
    * Handle drag enter according to the current content type
    * @param event Lumino IDragEvent
    */
-  dragEnterHandler(event: IDragEvent) {
+  dragEnterHandler = (event: IDragEvent) => {
     if (this.curContent instanceof Dropzone) {
       this.curContent.dragEnterHandler(event);
     }
-  }
+  };
 
   /**
    * Handle drag over according to the current content type
    * @param event Lumino IDragEvent
    */
-  dragOverHandler(event: IDragEvent) {
+  dragOverHandler = (event: IDragEvent) => {
     if (this.curContent instanceof Dropzone) {
       this.curContent.dragOverHandler(event);
     }
-  }
+  };
 
   /**
    * Handle drop leave according to the current content type
    * @param event Lumino IDragEvent
    */
-  dragDropHandler(event: IDragEvent) {
+  dragDropHandler = (event: IDragEvent) => {
     if (this.curContent instanceof Dropzone) {
       this.curContent.dragDropHandler(event);
     }
-  }
+  };
 
   /**
    * Handle drag leave according to the current content type
    * @param event Lumino IDragEvent
    */
-  dragLeaveHandler(event: IDragEvent) {
+  dragLeaveHandler = (event: IDragEvent) => {
     if (this.curContent instanceof Dropzone) {
       this.curContent.dragLeaveHandler(event);
     }
-  }
+  };
 }

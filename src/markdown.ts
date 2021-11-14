@@ -27,6 +27,7 @@ import { StickyContent, ContentType } from './content';
 export class StickyMarkdown implements IDisposable {
   stickyContent!: StickyContent;
   node!: HTMLElement;
+  toolbar!: HTMLElement;
   cellNode!: HTMLElement;
   originalCell!: MarkdownCell;
   cell!: MarkdownCell;
@@ -79,8 +80,8 @@ export class StickyMarkdown implements IDisposable {
     console.log(notebook.model);
 
     // Add a toolbar
-    const toolbar = md.createToolbar(md.toolBarItems);
-    md.stickyContent.headerNode.appendChild(toolbar);
+    md.toolbar = md.createToolbar(md.toolBarItems);
+    md.stickyContent.headerNode.appendChild(md.toolbar);
 
     // Clean the markdown cell
     // Need to append the node to DOM first so we can do the cleaning
@@ -322,6 +323,15 @@ export class StickyMarkdown implements IDisposable {
     event.preventDefault();
     event.stopPropagation();
 
+    // Show the original cell
+    this.originalCell.inputHidden = false;
+
+    // TEMP: replace the current content with the dropzone
+    this.stickyContent.showDropzone();
+
+    // Remove the code cell
+    this.dispose();
+
     console.log('Close clicked!');
   };
 
@@ -354,6 +364,7 @@ export class StickyMarkdown implements IDisposable {
 
   dispose() {
     this.node.remove();
+    this.toolbar.remove();
     this.isDisposed = true;
   }
 }
