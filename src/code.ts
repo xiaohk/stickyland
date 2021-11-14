@@ -147,7 +147,7 @@ export class StickyCode implements IDisposable {
         }
 
         cd.autoRunTimeout = setTimeout(() => {
-          cd.execute();
+          cd.execute(true);
         }, 200);
       }
     });
@@ -384,7 +384,9 @@ export class StickyCode implements IDisposable {
    * as the active cell, (2) use the NotebookActions to run the current active
    * cell
    */
-  execute = () => {
+  execute = (restoreActiveCell = false) => {
+    const restoreActiveCellIndex = this.notebook.content.activeCellIndex;
+
     // Find the cell index of the original cell
     // Note it can change as users can insert cells above and below the cell
     // Jupyter lab internally iterates through all widgets to find the index
@@ -405,6 +407,11 @@ export class StickyCode implements IDisposable {
       this.notebook.content,
       this.notebook.context.sessionContext
     );
+
+    // Restore the active cell if needed
+    if (restoreActiveCell) {
+      this.notebook.content.activeCellIndex = restoreActiveCellIndex;
+    }
   };
 
   runClicked = (event: Event) => {
