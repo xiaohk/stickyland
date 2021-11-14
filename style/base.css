@@ -27,6 +27,10 @@
   visibility: hidden;
 }
 
+.no-display {
+  display: none;
+}
+
 .svg-icon {
   display: flex;
   align-content: center;

@@ -25,6 +25,7 @@ import { StickyContent, ContentType } from './content';
 
 import iconCollapse from '../style/img/icon-collapse.svg';
 import iconLaunch from '../style/img/icon-launch.svg';
+import iconExpand from '../style/img/icon-expand.svg';
 
 /**
  * Class that implements the Code cell in StickyLand.
@@ -358,6 +359,11 @@ export class StickyCode implements IDisposable {
       });
     });
 
+    // Hide the expand button at first
+    buttonGroup
+      .querySelector('.button-expand')
+      ?.parentElement?.classList.add('no-display');
+
     // Add a toggle switch into the toolbar
     this.toggle = new Switch();
 
@@ -445,7 +451,40 @@ export class StickyCode implements IDisposable {
     event.preventDefault();
     event.stopPropagation();
 
+    // Hide the input region
+    this.cell.inputHidden = true;
+
+    // Swap the icon in the toolbar
+    console.log(this.node.querySelector('.button-collapse'));
+
+    this.stickyContent.headerNode
+      .querySelector('.button-collapse')
+      ?.parentElement?.classList.add('no-display');
+
+    this.stickyContent.headerNode
+      .querySelector('.button-expand')
+      ?.parentElement?.classList.remove('no-display');
+
     console.log('Collapse clicked!');
+  };
+
+  expandClicked = (event: Event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Hide the input region
+    this.cell.inputHidden = false;
+
+    // Swap the icon in the toolbar
+    this.stickyContent.headerNode
+      .querySelector('.button-collapse')
+      ?.parentElement?.classList.remove('no-display');
+
+    this.stickyContent.headerNode
+      .querySelector('.button-expand')
+      ?.parentElement?.classList.add('no-display');
+
+    console.log('Expand clicked!');
   };
 
   toolBarItems = [
@@ -463,6 +502,15 @@ export class StickyCode implements IDisposable {
         svgstr: iconCollapse
       }),
       onClick: this.collapseClicked
+    },
+    {
+      name: 'expand',
+      title: 'Show the input',
+      icon: new LabIcon({
+        name: 'icon-expand',
+        svgstr: iconExpand
+      }),
+      onClick: this.expandClicked
     },
     {
       name: 'launch',
