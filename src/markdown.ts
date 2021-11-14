@@ -1,13 +1,7 @@
 import { Widget, BoxLayout } from '@lumino/widgets';
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { Drag, IDragEvent } from '@lumino/dragdrop';
-import {
-  LabIcon,
-  runIcon,
-  editIcon,
-  launcherIcon,
-  closeIcon
-} from '@jupyterlab/ui-components';
+import { LabIcon } from '@jupyterlab/ui-components';
 import {
   NotebookPanel,
   INotebookModel,
@@ -20,6 +14,7 @@ import CodeMirror from 'codemirror';
 import { toArray } from '@lumino/algorithm';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { StickyContent, ContentType } from './content';
+import { MyIcons } from './icons';
 
 /**
  * Class that implements the Markdown cell in StickyLand.
@@ -339,25 +334,25 @@ export class StickyMarkdown implements IDisposable {
     {
       name: 'run',
       title: 'Run the cell',
-      icon: runIcon,
+      icon: MyIcons.runIcon,
       onClick: this.runClicked
     },
     {
       name: 'edit',
       title: 'Edit the cell',
-      icon: editIcon,
+      icon: MyIcons.editIcon,
       onClick: this.editClicked
     },
     {
       name: 'launch',
       title: 'Make the cell float',
-      icon: launcherIcon,
+      icon: MyIcons.launchIcon,
       onClick: this.launchClicked
     },
     {
       name: 'close',
       title: 'Remove the cell',
-      icon: closeIcon,
+      icon: MyIcons.closeIcon,
       onClick: this.closeClicked
     }
   ];

@@ -1,15 +1,7 @@
 import { Widget, BoxLayout } from '@lumino/widgets';
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { Drag, IDragEvent } from '@lumino/dragdrop';
-import {
-  LabIcon,
-  runIcon,
-  editIcon,
-  launcherIcon,
-  ellipsesIcon,
-  closeIcon,
-  Switch
-} from '@jupyterlab/ui-components';
+import { LabIcon, Switch } from '@jupyterlab/ui-components';
 import {
   NotebookPanel,
   INotebookModel,
@@ -23,10 +15,7 @@ import CodeMirror from 'codemirror';
 import { toArray, ArrayExt } from '@lumino/algorithm';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { StickyContent, ContentType } from './content';
-
-import iconCollapse from '../style/img/icon-collapse.svg';
-import iconLaunch from '../style/img/icon-launch.svg';
-import iconExpand from '../style/img/icon-expand.svg';
+import { MyIcons } from './icons';
 
 /**
  * Class that implements the Code cell in StickyLand.
@@ -178,7 +167,7 @@ export class StickyCode implements IDisposable {
 
     const placeholderIcon = document.createElement('div');
     placeholderIcon.classList.add('jp-MoreHorizIcon', 'placeholder-icon');
-    ellipsesIcon.element({ container: placeholderIcon });
+    MyIcons.ellipsesIcon.element({ container: placeholderIcon });
     cd.placeholder.appendChild(placeholderIcon);
 
     console.log(notebook.model);
@@ -534,40 +523,31 @@ export class StickyCode implements IDisposable {
     {
       name: 'run',
       title: 'Run the cell',
-      icon: runIcon,
+      icon: MyIcons.runIcon,
       onClick: this.runClicked
     },
     {
       name: 'collapse',
       title: 'Hide the input',
-      icon: new LabIcon({
-        name: 'icon-collapse',
-        svgstr: iconCollapse
-      }),
+      icon: MyIcons.collapseIcon,
       onClick: this.collapseClicked
     },
     {
       name: 'expand',
       title: 'Show the input',
-      icon: new LabIcon({
-        name: 'icon-expand',
-        svgstr: iconExpand
-      }),
+      icon: MyIcons.expandIcon,
       onClick: this.expandClicked
     },
     {
       name: 'launch',
       title: 'Make the cell float',
-      icon: new LabIcon({
-        name: 'icon-launch',
-        svgstr: iconLaunch
-      }),
+      icon: MyIcons.launchIcon,
       onClick: this.launchClicked
     },
     {
       name: 'close',
       title: 'Remove the cell',
-      icon: closeIcon,
+      icon: MyIcons.closeIcon,
       onClick: this.closeClicked
     }
   ];

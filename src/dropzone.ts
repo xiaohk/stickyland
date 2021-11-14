@@ -1,13 +1,11 @@
 import { Widget } from '@lumino/widgets';
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { Drag, IDragEvent } from '@lumino/dragdrop';
-import { LabIcon, caretDownEmptyIcon } from '@jupyterlab/ui-components';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { CodeCell, MarkdownCell, Cell } from '@jupyterlab/cells';
 import { toArray } from '@lumino/algorithm';
 import { StickyContent, ContentType } from './content';
-
-import iconAdd from '../style/img/icon-add.svg';
+import { MyIcons } from './icons';
 
 /**
  * Class that implements the Dropzone state where the StickyContent is empty
@@ -37,14 +35,7 @@ export class Dropzone implements IDisposable {
     addIconElem.classList.add('svg-icon');
     this.node.append(addIconElem);
 
-    const addIcon = new LabIcon({
-      name: 'icon-add',
-      svgstr: iconAdd
-    });
-
-    addIcon.element({
-      container: addIconElem
-    });
+    MyIcons.addIcon.element({ container: addIconElem });
 
     // Add a text label
     const label = document.createElement('span');
@@ -69,7 +60,7 @@ export class Dropzone implements IDisposable {
     // Add a small caret down icon (from jp)
     const selectIcon = document.createElement('span');
     selectContainer.append(selectIcon);
-    caretDownEmptyIcon.element({
+    MyIcons.caretDownEmptyIcon.element({
       container: selectIcon
     });
 
