@@ -23,6 +23,9 @@ import { toArray, ArrayExt } from '@lumino/algorithm';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { StickyContent, ContentType } from './content';
 
+import iconCollapse from '../style/img/icon-collapse.svg';
+import iconLaunch from '../style/img/icon-launch.svg';
+
 /**
  * Class that implements the Code cell in StickyLand.
  */
@@ -369,7 +372,7 @@ export class StickyCode implements IDisposable {
     const toggleSwitchNode = this.toggle.node.querySelector('.jp-switch');
     toggleSwitchNode?.addEventListener('click', this.toggle);
 
-    statusGroup.appendChild(this.toggle.node);
+    buttonGroup.appendChild(this.toggle.node);
 
     // Add an execution counter into the toolbar
     this.executionCounter = document.createElement('div');
@@ -438,6 +441,13 @@ export class StickyCode implements IDisposable {
     console.log('Close clicked!');
   };
 
+  collapseClicked = (event: Event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    console.log('Collapse clicked!');
+  };
+
   toolBarItems = [
     {
       name: 'run',
@@ -446,9 +456,21 @@ export class StickyCode implements IDisposable {
       onClick: this.runClicked
     },
     {
+      name: 'collapse',
+      title: 'Hide the input',
+      icon: new LabIcon({
+        name: 'icon-collapse',
+        svgstr: iconCollapse
+      }),
+      onClick: this.collapseClicked
+    },
+    {
       name: 'launch',
       title: 'Make the cell float',
-      icon: launcherIcon,
+      icon: new LabIcon({
+        name: 'icon-launch',
+        svgstr: iconLaunch
+      }),
       onClick: this.launchClicked
     },
     {

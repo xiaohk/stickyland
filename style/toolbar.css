@@ -15,6 +15,8 @@
 }
 
 .sticky-toolbar svg {
+  fill: var(--jp-inverse-layout-color3);
+  color: var(--jp-inverse-layout-color3);
   display: block;
   height: 16px;
   margin: 0 auto;

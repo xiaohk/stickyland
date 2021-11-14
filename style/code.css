@@ -37,7 +37,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 5px;
+  padding-right: 5px;
 }
 
 .toolbar-status .execution-counter {
@@ -48,9 +48,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 48px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .toolbar-status .execution-counter.mod-focused {
@@ -69,11 +68,11 @@
   opacity: 1;
 }
 
-.toolbar-status .jp-switch[aria-checked="true"] .jp-switch-track {
+.toolbar-buttons .jp-switch[aria-checked="true"] .jp-switch-track {
   background-color: var(--jp-brand-color1);
 }
 
-.toolbar-status .jp-switch:hover {
+.toolbar-buttons .jp-switch:hover {
   background-color: unset;
 }
 
