@@ -201,3 +201,60 @@
 .sticky-content .CodeMirror.cm-s-jupyter {
   background: transparent;
 }
+
+/* .x-icon-none[fill] {
+  fill: none;
+}
+
+.x-icon-selectable-inverse[fill] {
+  fill: rgba(255, 255, 255, 0.5);
+}
+
+.x-icon3-hover:hover[fill] {
+  fill: var(--md-grey-300);
+}
+
+.x-icon3:hover[fill] {
+  fill: rgba(255, 255, 255, 0.5);
+}
+
+.x-icon-selectable:hover[fill] {
+  fill: rgba(255, 255, 255, 0.5);
+}
+
+.x-icon-accent2-hover:hover[fill] {
+  fill: rgba(255, 255, 255, 0.5);
+} */
+
+
+
+.x-icon[fill] {
+  fill: #616161;
+}
+
+/* .x-icon:hover[fill] {
+  fill: rgba(255, 255, 255, 0.5);
+} */
+
+.x-icon-circle[fill] {
+  fill: none;
+}
+
+/* .x-icon-circle:hover {
+  fill: rgba(0, 0, 0, 0.54);
+} */
+.delete-tab {
+  position: absolute;
+  right: 0;
+}
+.delete-tab:hover .x-icon {
+  fill: rgba(255, 255, 255, 0.5);
+}
+
+.delete-tab:hover .x-icon-circle {
+  fill: var(--md-grey-400);
+}
+
+
+
+
