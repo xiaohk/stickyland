@@ -122,7 +122,8 @@
   /* background: var(--md-grey-200);
   color: rgba(0, 0, 0, 1); */
   /* border: none; */
-  flex: 0 0 20px;
+  min-width: 10px;
+  flex: 0 0 10px;
   /* max-width: 25px; */
   /* margin-left: auto; */
   /* position: absolute;

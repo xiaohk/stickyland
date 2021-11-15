@@ -64,7 +64,7 @@ export class StickyTab extends Widget {
   }
 
   clickTab = ( evt: Event ) => {
-    if ((evt.target as Element).className.includes('tab')) {
+    if ((evt.target as Element).getAttribute("class") && (evt.target as Element).className.includes('tab')) {
       var tabcontent = document.getElementsByClassName("sticky-content");
       for (var i = 0; i < tabcontent.length; i++) {
         (tabcontent[i] as HTMLElement).style.display = "none";
@@ -79,6 +79,11 @@ export class StickyTab extends Widget {
       document.getElementById(id!)!.style.display = "flex";
       
       (evt.target as Element).className += " current";
+    } else {
+      var deleteTab = document.getElementsByClassName("delete-tab");
+      for (var i = 0; i < deleteTab.length; i++) {
+        deleteTab[i].addEventListener("click", this.clickDeleteTab);
+      }
     }
     
   }
@@ -135,11 +140,15 @@ export class StickyTab extends Widget {
     } else {
       this.clickAddTab();
     }
-    
-
-    
     // (tabs[0] as HTMLElement).classList.add('current');
     // (tabs[0] as HTMLElement).style.display = "flex";
   }
+      
+  // addDeleteListener() {
+  //   var deleteTab = document.getElementsByClassName("delete-tab");
+  //   for (var i = 0; i < deleteTab.length; i++) {
+  //     deleteTab[i].addEventListener("click", this.clickDeleteTab);
+  //   }
+  // }
 
 }
