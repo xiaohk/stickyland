@@ -1,0 +1,26 @@
+.floating-window {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  position: absolute;
+  z-index: 6;
+
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: -1px 1px 3px hsla(0, 0%, 0%, 0.2), -1px 1px 20px hsla(0, 0%, 0%, 0.25);
+  background-color: white;
+}
+
+.floating-window .floating-header {
+  height: 20px;
+  width: 100%;
+  cursor: move;
+  background-color: var(--jp-layout-color4);
+  color: var(--md-grey-200);
+  border: 1px solid var(--jp-layout-color4);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
