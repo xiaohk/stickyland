@@ -17,11 +17,13 @@ import { toArray } from '@lumino/algorithm';
 
 import { StickyTab } from './tab';
 import { StickyContent } from './content';
+import { FloatingWindow } from './floating';
 
 export class StickyLand {
   node: HTMLElement;
   stickyTab: StickyTab;
   stickyContent: StickyContent;
+  floatingWindows: FloatingWindow[] = [];
 
   constructor(panel: NotebookPanel) {
     this.node = document.createElement('div');
@@ -38,7 +40,7 @@ export class StickyLand {
     this.stickyTab = new StickyTab(this.node);
 
     // Add the content element (the content can be different cells)
-    this.stickyContent = new StickyContent(this.node, panel);
+    this.stickyContent = new StickyContent(this.node, panel, this);
 
     // Register the drag-and-drop events
     this.node.addEventListener(

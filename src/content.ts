@@ -8,7 +8,7 @@ import { toArray } from '@lumino/algorithm';
 import { Dropzone } from './dropzone';
 import { StickyMarkdown } from './markdown';
 import { StickyCode } from './code';
-import { FloatingWindow } from './floating';
+import { StickyLand } from './stickyland';
 
 export enum ContentType {
   Dropzone = 'Dropzone',
@@ -24,11 +24,16 @@ export class StickyContent {
   contentNode: HTMLElement;
   curContent: Dropzone | StickyMarkdown | StickyCode;
   notebook: NotebookPanel;
-  floatingWindows: FloatingWindow[] = [];
+  stickyLand: StickyLand;
 
-  constructor(stickyContainer: HTMLElement, panel: NotebookPanel) {
+  constructor(
+    stickyContainer: HTMLElement,
+    panel: NotebookPanel,
+    stickyLand: StickyLand
+  ) {
     this.stickyContainer = stickyContainer;
     this.notebook = panel;
+    this.stickyLand = stickyLand;
 
     // Add the content element
     console.log('init content!');

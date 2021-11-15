@@ -1,5 +1,7 @@
 import { IDisposable } from '@lumino/disposable';
 import { ContentType } from './content';
+import { StickyCode } from './code';
+import { StickyMarkdown } from './markdown';
 import { MyIcons } from './icons';
 
 /**
@@ -7,13 +9,18 @@ import { MyIcons } from './icons';
  */
 export class FloatingWindow implements IDisposable {
   node: HTMLElement;
+  stickyCell: StickyCode | StickyMarkdown;
   header: HTMLElement;
   cellType: ContentType;
   isDisposed = false;
   isMousedown = false;
   lastMousePos = [0, 0];
 
-  constructor(cellType: ContentType, cellIndex = 0) {
+  constructor(
+    cellType: ContentType,
+    stickyCell: StickyCode | StickyMarkdown,
+    cellIndex = 0
+  ) {
     // Create the floating window element
     this.node = document.createElement('div');
     this.node.classList.add('floating-window');
@@ -26,6 +33,7 @@ export class FloatingWindow implements IDisposable {
 
     const headerText = document.createElement('span');
     this.cellType = cellType;
+    this.stickyCell = stickyCell;
 
     if (cellType === ContentType.Code) {
       headerText.innerText = `Code Cell ${cellIndex}`;
@@ -34,6 +42,7 @@ export class FloatingWindow implements IDisposable {
     }
     this.header.appendChild(headerText);
 
+    // Add two buttons to the header
     const headerIcons = document.createElement('div');
     headerIcons.classList.add('button-group');
     this.header.appendChild(headerIcons);
@@ -50,13 +59,54 @@ export class FloatingWindow implements IDisposable {
     MyIcons.closeIcon2.element({ container: icon2 });
     headerIcons.appendChild(icon2);
 
+    // Bind event handlers for those two buttons
+    icon1.addEventListener('click', this.landButtonClicked);
+    icon2.addEventListener('click', this.closeButtonClicked);
+
     // Allow users to drag the window to change the position
     this.header.addEventListener(
       'mousedown',
       this.headerMousedownHandler,
       true
     );
+
+    // Push itself to the floating window array
+    this.stickyCell.stickyContent.stickyLand.floatingWindows.push(this);
   }
+
+  landButtonClicked = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  closeButtonClicked = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.land();
+    this.stickyCell.closeClicked(e);
+    this.dispose();
+  };
+
+  /**
+   * Put back the elements to the StickyLand.
+   */
+  land = () => {
+    const floatingWrapper = this.node.querySelector('.sticky-content');
+    if (floatingWrapper) {
+      this.stickyCell.stickyContent.wrapperNode.append(
+        ...floatingWrapper.childNodes
+      );
+    }
+
+    // Remove the floating window from the sticky content
+    const windowIndex =
+      this.stickyCell.stickyContent.stickyLand.floatingWindows.indexOf(this);
+    this.stickyCell.stickyContent.stickyLand.floatingWindows.splice(
+      windowIndex,
+      1
+    );
+  };
 
   /**
    * Event handler for mouse down. It trigger the document to listen to mouse
@@ -131,6 +181,7 @@ export class FloatingWindow implements IDisposable {
       this.headerMousedownHandler,
       true
     );
+    this.node.remove();
     this.isDisposed = true;
   }
 }

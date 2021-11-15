@@ -40,8 +40,8 @@
 }
 
 .floating-window .button-group svg {
-  fill: var(--md-grey-500);
-  color: var(--md-grey-500);
+  fill: var(--md-grey-400);
+  color: var(--md-grey-400);
   display: block;
   height: 18px;
   width: 18px;
