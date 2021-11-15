@@ -126,17 +126,23 @@ export class StickyTab extends Widget {
   clickDeleteTab = (evt:Event) => {
     var deleteTab = (evt.currentTarget as Element).parentNode;
     var deleteHTML = (evt.currentTarget as Element).parentElement;
+    var deletedCurrent = false;
+    if (deleteHTML!.className.includes('current')) {
+      deletedCurrent = true;
+    }
     var deleteContent = document.getElementById(deleteHTML!.getAttribute("name")!);
     this.node.removeChild(deleteTab!);
     this.stickyContainer.removeChild(deleteContent!);
 
     StickyTab.numTabs--;
     if (StickyTab.numTabs > 0) {
-      var tabs = document.getElementsByClassName("tab");
-      if (!tabs[0].className.includes('current')) {
-        tabs[0].className += " current";
+      if (deletedCurrent) {
+        var tabs = document.getElementsByClassName("tab");
+        if (!tabs[0].className.includes('current')) {
+          tabs[0].className += " current";
+        }
+        document.getElementById(tabs[0].getAttribute("name")!)!.style.display = "flex";
       }
-      document.getElementById(tabs[0].getAttribute("name")!)!.style.display = "flex";
     } else {
       this.clickAddTab();
     }
