@@ -1,5 +1,6 @@
 import { IDisposable } from '@lumino/disposable';
 import { ContentType } from './content';
+import { MyIcons } from './icons';
 
 /**
  * Class that implements the Code cell in StickyLand.
@@ -33,6 +34,23 @@ export class FloatingWindow implements IDisposable {
     }
     this.header.appendChild(headerText);
 
+    const headerIcons = document.createElement('div');
+    headerIcons.classList.add('button-group');
+    this.header.appendChild(headerIcons);
+
+    const icon1 = document.createElement('div');
+    icon1.classList.add('header-button');
+    icon1.setAttribute('title', 'Put pack the cell to StickyLand');
+    MyIcons.landIcon.element({ container: icon1 });
+    headerIcons.appendChild(icon1);
+
+    const icon2 = document.createElement('div');
+    icon2.classList.add('header-button');
+    icon2.setAttribute('title', 'Close the cell');
+    MyIcons.closeIcon2.element({ container: icon2 });
+    headerIcons.appendChild(icon2);
+
+    // Allow users to drag the window to change the position
     this.header.addEventListener(
       'mousedown',
       this.headerMousedownHandler,
@@ -48,8 +66,6 @@ export class FloatingWindow implements IDisposable {
   headerMousedownHandler = (e: Event) => {
     e.preventDefault();
     e.stopPropagation();
-
-    console.log('done!');
 
     const mouseEvent = e as MouseEvent;
 

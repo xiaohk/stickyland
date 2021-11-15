@@ -10,7 +10,9 @@ import {
 import iconAdd from '../style/img/icon-add.svg';
 import iconCollapse from '../style/img/icon-collapse.svg';
 import iconLaunch from '../style/img/icon-launch.svg';
+import iconLand from '../style/img/icon-land.svg';
 import iconExpand from '../style/img/icon-expand.svg';
+import iconClose2 from '../style/img/icon-close2.svg';
 
 export class MyIcons {
   static runIcon = runIcon;
@@ -32,6 +34,16 @@ export class MyIcons {
   static launchIcon = new LabIcon({
     name: 'icon-launch',
     svgstr: iconLaunch
+  });
+
+  static landIcon = new LabIcon({
+    name: 'icon-land',
+    svgstr: iconLand
+  });
+
+  static closeIcon2 = new LabIcon({
+    name: 'icon-close2',
+    svgstr: iconClose2
   });
 
   static expandIcon = new LabIcon({
