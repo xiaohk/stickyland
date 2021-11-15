@@ -113,7 +113,6 @@ export class Dropzone implements IDisposable {
   dragEnterHandler = (event: IDragEvent) => {
     // Highlight the border to indicate dragover
     if (this.doseReceiveDrop) {
-      // check if display is flex?
       this.node.classList.add('drag-over');
     }
   };
