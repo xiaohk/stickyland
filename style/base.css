@@ -7,24 +7,28 @@
   position: absolute;
   z-index: 5;
   right: 0px;
-  width: 300px;
-  height: 300px;
-  opacity: 0.9;
+  opacity: 0.97;
 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  overflow: hidden;
-
-  /* border: 1px solid var(--md-grey-300); */
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 
-  box-shadow: -1px 1px 3px hsla(0, 0%, 0%, 0.15), -1px 1px 20px hsla(0, 0%, 0%, 0.1);
+  box-shadow: -1px 1px 3px hsla(0, 0%, 0%, 0.15),
+  -1px 1px 20px hsla(0, 0%, 0%, 0.1);
+  width: 300px;
+  height: 300px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: hidden;
 }
 
 .hidden {
   visibility: hidden;
+}
+
+.no-display {
+  display: none;
 }
 
 .svg-icon {
@@ -40,8 +44,7 @@
   width: 100%;
 }
 
-.button {
-  border: 1px solid hsl(0, 0%, 85.9%);
+.sticky-container .button {
   color: var(--jp-ui-font-color0);
   background-color: white;
   cursor: pointer;
@@ -59,11 +62,11 @@
   font-size: 0.6em;
 }
 
-.button:hover {
+.sticky-container .button:hover {
   border-color: hsl(0, 0%, 71%);
 }
 
-.button:active {
+.sticky-container .button:active {
   border-color: hsl(0, 0%, 40%);
   background-color: var(--md-grey-100);
 }
@@ -126,8 +129,27 @@
   background: white;
 }
 
+.sticky-header {
+  height: 10px;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--jp-layout-color3);
+  cursor: move;
+}
+
+.sticky-header svg {
+  fill: var(--md-grey-200);
+  color: var(--md-grey-200);
+  display: block;
+  width: 18px;
+  margin: 0 auto;
+}
+
 .sticky-content {
-  height: calc(100% - 28px);
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -179,6 +201,20 @@
   fill: rgba(0, 0, 0, 0.75);
 }
 
+.sticky-container .resize-handle {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 12px;
+  height: 12px;
+  cursor: nesw-resize;
+}
 
-
+.cursor-mask {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  background-color: hsla(0, 0%, 0%, 0);
+  z-index: 4;
+}
 

@@ -1,13 +1,7 @@
 import { Widget, BoxLayout } from '@lumino/widgets';
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { Drag, IDragEvent } from '@lumino/dragdrop';
-import {
-  LabIcon,
-  runIcon,
-  editIcon,
-  launcherIcon,
-  closeIcon
-} from '@jupyterlab/ui-components';
+import { LabIcon } from '@jupyterlab/ui-components';
 import {
   NotebookPanel,
   INotebookModel,
@@ -20,7 +14,7 @@ import CodeMirror from 'codemirror';
 import { toArray } from '@lumino/algorithm';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { StickyContent, ContentType } from './content';
-import { StickyTab } from './tab';
+import { MyIcons } from './icons';
 
 /**
  * Class that implements the Markdown cell in StickyLand.
@@ -28,6 +22,7 @@ import { StickyTab } from './tab';
 export class StickyMarkdown implements IDisposable {
   stickyContent!: StickyContent;
   node!: HTMLElement;
+  toolbar!: HTMLElement;
   cellNode!: HTMLElement;
   originalCell!: MarkdownCell;
   cell!: MarkdownCell;
@@ -80,7 +75,7 @@ export class StickyMarkdown implements IDisposable {
     // @ts-ignore
     md.renderer = md.cell._renderer;
 
-    // Add a dropzone element (providing feedback of drag-and-drop)
+    // Add a markdown cell element
     md.node = document.createElement('div');
     md.node.classList.add('sticky-md');
     // Need to add tabindex so it can receive keyboard events
@@ -90,8 +85,8 @@ export class StickyMarkdown implements IDisposable {
     console.log(notebook.model);
 
     // Add a toolbar
-    const toolbar = md.createToolbar(md.toolBarItems);
-    md.stickyContent.headerNode.appendChild(toolbar);
+    md.toolbar = md.createToolbar(md.toolBarItems);
+    md.stickyContent.headerNode.appendChild(md.toolbar);
 
     // Clean the markdown cell
     // Need to append the node to DOM first so we can do the cleaning
@@ -333,6 +328,15 @@ export class StickyMarkdown implements IDisposable {
     event.preventDefault();
     event.stopPropagation();
 
+    // Show the original cell
+    this.originalCell.inputHidden = false;
+
+    // TEMP: replace the current content with the dropzone
+    this.stickyContent.showDropzone();
+
+    // Remove the code cell
+    this.dispose();
+
     console.log('Close clicked!');
   };
 
@@ -340,31 +344,32 @@ export class StickyMarkdown implements IDisposable {
     {
       name: 'run',
       title: 'Run the cell',
-      icon: runIcon,
+      icon: MyIcons.runIcon,
       onClick: this.runClicked
     },
     {
       name: 'edit',
       title: 'Edit the cell',
-      icon: editIcon,
+      icon: MyIcons.editIcon,
       onClick: this.editClicked
     },
     {
       name: 'launch',
       title: 'Make the cell float',
-      icon: launcherIcon,
+      icon: MyIcons.launchIcon,
       onClick: this.launchClicked
     },
     {
       name: 'close',
       title: 'Remove the cell',
-      icon: closeIcon,
+      icon: MyIcons.closeIcon,
       onClick: this.closeClicked
     }
   ];
 
   dispose() {
     this.node.remove();
+    this.toolbar.remove();
     this.isDisposed = true;
   }
 }

@@ -1,0 +1,113 @@
+.sticky-code {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sticky-code-cell {
+  overflow-y: auto;
+  /* overflow-wrap: break-word; */
+  padding-bottom: 0px;
+}
+
+.sticky-code-output {
+  padding-left: 3px;
+}
+
+.sticky-code .jp-CodeMirrorEditor.jp-mod-focused {
+  border: var(--jp-border-width) solid var(--jp-cell-editor-active-border-color);
+  box-shadow: var(--jp-input-box-shadow);
+  background-color: var(--jp-cell-editor-active-background);
+}
+
+.sticky-toolbar.sticky-code-toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.sticky-toolbar .toolbar-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+}
+
+.sticky-toolbar .toolbar-status {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-right: 5px;
+}
+
+.toolbar-status .execution-counter {
+  color: var(--jp-cell-prompt-not-active-font-color);
+  font-size: var(--jp-code-font-size);
+  font-family: var(--jp-cell-prompt-font-family);
+  opacity: var(--jp-cell-prompt-not-active-opacity);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.toolbar-status .execution-counter.mod-focused {
+  color: var(--jp-cell-inprompt-font-color);
+  opacity: 1;
+}
+
+.toolbar-status .execution-counter.dirty {
+  color: var(--jp-warn-color1);
+  opacity: 1;
+}
+
+.toolbar-status .execution-counter.dirty::before {
+  color: var(--jp-warn-color1);
+  content: '•';
+  opacity: 1;
+}
+
+.toolbar-buttons .jp-switch[aria-checked="true"] .jp-switch-track {
+  background-color: var(--jp-accent-color1);
+}
+
+.toolbar-buttons .jp-switch:hover {
+  background-color: unset;
+}
+
+.sticky-code .placeholder-icon svg {
+  display: block;
+  height: auto;
+  margin: 0 auto;
+  width: 32px;
+}
+
+.sticky-code .placeholder-icon{
+  align-items: center;
+  display: flex;
+}
+
+/* Need to set the CodeMirror's height to 100% otherwise it uses the whole
+Notebook's height to determine when to scroll! Need to cascade down the 100%
+height. CodeMirror is such a lifesaver but so hard to debug!!
+*/
+.sticky-code-cell .jp-Cell-inputWrapper {
+  /* height: 100%; */
+  /* width: 100%; */
+}
+
+.sticky-code-cell .jp-InputArea {
+  /* height: 100%; */
+  /* width: 100%; */
+}
+
+.sticky-code-cell .jp-CodeMirrorEditor {
+  /* height: 100%; */
+  /* width: 100%; */
+}
+
+.sticky-code-cell .CodeMirror {
+  height: auto;
+  /* width: 100%; */
+}

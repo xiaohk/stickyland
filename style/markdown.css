@@ -14,6 +14,12 @@
   padding: 0 8px;
 }
 
+.sticky-md .jp-CodeMirrorEditor.jp-mod-focused {
+  border: var(--jp-border-width) solid var(--jp-cell-editor-active-border-color);
+  box-shadow: var(--jp-input-box-shadow);
+  background-color: var(--jp-cell-editor-active-background);
+}
+
 /* Need to set the CodeMirror's height to 100% otherwise it uses the whole
 Notebook's height to determine when to scroll! Need to cascade down the 100%
 height. CodeMirror is such a lifesaver but so hard to debug!!
