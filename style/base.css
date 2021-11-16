@@ -9,7 +9,7 @@
   right: 0px;
   width: 300px;
   height: 300px;
-  opacity: 0.9;
+  opacity: 0.97;
 
   display: flex;
   flex-direction: column;
@@ -44,8 +44,7 @@
   width: 100%;
 }
 
-.button {
-  border: 1px solid hsl(0, 0%, 85.9%);
+.sticky-container .button {
   color: var(--jp-ui-font-color0);
   background-color: white;
   cursor: pointer;
@@ -63,11 +62,11 @@
   font-size: 0.6em;
 }
 
-.button:hover {
+.sticky-container .button:hover {
   border-color: hsl(0, 0%, 71%);
 }
 
-.button:active {
+.sticky-container .button:active {
   border-color: hsl(0, 0%, 40%);
   background-color: var(--md-grey-100);
 }
@@ -110,4 +109,21 @@
 
 .sticky-content .CodeMirror.cm-s-jupyter {
   background: transparent;
+}
+
+.sticky-container .resize-handle {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 12px;
+  height: 12px;
+  cursor: nesw-resize;
+}
+
+.cursor-mask {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  background-color: hsla(0, 0%, 0%, 0);
+  z-index: 4;
 }

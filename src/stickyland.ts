@@ -42,6 +42,9 @@ export class StickyLand {
     // Add the content element (the content can be different cells)
     this.stickyContent = new StickyContent(this.node, panel, this);
 
+    // Allow users to drag to resize
+    this.enableResize();
+
     // Register the drag-and-drop events
     this.node.addEventListener(
       'lm-drop',
@@ -68,17 +71,69 @@ export class StickyLand {
     );
   }
 
-  isHidden() {
+  /**
+   * Allow users to drag the bottom left corner to resize the container
+   */
+  enableResize = () => {
+    const resizeHandle = document.createElement('div');
+    resizeHandle.classList.add('resize-handle');
+
+    this.node.append(resizeHandle);
+    resizeHandle.addEventListener('mousedown', this.resizeMousedownHandler);
+  };
+
+  resizeMousedownHandler = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const bbox = this.node.getBoundingClientRect();
+    const rightX = bbox.x + bbox.width;
+    const topY = bbox.y;
+
+    const cursorMask = document.createElement('div');
+    cursorMask.classList.add('cursor-mask');
+    cursorMask.style.cursor = 'nesw-resize';
+    document.body.appendChild(cursorMask);
+
+    const mouseMoveHandler = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const mouseEvent = e as MouseEvent;
+
+      const newX = mouseEvent.pageX;
+      const newWidth = Math.max(0, rightX - newX);
+      const newY = mouseEvent.pageY;
+      const newHeight = Math.max(0, newY - topY);
+
+      this.node.style.width = `${newWidth}px`;
+      this.node.style.height = `${newHeight}px`;
+    };
+
+    const mouseUpHandler = () => {
+      document.removeEventListener('mousemove', mouseMoveHandler, true);
+      document.removeEventListener('mouseup', mouseUpHandler, true);
+      document.body.style.cursor = 'default';
+      cursorMask.remove();
+    };
+
+    // Bind the mouse event listener to the document so we can track the movement
+    // if outside the header region
+    document.addEventListener('mousemove', mouseMoveHandler, true);
+    document.addEventListener('mouseup', mouseUpHandler, true);
+    document.body.style.cursor = 'newsw-resize';
+  };
+
+  isHidden = () => {
     return this.node.classList.contains('hidden');
-  }
+  };
 
-  hide() {
+  hide = () => {
     this.node.classList.add('hidden');
-  }
+  };
 
-  show() {
+  show = () => {
     this.node.classList.remove('hidden');
-  }
+  };
 
   /**
    * Handle drag drop event

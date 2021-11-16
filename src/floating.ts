@@ -13,7 +13,6 @@ export class FloatingWindow implements IDisposable {
   header: HTMLElement;
   cellType: ContentType;
   isDisposed = false;
-  isMousedown = false;
   lastMousePos = [0, 0];
 
   constructor(
@@ -118,8 +117,6 @@ export class FloatingWindow implements IDisposable {
     e.stopPropagation();
 
     const mouseEvent = e as MouseEvent;
-
-    this.isMousedown = true;
 
     // Register the offset from the initial click position to the div location
     this.lastMousePos = [mouseEvent.pageX, mouseEvent.pageY];
