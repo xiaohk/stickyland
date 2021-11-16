@@ -71,13 +71,62 @@
   background-color: var(--md-grey-100);
 }
 
-.sticky-tab {
+.sticky-tab-bar {
   height: 28px;
   width: 100%;
-  display: flex;
   opacity: 1;
   background-color: var(--md-grey-400);
-  /* border-top-left-radius: 5px; */
+  border-top: 5px solid var(--md-grey-400);
+  border-bottom: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.sticky-tab button.current {
+  background: var(--jp-layout-color1);
+  color: rgba(0, 0, 0, 1);
+  margin-left: 0;
+  flex: 0 1 100px;
+  text-align: left;
+  min-width: 40px;
+  line-height: 26px;
+  padding: 0px 8px;
+  border-top: 2px solid #1976D2;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+  touch-action: none; 
+}
+
+.sticky-tab button.add-cell {
+  min-width: 10px;
+  flex: 0 0 10px;
+}
+
+.sticky-tab button {
+  background: var(--md-grey-200);
+  color: rgba(0, 0, 0, 1);
+  min-height: 24;
+  margin-left: 0;
+  flex: 0 1 100px;
+  text-align: left;
+  min-width: 40px;
+  line-height: 26px;
+  padding: 0px 8px;
+  border: 1px solid var(--md-grey-400);
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.sticky-tab button:hover {
+  background: white;
 }
 
 .sticky-header {
@@ -118,7 +167,6 @@
   width: 100%;
   background-color: white;
   padding-bottom: 5px;
-  /* border-bottom-left-radius: 5px; */
 
   display: flex;
   justify-content: center;
@@ -128,6 +176,29 @@
 
 .sticky-content .CodeMirror.cm-s-jupyter {
   background: transparent;
+}
+
+.x-icon[fill] {
+  fill: #616161;
+}
+
+.x-icon-circle[fill] {
+  fill: none;
+}
+
+.delete-tab {
+  position: absolute;
+  right: 0;
+  margin-top: 4px;
+  margin-right: 3px;
+  
+}
+.delete-tab:hover .x-icon {
+  fill: #fff;
+}
+
+.delete-tab:hover .x-icon-circle {
+  fill: rgba(0, 0, 0, 0.75);
 }
 
 .sticky-container .resize-handle {
@@ -146,3 +217,4 @@
   background-color: hsla(0, 0%, 0%, 0);
   z-index: 4;
 }
+
