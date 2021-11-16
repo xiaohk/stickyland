@@ -5,12 +5,12 @@ import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { toArray } from '@lumino/algorithm';
 import { Dropzone} from './dropzone';
 import { StickyContent } from './content';
+import { StickyMarkdown } from './markdown';
 
 export class StickyTab extends Widget {
   stickyContainer: HTMLElement;
   node: HTMLElement;
   static numTabs: number = 0;
-  // static currentTabId: String;
 
   constructor(stickyContainer: HTMLElement) {
     super();
@@ -21,10 +21,7 @@ export class StickyTab extends Widget {
     this.node.classList.add('sticky-tab-bar');
     
     // Add new cell button
-    // var addCell = document.createElement('div');
-    // addCell.classList.add('add-cell')
     this.node.innerHTML += '<button class="add-cell">+</button>';
-    // this.node.appendChild(addCell);
 
     this.stickyContainer.append(this.node);
     
@@ -42,25 +39,16 @@ export class StickyTab extends Widget {
     var addCell = this.node.lastChild;
     this.node.removeChild(addCell!);
     this.node.innerHTML += `<button class="tab" name="New ${Dropzone.numDz}">New ${Dropzone.numDz}</button>`;
-    // this.node.innerHTML += '<button class="tab">Tab1</button>';
-    // this.node.innerHTML += '<button class="tab">Tab2</button>';
-    // this.node.innerHTML += '<button class="tab">Tab3</button>';
-    // this.node.innerHTML += '<button class="tab">Tab4</button>';
+
     this.node.appendChild(addCell!);
-    
-    // this.node.innerHTML += '<button class="tab">Tab3</button>';
 
     var tabs = document.getElementsByClassName("tab");
     tabs[0].className += " current";
-    // for (var i = 0; i < tabs.length; i++) {
     tabs[0].addEventListener("click", this.clickTab);
-    // tabs[i].innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" data-icon="ui-components:close" data-icon-id="58648a58-146c-4974-9873-7d2dfb468b8d"><g class="x-icon-none x-icon-selectable-inverse x-icon3-hover" fill="none"><circle cx="12" cy="12" r="11"></circle></g><g class="x-icon3 x-icon-selectable x-icon-accent2-hover" fill="#616161"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g><g class="x-icon-none x-icon-busy" fill="none"><circle cx="12" cy="12" r="7"></circle></g></svg>'
+
     tabs[0].innerHTML += '<svg class="delete-tab" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" data-icon="ui-components:close" data-icon-id="58648a58-146c-4974-9873-7d2dfb468b8d"><g class="x-icon-circle" fill="none"><circle cx="12" cy="12" r="11"></circle></g><g class="x-icon" fill="#616161"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g></svg>'
     var deleteTab = document.getElementsByClassName("delete-tab");
     deleteTab[0].addEventListener("click", this.clickDeleteTab);
-    // }
-    // StickyTab.currentTabId = `New Cell ${Dropzone.numDz}`;
-    // document.getElementById("New Cell 0")
   }
 
   clickTab = ( evt: Event ) => {
@@ -118,7 +106,6 @@ export class StickyTab extends Widget {
       (tabcontent[i] as HTMLElement).style.display = "none";
     }
     document.getElementById(`New ${cellNum}`)!.style.display = "flex";
-    // StickyTab.currentTabId = `New Cell ${cellNum}`;
     
     StickyTab.numTabs++;
   }
@@ -130,7 +117,13 @@ export class StickyTab extends Widget {
     if (deleteHTML!.className.includes('current')) {
       deletedCurrent = true;
     }
-    var deleteContent = document.getElementById(deleteHTML!.getAttribute("name")!);
+    var nameId = deleteHTML!.getAttribute("name");
+    if (nameId!.includes('New')) {
+      Dropzone.numDz--;
+    } else if (nameId!.includes('md')) {
+      StickyMarkdown.numMd--;
+    }
+    var deleteContent = document.getElementById(nameId!);
     this.node.removeChild(deleteTab!);
     this.stickyContainer.removeChild(deleteContent!);
 
@@ -146,15 +139,6 @@ export class StickyTab extends Widget {
     } else {
       this.clickAddTab();
     }
-    // (tabs[0] as HTMLElement).classList.add('current');
-    // (tabs[0] as HTMLElement).style.display = "flex";
   }
-      
-  // addDeleteListener() {
-  //   var deleteTab = document.getElementsByClassName("delete-tab");
-  //   for (var i = 0; i < deleteTab.length; i++) {
-  //     deleteTab[i].addEventListener("click", this.clickDeleteTab);
-  //   }
-  // }
 
 }
