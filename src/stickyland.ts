@@ -18,23 +18,30 @@ import { toArray } from '@lumino/algorithm';
 import { StickyTab } from './tab';
 import { StickyContent } from './content';
 import { FloatingWindow } from './floating';
+import { MyIcons } from './icons';
 
 export class StickyLand {
   node: HTMLElement;
+  header: HTMLElement;
   stickyTab: StickyTab;
   stickyContent: StickyContent;
   floatingWindows: FloatingWindow[] = [];
 
   constructor(panel: NotebookPanel) {
     this.node = document.createElement('div');
-    this.node.classList.add('sticky-container');
-    this.node.classList.add('hidden');
+    this.node.classList.add('sticky-container', 'hidden');
 
-    // Put the node below the toolbar
+    // Put stickyland below the toolbar
     const toolbarHeight = parseFloat(panel.toolbar.node.style.height);
-    this.node.style.top = `${toolbarHeight}px`;
+    this.node.style.top = `${toolbarHeight + 5}px`;
+    panel.node.appendChild(this.node);
 
-    panel.node.append(this.node);
+    // Create a header so that users can drag
+    this.header = document.createElement('div');
+    this.header.classList.add('sticky-header');
+    this.node.appendChild(this.header);
+
+    this.initHeader();
 
     // Add the tab element
     this.stickyTab = new StickyTab(this.node);
@@ -90,6 +97,7 @@ export class StickyLand {
     const rightX = bbox.x + bbox.width;
     const topY = bbox.y;
 
+    // Create a window size mask so that we can override the codemirror cursor
     const cursorMask = document.createElement('div');
     cursorMask.classList.add('cursor-mask');
     cursorMask.style.cursor = 'nesw-resize';
@@ -121,6 +129,58 @@ export class StickyLand {
     document.addEventListener('mousemove', mouseMoveHandler, true);
     document.addEventListener('mouseup', mouseUpHandler, true);
     document.body.style.cursor = 'newsw-resize';
+  };
+
+  /**
+   * Style the header so that users can reposition StickyLand.
+   */
+  initHeader = () => {
+    // Add the drag icon
+    const dragHandle = document.createElement('div');
+    dragHandle.classList.add('drag-handle');
+    this.header.appendChild(dragHandle);
+    MyIcons.dragIcon.element({ container: dragHandle });
+
+    // Allow the user to drag the header to change the vertical position of
+    // stickyland
+    this.header.addEventListener('mousedown', this.headerMousedownHandler);
+  };
+
+  headerMousedownHandler = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const mouseEvent = e as MouseEvent;
+    const yOffset = this.node.offsetTop - mouseEvent.pageY;
+
+    // Create a window size mask so that we can override the codemirror cursor
+    const cursorMask = document.createElement('div');
+    cursorMask.classList.add('cursor-mask');
+    cursorMask.style.cursor = 'move';
+    document.body.appendChild(cursorMask);
+
+    const mouseMoveHandler = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const mouseEvent = e as MouseEvent;
+
+      const newTop = mouseEvent.pageY + yOffset;
+
+      this.node.style.top = `${newTop}px`;
+    };
+
+    const mouseUpHandler = () => {
+      document.removeEventListener('mousemove', mouseMoveHandler, true);
+      document.removeEventListener('mouseup', mouseUpHandler, true);
+      document.body.style.cursor = 'default';
+      cursorMask.remove();
+    };
+
+    // Bind the mouse event listener to the document so we can track the movement
+    // if outside the header region
+    document.addEventListener('mousemove', mouseMoveHandler, true);
+    document.addEventListener('mouseup', mouseUpHandler, true);
+    document.body.style.cursor = 'move';
   };
 
   isHidden = () => {

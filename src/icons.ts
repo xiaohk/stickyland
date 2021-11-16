@@ -13,6 +13,8 @@ import iconLaunch from '../style/img/icon-launch.svg';
 import iconLand from '../style/img/icon-land.svg';
 import iconExpand from '../style/img/icon-expand.svg';
 import iconClose2 from '../style/img/icon-close2.svg';
+import iconChevron from '../style/img/icon-chevron.svg';
+import iconDrag from '../style/img/icon-drag.svg';
 
 export class MyIcons {
   static runIcon = runIcon;
@@ -49,5 +51,15 @@ export class MyIcons {
   static expandIcon = new LabIcon({
     name: 'icon-expand',
     svgstr: iconExpand
+  });
+
+  static chevronIcon = new LabIcon({
+    name: 'icon-chevron',
+    svgstr: iconChevron
+  });
+
+  static dragIcon = new LabIcon({
+    name: 'icon-drag',
+    svgstr: iconDrag
   });
 }
