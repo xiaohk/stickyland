@@ -77,7 +77,7 @@ export class StickyContent {
         this.curContent = StickyMarkdown.createFromExistingCell(
           this,
           cell as MarkdownCell,
-          StickyContent.notebook
+          this.notebook
         );
         break;
 
@@ -110,7 +110,7 @@ export class StickyContent {
         // Initialize a new code cell
         this.curContent = StickyCode.createFromNewCell(this, this.notebook);
         break;
-        
+
       case ContentType.Markdown:
         // Remove the dropzone
         this.curContent.dispose();
