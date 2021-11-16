@@ -3,7 +3,7 @@ import { Dropzone } from './dropzone';
 import { StickyContent } from './content';
 import { StickyMarkdown } from './markdown';
 import { StickyLand } from './stickyland';
-import { NotebookPanel} from '@jupyterlab/notebook';
+import { NotebookPanel } from '@jupyterlab/notebook';
 
 export class StickyTab extends Widget {
   stickyContainer: HTMLElement;
@@ -52,7 +52,7 @@ export class StickyTab extends Widget {
     tabs[0].addEventListener('click', this.clickTab);
 
     tabs[0].innerHTML +=
-      '<svg class="delete-tab" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" data-icon="ui-components:close" data-icon-id="58648a58-146c-4974-9873-7d2dfb468b8d"><g class="x-icon-circle" fill="none"><circle cx="12" cy="12" r="11"></circle></g><g class="x-icon" fill="#616161"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g></svg>'
+      '<svg class="delete-tab" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" data-icon="ui-components:close" data-icon-id="58648a58-146c-4974-9873-7d2dfb468b8d"><g class="x-icon-circle" fill="none"><circle cx="12" cy="12" r="11"></circle></g><g class="x-icon" fill="#616161"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g></svg>';
     const deleteTab = document.getElementsByClassName('delete-tab');
     deleteTab[0].addEventListener('click', this.clickDeleteTab);
   };
@@ -101,7 +101,7 @@ export class StickyTab extends Widget {
       tabs[i].addEventListener('click', this.clickTab);
     }
     tabs[StickyTab.numTabs].innerHTML +=
-      '<svg class="delete-tab" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" data-icon="ui-components:close" data-icon-id="58648a58-146c-4974-9873-7d2dfb468b8d"><g class="x-icon-circle" fill="none"><circle cx="12" cy="12" r="11"></circle></g><g class="x-icon" fill="#616161"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g></svg>'
+      '<svg class="delete-tab" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" data-icon="ui-components:close" data-icon-id="58648a58-146c-4974-9873-7d2dfb468b8d"><g class="x-icon-circle" fill="none"><circle cx="12" cy="12" r="11"></circle></g><g class="x-icon" fill="#616161"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g></svg>';
     const deleteTab = document.getElementsByClassName('delete-tab');
     for (let i = 0; i < deleteTab.length; i++) {
       deleteTab[i].addEventListener('click', this.clickDeleteTab);
