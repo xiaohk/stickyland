@@ -20,6 +20,9 @@ import { StickyContent } from './content';
 import { FloatingWindow } from './floating';
 import { MyIcons } from './icons';
 
+const MIN_WIDTH = 235;
+const MIN_HEIGHT = 240;
+
 export class StickyLand {
   node: HTMLElement;
   header: HTMLElement;
@@ -109,9 +112,9 @@ export class StickyLand {
       const mouseEvent = e as MouseEvent;
 
       const newX = mouseEvent.pageX;
-      const newWidth = Math.max(0, rightX - newX);
+      const newWidth = Math.max(MIN_WIDTH, rightX - newX);
       const newY = mouseEvent.pageY;
-      const newHeight = Math.max(0, newY - topY);
+      const newHeight = Math.max(MIN_HEIGHT, newY - topY);
 
       this.node.style.width = `${newWidth}px`;
       this.node.style.height = `${newHeight}px`;
