@@ -464,9 +464,6 @@ export class StickyCode implements IDisposable {
    * Float the current code cell.
    */
   float = () => {
-    // Step 1: Create a new DIV to host the floating node
-    // The new DIV would be in the whole notebook
-
     // Query the code cell index for this floating window
     let floatIndex = 1;
     if (this.stickyContent.stickyLand.floatingWindows.length !== 0) {
@@ -477,24 +474,13 @@ export class StickyCode implements IDisposable {
       });
     }
 
+    // Create the floating window and put content from stickyland to the floating
+    // window
     this.floatingWindow = new FloatingWindow(
       ContentType.Code,
       this,
       floatIndex
     );
-
-    // Step 2: Clone the content wrapper and move all its children to the clone
-    // Append the clone to the floating window
-    const floatingContent = this.stickyContent.wrapperNode.cloneNode(
-      false
-    ) as HTMLElement;
-    floatingContent.append(...this.stickyContent.wrapperNode.childNodes);
-    this.floatingWindow.node.append(floatingContent);
-
-    // Note that we don't set the initial width/height for the floating window
-    // CodeMirror would automatically make the container fit the editor
-
-    // Step 3: Make the floating window movable and resizable
 
     // Finally, toggle the `isFloating` property
     this.isFloating = true;

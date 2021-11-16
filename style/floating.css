@@ -65,3 +65,47 @@
   fill: var(--md-grey-50);
   color: var(--md-grey-50);
 }
+
+.floating-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+
+  font-size: 1.5em;
+  font-weight: 400;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.floating-placeholder .placeholder-label {
+  text-align: center;
+  margin: 10px 10px 30px 10px;
+  color: var(--md-grey-700);
+  pointer-events: none;
+}
+
+.floating-placeholder .svg-icon {
+  width: 2em;
+  height: 2em;
+  fill: var(--md-grey-400);
+  pointer-events: none;
+}
+
+.placeholder-bottom-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.placeholder-bottom-container .button {
+  border: 1px solid hsl(0, 0%, 85.9%);
+  height: 22px;
+}
+
+.placeholder-select-container {
+  position: relative;
+}

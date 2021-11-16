@@ -100,7 +100,7 @@
   border-radius: 0;
   position: relative;
   overflow: hidden;
-  touch-action: none; 
+  touch-action: none;
 }
 
 .sticky-tab button.add-cell {
@@ -191,7 +191,7 @@
   right: 0;
   margin-top: 4px;
   margin-right: 3px;
-  
+
 }
 .delete-tab:hover .x-icon {
   fill: #fff;

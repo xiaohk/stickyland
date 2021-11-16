@@ -11,6 +11,7 @@ export class FloatingWindow implements IDisposable {
   node: HTMLElement;
   stickyCell: StickyCode | StickyMarkdown;
   header: HTMLElement;
+  placeholder: HTMLElement;
   cellType: ContentType;
   isDisposed = false;
   lastMousePos = [0, 0];
@@ -71,7 +72,57 @@ export class FloatingWindow implements IDisposable {
 
     // Push itself to the floating window array
     this.stickyCell.stickyContent.stickyLand.floatingWindows.push(this);
+
+    // Add the content from the cell to the floating window
+    const floatingContent = this.stickyCell.stickyContent.wrapperNode.cloneNode(
+      false
+    ) as HTMLElement;
+    floatingContent.append(
+      ...this.stickyCell.stickyContent.wrapperNode.childNodes
+    );
+    this.node.append(floatingContent);
+
+    // Add a placeholder in the original sticky content
+    this.placeholder = this.addPlaceholder();
   }
+
+  /**
+   * Add a place holder in the content node in StickyLand when the cell is floating
+   * @returns Placeholder node
+   */
+  addPlaceholder = () => {
+    const placeholder = document.createElement('div');
+    placeholder.classList.add('floating-placeholder');
+    this.stickyCell.stickyContent.wrapperNode.appendChild(placeholder);
+
+    // Add an icon
+    const addIconElem = document.createElement('div');
+    addIconElem.classList.add('svg-icon');
+    placeholder.append(addIconElem);
+
+    MyIcons.launchIcon.element({ container: addIconElem });
+
+    // Add a text label
+    const label = document.createElement('span');
+    label.classList.add('placeholder-label');
+    label.innerText = 'This cell is floating';
+    placeholder.append(label);
+
+    // Add bottom container
+    const bottomContainer = document.createElement('div');
+    bottomContainer.classList.add('placeholder-bottom-container');
+    placeholder.append(bottomContainer);
+
+    // Create a button to summon the floating window
+    const button = document.createElement('button') as HTMLButtonElement;
+    button.classList.add('placeholder-button', 'button');
+    bottomContainer.append(button);
+    button.type = 'button';
+    button.innerText = 'summon';
+    button.addEventListener('click', this.landButtonClicked);
+
+    return placeholder;
+  };
 
   landButtonClicked = (e: Event) => {
     e.preventDefault();
@@ -91,6 +142,10 @@ export class FloatingWindow implements IDisposable {
    * Put back the elements to the StickyLand.
    */
   land = () => {
+    // Remove the placeholder
+    this.placeholder.remove();
+
+    // Put back the elements to stickyland
     const floatingWrapper = this.node.querySelector('.sticky-content');
     if (floatingWrapper) {
       this.stickyCell.stickyContent.wrapperNode.append(
@@ -98,7 +153,7 @@ export class FloatingWindow implements IDisposable {
       );
     }
 
-    // Remove the floating window from the sticky content
+    // Remove the FloatingWindow object from the sticky content
     const windowIndex =
       this.stickyCell.stickyContent.stickyLand.floatingWindows.indexOf(this);
     this.stickyCell.stickyContent.stickyLand.floatingWindows.splice(
