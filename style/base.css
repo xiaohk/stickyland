@@ -72,13 +72,14 @@
 }
 
 .sticky-tab-bar {
-  height: 28px;
+  height: 23px;
   width: 100%;
   opacity: 1;
-  background-color: var(--md-grey-400);
-  border-top: 5px solid var(--md-grey-400);
-  border-bottom: none;
-  overflow: hidden;
+  background-color: var(--jp-layout-color3);
+  border-bottom: var(--jp-border-width) solid var(--jp-border-color1);
+  /* Create a white border effect of the current tab */
+  overflow: visible;
+
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -86,21 +87,25 @@
 
 .sticky-tab button.current {
   background: var(--jp-layout-color1);
-  color: rgba(0, 0, 0, 1);
+  color: var(--jp-ui-font-color0);
+
   margin-left: 0;
-  flex: 0 1 100px;
   text-align: left;
   min-width: 40px;
-  line-height: 26px;
   padding: 0px 8px;
+
   border-top: 2px solid #1976D2;
-  border-left: none;
-  border-right: none;
-  border-bottom: none;
   border-radius: 0;
+
   position: relative;
   overflow: hidden;
   touch-action: none;
+
+  /* Create a white border effect */
+  line-height: 21px;
+  min-height: 21px;
+  transform: translateY(var(--jp-border-width));
+  z-index: 2;
 }
 
 .sticky-tab button.add-cell {
@@ -109,19 +114,26 @@
 }
 
 .sticky-tab button {
-  background: var(--md-grey-200);
-  color: rgba(0, 0, 0, 1);
-  min-height: 24;
+  background: var(--jp-layout-color2);
+  color: var(--jp-ui-font-color0);
   margin-left: 0;
-  flex: 0 1 100px;
   text-align: left;
-  min-width: 40px;
-  line-height: 26px;
+  min-width: 0px;
   padding: 0px 8px;
-  border: 1px solid var(--md-grey-400);
+
+  line-height: 22px;
+  min-height: 22px;
+
+  border: var(--jp-border-width) solid var(--jp-border-color1);
+  border-bottom: none;
+  border-left: none;
   border-radius: 0;
-  position: relative;
+
+  /* Dynamic width */
+  flex: 0 1 80px;
   overflow: hidden;
+
+  position: relative;
   touch-action: none;
 }
 
