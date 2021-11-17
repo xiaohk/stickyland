@@ -1,6 +1,6 @@
 
 .sticky-button.jp-Button.minimal .jp-Icon {
-  color: orange;
+  color: var(--jp-inverse-layout-color3);
 }
 
 .sticky-container {

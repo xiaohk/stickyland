@@ -39,6 +39,15 @@ export class FloatingWindow implements IDisposable {
     this.tab = this.stickyTab.activeTab;
     this.stickyLand = this.stickyCell.stickyContent.stickyLand;
 
+    // Position the node to the inner region and offset it a little bit when
+    // users create multiple windows
+    this.node.style.left = `${
+      200 + this.stickyLand.floatingWindows.length * 20
+    }px`;
+    this.node.style.top = `${
+      100 + this.stickyLand.floatingWindows.length * 20
+    }px`;
+
     // Query the cell index for this cell
     let cellIndex = 1;
     if (this.stickyTab.activeTab) {
@@ -73,12 +82,19 @@ export class FloatingWindow implements IDisposable {
     icon1.addEventListener('click', this.landButtonClicked);
     icon2.addEventListener('click', this.closeButtonClicked);
 
+    // Need to cancel mousedown event to avoid header dragging
+    icon1.addEventListener('mousedown', e => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    icon2.addEventListener('mousedown', e => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
     // Allow users to drag the window to change the position
-    this.header.addEventListener(
-      'mousedown',
-      this.headerMousedownHandler,
-      true
-    );
+    this.header.addEventListener('mousedown', this.headerMousedownHandler);
 
     // Push itself to the floating window array
     this.stickyLand.floatingWindows.push(this);
@@ -214,6 +230,21 @@ export class FloatingWindow implements IDisposable {
 
     const mouseEvent = e as MouseEvent;
 
+    // Raise the clicked window
+    this.node.parentNode?.appendChild(this.node);
+
+    // Create a window size mask so that we can override the codemirror cursor
+    const cursorMask = document.createElement('div');
+    cursorMask.classList.add('cursor-mask');
+    cursorMask.style.cursor = 'move';
+    document.body.appendChild(cursorMask);
+
+    // Also need to mask the internal region
+    const innerCursorMask = document.createElement('div');
+    innerCursorMask.classList.add('cursor-mask');
+    innerCursorMask.style.cursor = 'move';
+    this.node.appendChild(innerCursorMask);
+
     // Register the offset from the initial click position to the div location
     this.lastMousePos = [mouseEvent.pageX, mouseEvent.pageY];
 
@@ -238,17 +269,8 @@ export class FloatingWindow implements IDisposable {
       document.removeEventListener('mousemove', mouseMoveHandler, true);
       document.removeEventListener('mouseup', mouseUpHandler, true);
       document.body.style.cursor = 'default';
-
-      // Restore the old style for code mirror elements
-      document.querySelectorAll('.jp-Editor').forEach(e => {
-        const elem = e as HTMLElement;
-        const oldStyle = elem.getAttribute('old-style');
-        if (oldStyle) {
-          elem.setAttribute('style', oldStyle);
-        } else {
-          elem.removeAttribute('style');
-        }
-      });
+      cursorMask.remove();
+      innerCursorMask.remove();
     };
 
     // Bind the mouse event listener to the document so we can track the movement
@@ -256,24 +278,10 @@ export class FloatingWindow implements IDisposable {
     document.addEventListener('mousemove', mouseMoveHandler, true);
     document.addEventListener('mouseup', mouseUpHandler, true);
     document.body.style.cursor = 'move';
-
-    // Override the pointer events for all code mirror elements
-    document.querySelectorAll('.jp-Editor').forEach(e => {
-      const elem = e as HTMLElement;
-      const oldStyle = elem.getAttribute('style');
-      if (oldStyle) {
-        elem.setAttribute('old-style', oldStyle);
-      }
-      elem.setAttribute('style', 'pointer-events: none;');
-    });
   };
 
   dispose() {
-    this.header.removeEventListener(
-      'mousedown',
-      this.headerMousedownHandler,
-      true
-    );
+    this.header.removeEventListener('mousedown', this.headerMousedownHandler);
     this.node.remove();
     this.isDisposed = true;
   }

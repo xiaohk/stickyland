@@ -76,8 +76,7 @@ export class Dropzone implements IDisposable {
     const newCellOptions = [
       { name: 'Select new cell type', type: ContentType.Dropzone },
       { name: 'Code', type: ContentType.Code },
-      { name: 'Markdown', type: ContentType.Markdown },
-      { name: 'Table of content', type: ContentType.TableOfContent }
+      { name: 'Markdown', type: ContentType.Markdown }
     ];
 
     newCellOptions.forEach(o => {
@@ -172,10 +171,6 @@ export class Dropzone implements IDisposable {
       case ContentType.Markdown:
         console.log('Creating a new markdown cell!');
         this.stickyContent.swapDropzoneWithNewCell(ContentType.Markdown);
-        break;
-
-      case ContentType.TableOfContent:
-        console.log('Creating a new table of content cell!');
         break;
 
       case ContentType.Dropzone:

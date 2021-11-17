@@ -13,8 +13,7 @@ import { StickyLand } from './stickyland';
 export enum ContentType {
   Dropzone = 'Dropzone',
   Code = 'Code',
-  Markdown = 'Markdown',
-  TableOfContent = 'TableOfContent'
+  Markdown = 'Markdown'
 }
 
 export class StickyContent implements IDisposable {
