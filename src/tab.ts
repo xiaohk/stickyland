@@ -89,23 +89,6 @@ export class StickyTab implements IDisposable {
       this.stickyLand
     );
 
-    // Handle delete icon clicked
-    tabIcon.addEventListener('click', (e: MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      // Case 1: if there are other tabs
-
-      // Case 2: this tab is the only tab
-      if (this.tabs.length === 1) {
-        // Swap the content to dropzone
-        tabContent.swapToDropzone();
-
-        // Update the tab name
-        this.updateActiveTab();
-      }
-    });
-
     // Add this tab to the model and view
     const newTab: Tab = {
       cellType: ContentType.Dropzone,
@@ -113,6 +96,45 @@ export class StickyTab implements IDisposable {
       tabNode: tabNode,
       tabContent: tabContent
     };
+
+    // Handle delete icon clicked
+    tabIcon.addEventListener('click', (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Case 1: this tab is the only tab
+      if (this.tabs.length === 1) {
+        // Swap the content to dropzone
+        tabContent.swapToDropzone();
+
+        // Update the tab name
+        this.updateActiveTab();
+      } else {
+        // Case 2: if there are other tabs
+        // First swap the content to dropzone
+        tabContent.swapToDropzone();
+
+        // Then remove the content
+        tabContent.dispose();
+
+        // Prepare to remove the tab
+        const tabIndex = this.tabs.indexOf(newTab);
+
+        // Change the active tab to the one on the left or on the right if there
+        // is no tab on the left
+        if (tabIndex !== 0) {
+          this.switchActiveTab(this.tabs[tabIndex - 1]);
+        } else {
+          this.switchActiveTab(this.tabs[tabIndex + 1]);
+        }
+
+        // Remove the tab from model
+        this.tabs.splice(tabIndex, 1);
+
+        // Remove the tab from the DOM
+        newTab.tabNode.remove();
+      }
+    });
 
     this.tabs.push(newTab);
     this.node.insertBefore(newTab.tabNode, this.addButton);
@@ -168,7 +190,7 @@ export class StickyTab implements IDisposable {
       }
 
       // Find the new cell index
-      let newCellIndex = 0;
+      let newCellIndex = 1;
       this.tabs.forEach(d => {
         if (d.cellType === newCellType) {
           newCellIndex++;
