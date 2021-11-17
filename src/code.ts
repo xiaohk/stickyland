@@ -45,7 +45,7 @@ export class StickyCode implements IDisposable {
   outputObserver!: MutationObserver;
 
   autoRun = false;
-  autoRunTimeout: number | null = null;
+  autoRunScheduled = false;
   isDisposed = false;
 
   isFloating = false;
@@ -134,28 +134,6 @@ export class StickyCode implements IDisposable {
     if (cd.outputNode) {
       cd.outputObserver.observe(cd.outputNode, { childList: true });
     }
-
-    // Listen to the notebook execution events so we can auto-run the cell
-    NotebookActions.executionScheduled.connect((_, args) => {
-      // Schedule to run the code cell if auto-run is toggled and the current
-      // running cell is not the original cell
-      if (args.cell.node !== cd.originalCell.node && cd.autoRun) {
-        // We need to set a timeout to workaround the current executionScheduled
-        // emit order
-        // https://github.com/jupyterlab/jupyterlab/pull/11453
-
-        // Also users might run multiple cells at one time, we can set a short
-        // timeout so that we only run the sticky code cell once in a series of
-        // other executions of other cells
-        if (cd.autoRunTimeout !== null) {
-          clearTimeout(cd.autoRunTimeout);
-        }
-
-        cd.autoRunTimeout = setTimeout(() => {
-          cd.execute(true);
-        }, 200);
-      }
-    });
 
     // Add a hidden placeholder element before the input area. We show it when
     // users collapse the input
@@ -439,7 +417,7 @@ export class StickyCode implements IDisposable {
     this.cell.editor.blur();
 
     // Run the active cell
-    NotebookActions.run(
+    const runPromise = NotebookActions.run(
       this.notebook.content,
       this.notebook.context.sessionContext
     );
@@ -448,6 +426,8 @@ export class StickyCode implements IDisposable {
     if (restoreActiveCell) {
       this.notebook.content.activeCellIndex = restoreActiveCellIndex;
     }
+
+    return runPromise;
   };
 
   /**
@@ -488,7 +468,7 @@ export class StickyCode implements IDisposable {
     event.stopPropagation();
 
     // Run the cell
-    this.execute();
+    this.execute(true);
   };
 
   launchClicked = (event: Event) => {
@@ -576,13 +556,13 @@ export class StickyCode implements IDisposable {
       title: 'Make the cell float',
       icon: MyIcons.launchIcon,
       onClick: this.launchClicked
-    },
-    {
-      name: 'close',
-      title: 'Remove the cell',
-      icon: MyIcons.closeIcon,
-      onClick: this.closeClicked
     }
+    // {
+    //   name: 'close',
+    //   title: 'Remove the cell',
+    //   icon: MyIcons.closeIcon,
+    //   onClick: this.closeClicked
+    // }
   ];
 
   /**
@@ -594,7 +574,7 @@ export class StickyCode implements IDisposable {
       if (e.key === 'Enter') {
         if (e.shiftKey || e.ctrlKey) {
           // [Shift + enter] or [control + enter] runs the code cell
-          this.execute();
+          this.execute(true);
           e.preventDefault();
           e.stopPropagation();
         }

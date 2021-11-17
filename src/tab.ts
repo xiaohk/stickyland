@@ -1,5 +1,5 @@
 import { IDisposable } from '@lumino/disposable';
-import { Dropzone } from './dropzone';
+import { NotebookActions } from '@jupyterlab/notebook';
 import { StickyContent } from './content';
 import { StickyMarkdown } from './markdown';
 import { StickyCode } from './code';
@@ -24,6 +24,8 @@ export class StickyTab implements IDisposable {
   activeTab: Tab | null = null;
   tabs: Tab[] = [];
 
+  autoRunTimeout: number | null = null;
+  autoRunPromises: Promise<boolean>[] = [];
   isDisposed = false;
 
   constructor(
@@ -56,6 +58,73 @@ export class StickyTab implements IDisposable {
 
     // Create the first tab
     this.createTab();
+
+    /**
+     * Listen to the notebook execution events so we can auto-run the code cell
+     * We need to register the listener at the tab level because there can be
+     * multiple code cells with auto-run turned on. If each triggers its own
+     * listener then there will be a race and infinite auto-runs.
+     */
+    NotebookActions.executionScheduled.connect((_, args) => {
+      // Get all the code cells that have auto-run turned on
+      // const autoRunCells = new Set<StickyCode>();
+      const autoRunCells = new Array<StickyCode>();
+      const autoRunCellNodes = new Set<HTMLElement>();
+
+      this.tabs.forEach(d => {
+        if (d.cellType === ContentType.Code) {
+          const curContent = d.tabContent.curContent as StickyCode;
+          if (curContent.autoRun) {
+            autoRunCells.push(curContent);
+            autoRunCellNodes.add(curContent.originalCell.node);
+          }
+        }
+      });
+
+      console.log(args);
+
+      // Schedule to run the code cell if auto-run is toggled and the current
+      // running cell is not the original cell
+      // if (autoRunCellNodes.has(args.cell.node)) {
+      //   return;
+      // }
+
+      // We need to set a timeout to workaround the current executionScheduled
+      // emit order
+      // https://github.com/jupyterlab/jupyterlab/pull/11453
+
+      // Also users might run multiple cells at one time, we can set a short
+      // timeout so that we only run the sticky code cell once in a series of
+      // other executions of other cells
+      if (this.autoRunTimeout !== null) {
+        clearTimeout(this.autoRunTimeout);
+      }
+
+      this.autoRunTimeout = setTimeout(() => {
+        // Run the auto-run code cells
+        this.autoRunPromises = [];
+        autoRunCells.forEach(d => {
+          // If the signal source is the cell itself, we mark it as autoRunScheduled
+          // so we won't run it again after its peers finish running
+          if (d.originalCell.node === args.cell.node) {
+            d.autoRunScheduled = true;
+          } else {
+            if (!d.autoRunScheduled) {
+              d.autoRunScheduled = true;
+              this.autoRunPromises.push(d.execute(true));
+            }
+          }
+        });
+
+        // Flip their runScheduled once this batch is all finished
+        Promise.all(this.autoRunPromises).then(values => {
+          console.log(values);
+          autoRunCells.forEach(d => {
+            d.autoRunScheduled = false;
+          });
+        });
+      }, 200);
+    });
   }
 
   /**
