@@ -17,7 +17,7 @@ export enum ContentType {
   TableOfContent = 'TableOfContent'
 }
 
-export class StickyContent {
+export class StickyContent implements IDisposable {
   stickyContainer: HTMLElement;
   wrapperNode: HTMLElement;
   headerNode: HTMLElement;
@@ -25,6 +25,7 @@ export class StickyContent {
   curContent: Dropzone | StickyMarkdown | StickyCode;
   notebook: NotebookPanel;
   stickyLand: StickyLand;
+  isDisposed = false;
 
   constructor(
     stickyContainer: HTMLElement,
@@ -162,5 +163,11 @@ export class StickyContent {
     if (this.curContent instanceof Dropzone) {
       this.curContent.dragLeaveHandler(event);
     }
+  };
+
+  dispose = () => {
+    // Dispose the current content
+    this.curContent.closeClicked();
+    this.isDisposed = true;
   };
 }

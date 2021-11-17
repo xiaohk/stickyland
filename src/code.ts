@@ -510,10 +510,7 @@ export class StickyCode implements IDisposable {
     console.log('Launch clicked!');
   };
 
-  closeClicked = (event: Event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
+  closeClicked = () => {
     // Show the original cell
     this.originalCell.inputHidden = false;
     this.originalCell.outputHidden = false;

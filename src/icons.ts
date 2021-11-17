@@ -4,7 +4,8 @@ import {
   editIcon,
   ellipsesIcon,
   caretDownEmptyIcon,
-  closeIcon
+  closeIcon,
+  addIcon
 } from '@jupyterlab/ui-components';
 
 import iconAdd from '../style/img/icon-add.svg';
@@ -15,6 +16,7 @@ import iconExpand from '../style/img/icon-expand.svg';
 import iconClose2 from '../style/img/icon-close2.svg';
 import iconChevron from '../style/img/icon-chevron.svg';
 import iconDrag from '../style/img/icon-drag.svg';
+import iconTabClose from '../style/img/icon-tabclose.svg';
 
 export class MyIcons {
   static runIcon = runIcon;
@@ -22,6 +24,7 @@ export class MyIcons {
   static ellipsesIcon = ellipsesIcon;
   static closeIcon = closeIcon;
   static caretDownEmptyIcon = caretDownEmptyIcon;
+  static addIcon2 = addIcon;
 
   static addIcon = new LabIcon({
     name: 'icon-add',
@@ -61,5 +64,10 @@ export class MyIcons {
   static dragIcon = new LabIcon({
     name: 'icon-drag',
     svgstr: iconDrag
+  });
+
+  static tabCloseIcon = new LabIcon({
+    name: 'icon-tabClose',
+    svgstr: iconTabClose
   });
 }

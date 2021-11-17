@@ -92,11 +92,6 @@ export class Dropzone implements IDisposable {
     });
   }
 
-  dispose() {
-    this.node.remove();
-    this.isDisposed = true;
-  }
-
   /**
    * Handle drag enter (highlight the border)
    * @param event Lumino IDragEvent
@@ -159,6 +154,13 @@ export class Dropzone implements IDisposable {
   };
 
   /**
+   * Dispose self when user clicks the close icon (from the tab)
+   */
+  closeClicked = () => {
+    this.dispose();
+  };
+
+  /**
    * Handle mouse click on the create button
    * @param event Mouse movement event
    */
@@ -188,4 +190,9 @@ export class Dropzone implements IDisposable {
         break;
     }
   };
+
+  dispose() {
+    this.node.remove();
+    this.isDisposed = true;
+  }
 }

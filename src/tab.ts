@@ -1,15 +1,30 @@
-import { Widget } from '@lumino/widgets';
+import { IDisposable } from '@lumino/disposable';
 import { Dropzone } from './dropzone';
 import { StickyContent } from './content';
 import { StickyMarkdown } from './markdown';
+import { StickyCode } from './code';
 import { StickyLand } from './stickyland';
 import { NotebookPanel } from '@jupyterlab/notebook';
+import { ContentType } from './content';
+import { MyIcons } from './icons';
 
-export class StickyTab extends Widget {
+type Tab = {
+  cellType: ContentType;
+  cellIndex: number;
+  tabNode: HTMLElement;
+  tabContent: StickyContent;
+};
+
+export class StickyTab implements IDisposable {
   stickyContainer: HTMLElement;
   node: HTMLElement;
   stickyLand: StickyLand;
   notebook: NotebookPanel;
+  addButton: HTMLElement;
+  activeTab: Tab | null = null;
+  tabs: Tab[] = [];
+
+  isDisposed = false;
   static numTabs = 0;
 
   constructor(
@@ -17,44 +32,87 @@ export class StickyTab extends Widget {
     panel: NotebookPanel,
     stickyLand: StickyLand
   ) {
-    super();
     this.stickyContainer = stickyContainer;
     this.stickyLand = stickyLand;
     this.notebook = panel;
 
     // Add the tab element
     this.node = document.createElement('div');
-    this.node.classList.add('sticky-tab-bar');
-
-    // Add new cell button
-    this.node.innerHTML += '<button class="add-cell">+</button>';
-
+    this.node.classList.add('sticky-tab', 'sticky-tab-bar');
     this.stickyContainer.append(this.node);
 
-    const addCell = document.getElementsByClassName('add-cell');
-    addCell[0].addEventListener('click', this.clickAddTab);
+    // Add new cell button
+    this.addButton = document.createElement('button');
+    this.addButton.classList.add('add-tab');
+    this.node.appendChild(this.addButton);
+    MyIcons.addIcon2.element({ container: this.addButton });
 
-    // Initialize the tab
-    this.createFirstTab();
-    StickyTab.numTabs++;
+    this.addButton.addEventListener('click', this.clickAddTab);
+
+    // Create the first tab
+    this.createTab();
+
+    // StickyTab.numTabs++;
   }
 
-  createFirstTab = () => {
-    this.node.classList.add('sticky-tab');
-    const addCell = this.node.lastChild;
-    this.node.removeChild(addCell!);
-    this.node.innerHTML += `<button class="tab" name="New ${Dropzone.numDz}">New ${Dropzone.numDz}</button>`;
+  /**
+   * Create a tab containing a dropzone content. The tab name is always 'new'
+   * for new tabs. Creating a different content (after interacting with the
+   * dropzone will update the tab name).
+   * @returns New tab
+   */
+  createTab = (): Tab => {
+    // Create a new tab node
+    const tabNode = document.createElement('button');
+    tabNode.classList.add('tab');
 
-    this.node.appendChild(addCell!);
+    // Add a label to the button
+    const tabLabel = document.createElement('span');
+    tabLabel.classList.add('tab-label');
+    tabNode.appendChild(tabLabel);
 
-    const tabs = document.getElementsByClassName('tab');
-    tabs[0].className += ' current';
-    tabs[0].addEventListener('click', this.clickTab);
+    // Add a delete icon
+    const tabIcon = document.createElement('div');
+    tabIcon.classList.add('tab-icon');
+    MyIcons.tabCloseIcon.element({ container: tabIcon });
+    tabNode.appendChild(tabIcon);
 
-    tabs[0].innerHTML +=
-      '<svg class="delete-tab" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" data-icon="ui-components:close" data-icon-id="58648a58-146c-4974-9873-7d2dfb468b8d"><g class="x-icon-circle" fill="none"><circle cx="12" cy="12" r="11"></circle></g><g class="x-icon" fill="#616161"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g></svg>';
-    const deleteTab = document.getElementsByClassName('delete-tab');
-    deleteTab[0].addEventListener('click', this.clickDeleteTab);
+    // New tab always has the dropzone content
+    tabLabel.innerHTML = 'New';
+    const tabContent = new StickyContent(
+      this.stickyContainer,
+      this.notebook,
+      this.stickyLand
+    );
+
+    // Bind event handlers
+    tabIcon.addEventListener('click', (event: MouseEvent) => {
+      // Remove the content
+      tabContent.dispose();
+    });
+
+    // Add this tab to the model and view
+    const newTab: Tab = {
+      cellType: ContentType.Dropzone,
+      cellIndex: 0,
+      tabNode: tabNode,
+      tabContent: tabContent
+    };
+
+    this.tabs.push(newTab);
+    this.node.insertBefore(newTab.tabNode, this.addButton);
+    this.activeTab = newTab;
+
+    // Move the current active tab to this new one
+    if (this.activeTab) {
+      this.activeTab.tabNode.classList.remove('current');
+    }
+    this.activeTab = newTab;
+    newTab.tabNode.classList.add('current');
+    this.stickyLand.stickyContent = newTab.tabContent;
+
+    // Return this tab
+    return newTab;
   };
 
   clickTab = (evt: Event) => {
@@ -143,5 +201,9 @@ export class StickyTab extends Widget {
     } else {
       this.clickAddTab();
     }
+  };
+
+  dispose = () => {
+    this.isDisposed = true;
   };
 }

@@ -325,10 +325,7 @@ export class StickyMarkdown implements IDisposable {
     console.log('Launch clicked!');
   };
 
-  closeClicked = (event: Event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
+  closeClicked = () => {
     // Show the original cell
     this.originalCell.inputHidden = false;
 
@@ -337,8 +334,6 @@ export class StickyMarkdown implements IDisposable {
 
     // Remove the code cell
     this.dispose();
-
-    console.log('Close clicked!');
   };
 
   toolBarItems = [

@@ -108,9 +108,21 @@
   z-index: 2;
 }
 
-.sticky-tab button.add-cell {
-  min-width: 10px;
-  flex: 0 0 10px;
+.sticky-tab button.add-tab {
+  flex: 0 0 16px;
+  padding: 0 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sticky-tab button.add-tab svg{
+  fill: var(--jp-inverse-layout-color3);
+  color: var(--jp-inverse-layout-color3);
+  display: block;
+  height: 16px;
+  width: 16px;
+  margin: 0 auto;
 }
 
 .sticky-tab button {
@@ -190,26 +202,40 @@
   background: transparent;
 }
 
-.x-icon[fill] {
-  fill: #616161;
+.sticky-tab .tab {
+  display: flex;
+  flex-direction: row;
 }
 
-.x-icon-circle[fill] {
-  fill: none;
-}
-
-.delete-tab {
+.tab-icon {
   position: absolute;
   right: 0;
   margin-top: 4px;
   margin-right: 3px;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.delete-tab:hover .x-icon {
+
+.tab-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.tab-icon .x-icon[fill] {
+  fill: #616161;
+}
+
+.tab-icon .x-icon-circle[fill] {
+  fill: none;
+}
+
+.tab-icon:hover .x-icon {
   fill: #fff;
 }
 
-.delete-tab:hover .x-icon-circle {
+.tab-icon:hover .x-icon-circle {
   fill: rgba(0, 0, 0, 0.75);
 }
 

@@ -27,7 +27,7 @@ export class StickyLand {
   node: HTMLElement;
   header: HTMLElement;
   stickyTab: StickyTab;
-  stickyContent: StickyContent;
+  stickyContent: StickyContent | null = null;
   floatingWindows: FloatingWindow[] = [];
 
   constructor(panel: NotebookPanel) {
@@ -50,7 +50,7 @@ export class StickyLand {
     this.stickyTab = new StickyTab(this.node, panel, this);
 
     // Add the content element (the content can be different cells)
-    this.stickyContent = new StickyContent(this.node, panel, this);
+    // this.stickyContent = new StickyContent(this.node, panel, this);
 
     // Allow users to drag to resize
     this.enableResize();
@@ -213,7 +213,9 @@ export class StickyLand {
     event.stopPropagation();
 
     // Let the content handle drag drop
-    this.stickyContent.dragDropHandler(event);
+    if (this.stickyContent) {
+      this.stickyContent.dragDropHandler(event);
+    }
   };
 
   /**
@@ -230,8 +232,12 @@ export class StickyLand {
     event.preventDefault();
     event.stopPropagation();
 
+    console.log('drag enter');
+
     // Change the view of content
-    this.stickyContent.dragEnterHandler(event);
+    if (this.stickyContent) {
+      this.stickyContent.dragEnterHandler(event);
+    }
   };
 
   /**
@@ -256,7 +262,9 @@ export class StickyLand {
     event.dropAction = 'copy';
 
     // Change the view of content
-    this.stickyContent.dragOverHandler(event);
+    if (this.stickyContent) {
+      this.stickyContent.dragOverHandler(event);
+    }
   };
 
   /**
@@ -274,6 +282,8 @@ export class StickyLand {
     event.stopPropagation();
 
     // Change the view of content
-    this.stickyContent.dragLeaveHandler(event);
+    if (this.stickyContent) {
+      this.stickyContent.dragLeaveHandler(event);
+    }
   };
 }

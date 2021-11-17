@@ -134,7 +134,7 @@ export class FloatingWindow implements IDisposable {
     e.stopPropagation();
 
     this.land();
-    this.stickyCell.closeClicked(e);
+    this.stickyCell.closeClicked();
     this.dispose();
   };
 
