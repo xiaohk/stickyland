@@ -49,9 +49,6 @@ export class StickyLand {
     // Add the tab element
     this.stickyTab = new StickyTab(this.node, panel, this);
 
-    // Add the content element (the content can be different cells)
-    // this.stickyContent = new StickyContent(this.node, panel, this);
-
     // Allow users to drag to resize
     this.enableResize();
 

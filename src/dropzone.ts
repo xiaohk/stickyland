@@ -24,10 +24,6 @@ export class Dropzone implements IDisposable {
     this.stickyContent = stickyContent;
     this.doseReceiveDrop = true;
 
-    // Connect to corresponding tab
-    this.stickyContent.wrapperNode.id = 'New ' + Dropzone.numDz;
-    Dropzone.numDz++;
-
     // Add a dropzone element (providing feedback of drag-and-drop)
     this.node = document.createElement('div');
     this.node.classList.add('dropzone');

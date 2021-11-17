@@ -21,6 +21,9 @@
   flex-direction: column;
   align-items: stretch;
   overflow: hidden;
+
+  --sticky-header-height: 10px;
+  --sticky-tab-height: 23px;
 }
 
 .hidden {
@@ -72,7 +75,7 @@
 }
 
 .sticky-tab-bar {
-  height: 23px;
+  height: var(--sticky-tab-height);
   width: 100%;
   opacity: 1;
   background-color: var(--jp-layout-color3);
@@ -110,10 +113,12 @@
 
 .sticky-tab button.add-tab {
   flex: 0 0 16px;
-  padding: 0 4px;
+  padding: 2px 4px 0 4px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  min-height: 20px;
 }
 
 .sticky-tab button.add-tab svg{
@@ -154,7 +159,7 @@
 }
 
 .sticky-header {
-  height: 10px;
+  height: var(--sticky-header-height);
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
@@ -173,11 +178,11 @@
 }
 
 .sticky-content {
-  height: 100%;
+  height: calc(100% - var(--sticky-header-height) - var(--sticky-tab-height));
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
