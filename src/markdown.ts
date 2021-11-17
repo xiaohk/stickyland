@@ -344,12 +344,6 @@ export class StickyMarkdown implements IDisposable {
       icon: MyIcons.launchIcon,
       onClick: this.launchClicked
     }
-    // {
-    //   name: 'close',
-    //   title: 'Remove the cell',
-    //   icon: MyIcons.closeIcon,
-    //   onClick: this.closeClicked
-    // }
   ];
 
   dispose() {

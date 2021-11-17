@@ -8,7 +8,7 @@ import { NotebookPanel } from '@jupyterlab/notebook';
 import { ContentType } from './content';
 import { MyIcons } from './icons';
 
-type Tab = {
+export type Tab = {
   cellType: ContentType;
   cellIndex: number;
   tabNode: HTMLElement;
@@ -81,14 +81,6 @@ export class StickyTab implements IDisposable {
         }
       });
 
-      console.log(args);
-
-      // Schedule to run the code cell if auto-run is toggled and the current
-      // running cell is not the original cell
-      // if (autoRunCellNodes.has(args.cell.node)) {
-      //   return;
-      // }
-
       // We need to set a timeout to workaround the current executionScheduled
       // emit order
       // https://github.com/jupyterlab/jupyterlab/pull/11453
@@ -118,7 +110,6 @@ export class StickyTab implements IDisposable {
 
         // Flip their runScheduled once this batch is all finished
         Promise.all(this.autoRunPromises).then(values => {
-          console.log(values);
           autoRunCells.forEach(d => {
             d.autoRunScheduled = false;
           });
@@ -170,39 +161,7 @@ export class StickyTab implements IDisposable {
     tabIcon.addEventListener('click', (e: MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
-
-      // Case 1: this tab is the only tab
-      if (this.tabs.length === 1) {
-        // Swap the content to dropzone
-        tabContent.swapToDropzone();
-
-        // Update the tab name
-        this.updateActiveTab();
-      } else {
-        // Case 2: if there are other tabs
-        // First swap the content to dropzone
-        tabContent.swapToDropzone();
-
-        // Then remove the content
-        tabContent.dispose();
-
-        // Prepare to remove the tab
-        const tabIndex = this.tabs.indexOf(newTab);
-
-        // Change the active tab to the one on the left or on the right if there
-        // is no tab on the left
-        if (tabIndex !== 0) {
-          this.switchActiveTab(this.tabs[tabIndex - 1]);
-        } else {
-          this.switchActiveTab(this.tabs[tabIndex + 1]);
-        }
-
-        // Remove the tab from model
-        this.tabs.splice(tabIndex, 1);
-
-        // Remove the tab from the DOM
-        newTab.tabNode.remove();
-      }
+      this.closeTab(newTab);
     });
 
     this.tabs.push(newTab);
@@ -224,6 +183,45 @@ export class StickyTab implements IDisposable {
 
     // Return this tab
     return newTab;
+  };
+
+  /**
+   * Close the given tab
+   * @param tab Tab to close
+   */
+  closeTab = (tab: Tab) => {
+    // Case 1: this tab is the only tab
+    if (this.tabs.length === 1) {
+      // Swap the content to dropzone
+      tab.tabContent.swapToDropzone();
+
+      // Update the tab name
+      this.updateActiveTab();
+    } else {
+      // Case 2: if there are other tabs
+      // First swap the content to dropzone
+      tab.tabContent.swapToDropzone();
+
+      // Then remove the content
+      tab.tabContent.dispose();
+
+      // Prepare to remove the tab
+      const tabIndex = this.tabs.indexOf(tab);
+
+      // Change the active tab to the one on the left or on the right if there
+      // is no tab on the left
+      if (tabIndex !== 0) {
+        this.switchActiveTab(this.tabs[tabIndex - 1]);
+      } else {
+        this.switchActiveTab(this.tabs[tabIndex + 1]);
+      }
+
+      // Remove the tab from model
+      this.tabs.splice(tabIndex, 1);
+
+      // Remove the tab from the DOM
+      tab.tabNode.remove();
+    }
   };
 
   /**

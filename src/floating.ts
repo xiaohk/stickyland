@@ -2,6 +2,8 @@ import { IDisposable } from '@lumino/disposable';
 import { ContentType } from './content';
 import { StickyCode } from './code';
 import { StickyMarkdown } from './markdown';
+import { StickyTab, Tab } from './tab';
+import { StickyLand } from './stickyland';
 import { MyIcons } from './icons';
 
 /**
@@ -10,17 +12,16 @@ import { MyIcons } from './icons';
 export class FloatingWindow implements IDisposable {
   node: HTMLElement;
   stickyCell: StickyCode | StickyMarkdown;
+  stickyTab: StickyTab;
+  stickyLand: StickyLand;
+  tab: Tab | null;
   header: HTMLElement;
   placeholder: HTMLElement;
   cellType: ContentType;
   isDisposed = false;
   lastMousePos = [0, 0];
 
-  constructor(
-    cellType: ContentType,
-    stickyCell: StickyCode | StickyMarkdown,
-    cellIndex = 0
-  ) {
+  constructor(cellType: ContentType, stickyCell: StickyCode | StickyMarkdown) {
     // Create the floating window element
     this.node = document.createElement('div');
     this.node.classList.add('floating-window');
@@ -34,11 +35,20 @@ export class FloatingWindow implements IDisposable {
     const headerText = document.createElement('span');
     this.cellType = cellType;
     this.stickyCell = stickyCell;
+    this.stickyTab = this.stickyCell.stickyContent.stickyLand.stickyTab;
+    this.tab = this.stickyTab.activeTab;
+    this.stickyLand = this.stickyCell.stickyContent.stickyLand;
+
+    // Query the cell index for this cell
+    let cellIndex = 1;
+    if (this.stickyTab.activeTab) {
+      cellIndex = this.stickyTab.activeTab.cellIndex;
+    }
 
     if (cellType === ContentType.Code) {
-      headerText.innerText = `Code Cell ${cellIndex}`;
+      headerText.innerText = `Code-${cellIndex}`;
     } else {
-      headerText.innerText = 'Markdown Cell';
+      headerText.innerText = `Markdown-${cellIndex}`;
     }
     this.header.appendChild(headerText);
 
@@ -71,7 +81,14 @@ export class FloatingWindow implements IDisposable {
     );
 
     // Push itself to the floating window array
-    this.stickyCell.stickyContent.stickyLand.floatingWindows.push(this);
+    this.stickyLand.floatingWindows.push(this);
+
+    // Hide the launching icon
+    const launchIcon =
+      this.stickyCell.stickyContent.headerNode.querySelector(
+        '.button-launch'
+      )?.parentElement;
+    launchIcon?.classList.add('no-display');
 
     // Add the content from the cell to the floating window
     const floatingContent = this.stickyCell.stickyContent.wrapperNode.cloneNode(
@@ -124,17 +141,34 @@ export class FloatingWindow implements IDisposable {
     return placeholder;
   };
 
+  /**
+   * Put the cell back to StickyLand.
+   * @param e Event
+   */
   landButtonClicked = (e: Event) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  closeButtonClicked = (e: Event) => {
     e.preventDefault();
     e.stopPropagation();
 
     this.land();
-    this.stickyCell.closeClicked();
+    this.dispose();
+  };
+
+  /**
+   * Land the sticky window and close the corresponding tab
+   * @param e Event
+   */
+  closeButtonClicked = (e: Event) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // First put back the cell
+    this.land();
+
+    // Close the tab
+    if (this.tab) {
+      this.stickyTab.closeTab(this.tab);
+    }
+
     this.dispose();
   };
 
@@ -152,6 +186,13 @@ export class FloatingWindow implements IDisposable {
         ...floatingWrapper.childNodes
       );
     }
+
+    // Show the launching icon
+    const launchIcon =
+      this.stickyCell.stickyContent.headerNode.querySelector(
+        '.button-launch'
+      )?.parentElement;
+    launchIcon?.classList.remove('no-display');
 
     // Remove the FloatingWindow object from the sticky content
     const windowIndex =

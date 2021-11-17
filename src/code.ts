@@ -434,23 +434,9 @@ export class StickyCode implements IDisposable {
    * Float the current code cell.
    */
   float = () => {
-    // Query the code cell index for this floating window
-    let floatIndex = 1;
-    if (this.stickyContent.stickyLand.floatingWindows.length !== 0) {
-      this.stickyContent.stickyLand.floatingWindows.forEach(d => {
-        if (d.cellType === ContentType.Code) {
-          floatIndex++;
-        }
-      });
-    }
-
     // Create the floating window and put content from stickyland to the floating
     // window
-    this.floatingWindow = new FloatingWindow(
-      ContentType.Code,
-      this,
-      floatIndex
-    );
+    this.floatingWindow = new FloatingWindow(ContentType.Code, this);
 
     // Finally, toggle the `isFloating` property
     this.isFloating = true;
@@ -557,12 +543,6 @@ export class StickyCode implements IDisposable {
       icon: MyIcons.launchIcon,
       onClick: this.launchClicked
     }
-    // {
-    //   name: 'close',
-    //   title: 'Remove the cell',
-    //   icon: MyIcons.closeIcon,
-    //   onClick: this.closeClicked
-    // }
   ];
 
   /**
