@@ -114,6 +114,45 @@ export class StickyTab implements IDisposable {
     return newTab;
   };
 
+  /**
+   * Update the tab name for the active tab. This function is called when user
+   * creates a new code/md cell.
+   */
+  updateActiveTab = () => {
+    if (this.activeTab) {
+      const newContent = this.activeTab?.tabContent.curContent;
+
+      // Find the new content type
+      let newCellType = ContentType.Dropzone;
+      if (newContent instanceof StickyCode) {
+        newCellType = ContentType.Code;
+      } else if (newContent instanceof StickyMarkdown) {
+        newCellType = ContentType.Markdown;
+      }
+
+      // Find the new cell index
+      let newCellIndex = 0;
+      this.tabs.forEach(d => {
+        if (d.cellType === newCellType) {
+          newCellIndex++;
+        }
+      });
+
+      // Update the tab name
+      const tabLabel = this.activeTab.tabNode.querySelector('.tab-label');
+
+      if (newCellType === ContentType.Code && tabLabel) {
+        tabLabel.innerHTML = `Code-${newCellIndex}`;
+      } else if (newCellType === ContentType.Markdown && tabLabel) {
+        tabLabel.innerHTML = `Markdown-${newCellIndex}`;
+      }
+
+      // Update the model data
+      this.activeTab.cellIndex = newCellIndex;
+      this.activeTab.cellType = newCellType;
+    }
+  };
+
   // clickTab = (evt: Event) => {
   //   if (
   //     (evt.target as Element).getAttribute('class') &&

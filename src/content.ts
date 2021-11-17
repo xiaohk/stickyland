@@ -95,6 +95,9 @@ export class StickyContent implements IDisposable {
       default:
         break;
     }
+
+    // Notify the tab to update tab name
+    this.stickyLand.stickyTab.updateActiveTab();
   };
 
   /**
@@ -123,6 +126,9 @@ export class StickyContent implements IDisposable {
       default:
         break;
     }
+
+    // Notify the tab to update tab name
+    this.stickyLand.stickyTab.updateActiveTab();
   };
 
   /**
