@@ -171,9 +171,18 @@ export class StickyContent implements IDisposable {
     }
   };
 
+  swapToDropzone = () => {
+    // Dispose the current content
+    this.curContent.closeClicked();
+  };
+
   dispose = () => {
     // Dispose the current content
     this.curContent.closeClicked();
+
+    // Dispose the dropzone
+    this.curContent.dispose();
+    this.wrapperNode.remove();
     this.isDisposed = true;
   };
 }

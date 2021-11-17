@@ -343,13 +343,13 @@ export class StickyMarkdown implements IDisposable {
       title: 'Make the cell float',
       icon: MyIcons.launchIcon,
       onClick: this.launchClicked
-    },
-    {
-      name: 'close',
-      title: 'Remove the cell',
-      icon: MyIcons.closeIcon,
-      onClick: this.closeClicked
     }
+    // {
+    //   name: 'close',
+    //   title: 'Remove the cell',
+    //   icon: MyIcons.closeIcon,
+    //   onClick: this.closeClicked
+    // }
   ];
 
   dispose() {

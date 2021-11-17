@@ -150,10 +150,10 @@ export class Dropzone implements IDisposable {
   };
 
   /**
-   * Dispose self when user clicks the close icon (from the tab)
+   * Implement this function to be consistent with other cell content
    */
   closeClicked = () => {
-    this.dispose();
+    // pass
   };
 
   /**

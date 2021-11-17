@@ -50,8 +50,6 @@ export class StickyTab implements IDisposable {
 
     // Create the first tab
     this.createTab();
-
-    // StickyTab.numTabs++;
   }
 
   /**
@@ -84,10 +82,18 @@ export class StickyTab implements IDisposable {
       this.stickyLand
     );
 
-    // Bind event handlers
+    // Handle delete icon clicked
     tabIcon.addEventListener('click', (event: MouseEvent) => {
-      // Remove the content
-      tabContent.dispose();
+      // Case 1: if there are other tabs
+
+      // Case 2: this tab is the only tab
+      if (this.tabs.length === 1) {
+        // Swap the content to dropzone
+        tabContent.swapToDropzone();
+
+        // Update the tab name
+        this.updateActiveTab();
+      }
     });
 
     // Add this tab to the model and view
@@ -145,6 +151,8 @@ export class StickyTab implements IDisposable {
         tabLabel.innerHTML = `Code-${newCellIndex}`;
       } else if (newCellType === ContentType.Markdown && tabLabel) {
         tabLabel.innerHTML = `Markdown-${newCellIndex}`;
+      } else if (newCellType === ContentType.Dropzone && tabLabel) {
+        tabLabel.innerHTML = 'New';
       }
 
       // Update the model data
