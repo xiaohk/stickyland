@@ -90,7 +90,6 @@ export class StickyMarkdown implements IDisposable {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     md.codemirror = codeMirrorNode.CodeMirror as CodeMirror.Editor;
-    console.log(md.codemirror);
 
     // Bind events
     md.bindEventHandlers();
@@ -308,8 +307,6 @@ export class StickyMarkdown implements IDisposable {
   launchClicked = (event: Event) => {
     event.preventDefault();
     event.stopPropagation();
-
-    console.log(this.cell.editor.getCursorPosition());
 
     console.log('Launch clicked!');
   };

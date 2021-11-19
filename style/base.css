@@ -168,8 +168,8 @@
   fill: var(--md-grey-200);
   color: var(--md-grey-200);
   display: block;
-  width: 18px;
-  margin: 0 auto;
+  width: 20px;
+  padding: 3px 0 0 0;
 }
 
 .sticky-content {
@@ -245,9 +245,41 @@
   position: absolute;
   bottom: 0px;
   left: 0px;
-  width: 12px;
-  height: 12px;
+  width: 20px;
+  height: 20px;
   cursor: nesw-resize;
+  overflow: hidden;
+}
+
+/* Fake the think white border surrounding the lines */
+.sticky-container .resize-handle::after {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px solid white;
+  content: '';
+  bottom: 0px;
+  left: 0px;
+}
+
+/* Fake the resize lines */
+.sticky-container .resize-handle .line {
+  position: absolute;
+  border-bottom: 1px solid var(--md-grey-800);
+  width: 37px;
+  height: 37px;
+}
+
+.sticky-container .resize-handle .line-1 {
+  transform: translateY(-11px) rotate(45deg);
+}
+
+.sticky-container .resize-handle .line-2 {
+  transform: translateY(-16px) rotate(45deg);
+}
+
+.sticky-container .resize-handle .line-3 {
+  transform: translateY(-21px) rotate(45deg);
 }
 
 .cursor-mask {

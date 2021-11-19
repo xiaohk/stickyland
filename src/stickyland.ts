@@ -36,7 +36,7 @@ export class StickyLand {
 
     // Put stickyland below the toolbar
     const toolbarHeight = parseFloat(panel.toolbar.node.style.height);
-    this.node.style.top = `${toolbarHeight + 5}px`;
+    this.node.style.top = `${toolbarHeight + 30}px`;
     panel.node.appendChild(this.node);
 
     // Create a header so that users can drag
@@ -85,10 +85,27 @@ export class StickyLand {
     const resizeHandle = document.createElement('div');
     resizeHandle.classList.add('resize-handle');
 
+    // Draw a few liens to signify the resize affordance
+    const line1 = document.createElement('div');
+    line1.classList.add('line', 'line-1');
+    resizeHandle.appendChild(line1);
+
+    const line2 = document.createElement('div');
+    line2.classList.add('line', 'line-2');
+    resizeHandle.appendChild(line2);
+
+    const line3 = document.createElement('div');
+    line3.classList.add('line', 'line-3');
+    resizeHandle.appendChild(line3);
+
     this.node.append(resizeHandle);
     resizeHandle.addEventListener('mousedown', this.resizeMousedownHandler);
   };
 
+  /**
+   * Handle the dragging on the resize handle on the bottom left corner
+   * @param e Mouse event
+   */
   resizeMousedownHandler = (e: Event) => {
     e.preventDefault();
     e.stopPropagation();
