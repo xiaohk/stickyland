@@ -1,18 +1,10 @@
-import { Widget, BoxLayout } from '@lumino/widgets';
-import { IDisposable, DisposableDelegate } from '@lumino/disposable';
-import { Drag, IDragEvent } from '@lumino/dragdrop';
+import { IDisposable } from '@lumino/disposable';
 import { LabIcon, Switch } from '@jupyterlab/ui-components';
-import {
-  NotebookPanel,
-  INotebookModel,
-  INotebookTracker,
-  NotebookActions
-} from '@jupyterlab/notebook';
+import { NotebookPanel, NotebookActions, Notebook } from '@jupyterlab/notebook';
 import { IChangedArgs } from '@jupyterlab/coreutils';
 import { CodeCell, ICodeCellModel, Cell, ICellModel } from '@jupyterlab/cells';
-import { ICodeMirror } from '@jupyterlab/codemirror';
 import CodeMirror from 'codemirror';
-import { toArray, ArrayExt } from '@lumino/algorithm';
+import { ArrayExt } from '@lumino/algorithm';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { StickyContent, ContentType } from './content';
 import { FloatingWindow } from './floating';
@@ -46,6 +38,7 @@ export class StickyCode implements IDisposable {
 
   autoRun = false;
   autoRunScheduled = false;
+  runScheduled = false;
   isDisposed = false;
 
   isFloating = false;
@@ -71,10 +64,6 @@ export class StickyCode implements IDisposable {
     // Clone the cell
     cd.originalCell = cell;
     cd.cell = cd.originalCell.clone();
-
-    // Collapse the original cell (both input and output)
-    cd.originalCell.inputHidden = true;
-    cd.originalCell.outputHidden = true;
 
     // Register the original execution counter node
     cd.originalExecutionCounter = cd.originalCell.node.querySelector(
@@ -110,7 +99,13 @@ export class StickyCode implements IDisposable {
 
     cd.executionCount = cd.cell.model.executionCount;
 
+    // Collapse the original cell (both input and output)
+    cd.originalCell.inputHidden = true;
+    cd.originalCell.outputHidden = true;
+
     cd.cell.model.stateChanged.connect(cd.handleStateChange, cd);
+    NotebookActions.executionScheduled.connect(cd.handleExecutionScheduled, cd);
+    NotebookActions.executed.connect(cd.handleExecuted, cd);
 
     // Bind events
     cd.bindEventHandlers();
@@ -195,6 +190,49 @@ export class StickyCode implements IDisposable {
   };
 
   /**
+   * We listen to the execution state of this notebook. We use it to change the
+   * execution counter to star if the cell is scheduled to run.
+   * @param _ any
+   * @param args Notebook and cell
+   */
+  handleExecutionScheduled = (
+    _: any,
+    args: {
+      notebook: Notebook;
+      cell: Cell<ICellModel>;
+    }
+  ) => {
+    // Change the execution counter
+    if (args.cell.node === this.originalCell.node) {
+      this.runScheduled = true;
+      this.executionCount = null;
+      this.executionCounter.innerText = '[*]';
+    }
+  };
+
+  /**
+   * We listen to the execution state of this notebook. We use it to change the
+   * execution counter to star if the cell is scheduled to run.
+   * @param _ any
+   * @param args Notebook and cell
+   */
+  handleExecuted = (
+    _: any,
+    args: {
+      notebook: Notebook;
+      cell: Cell<ICellModel>;
+    }
+  ) => {
+    // Change the execution counter
+    if (args.cell.node === this.originalCell.node) {
+      this.runScheduled = false;
+      if (this.executionCount === null) {
+        this.executionCounter.innerText = '[ ]';
+      }
+    }
+  };
+
+  /**
    * Helper function to handle code model state changes. The state change signal
    * is emitted with anything (input, output, etc.). This function follows the
    * signal pattern from lumino
@@ -246,8 +284,11 @@ export class StickyCode implements IDisposable {
     // Update the counter element
     if (newCount !== null) {
       this.executionCounter.innerText = `[${newCount}]`;
+      this.runScheduled = false;
     } else {
-      this.executionCounter.innerText = '[*]';
+      if (!this.runScheduled) {
+        this.executionCounter.innerText = '[ ]';
+      }
     }
   }
 
@@ -554,6 +595,13 @@ export class StickyCode implements IDisposable {
     // Disconnect signal handlers
     this.codeObserver.disconnect();
     this.toggle.dispose();
+
+    // Disconnect notebook execution signal
+    NotebookActions.executionScheduled.disconnect(
+      this.handleExecutionScheduled,
+      this
+    );
+    NotebookActions.executed.disconnect(this.handleExecuted, this);
 
     // Remove nodes
     this.node.remove();
