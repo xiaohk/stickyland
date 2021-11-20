@@ -1,9 +1,7 @@
-import { Widget } from '@lumino/widgets';
-import { IDisposable, DisposableDelegate } from '@lumino/disposable';
-import { Drag, IDragEvent } from '@lumino/dragdrop';
-import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
+import { IDisposable } from '@lumino/disposable';
+import { IDragEvent } from '@lumino/dragdrop';
+import { NotebookPanel } from '@jupyterlab/notebook';
 import { CodeCell, MarkdownCell, Cell } from '@jupyterlab/cells';
-import { toArray } from '@lumino/algorithm';
 import { StickyContent, ContentType } from './content';
 import { MyIcons } from './icons';
 

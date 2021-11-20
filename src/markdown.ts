@@ -1,17 +1,8 @@
-import { Widget, BoxLayout } from '@lumino/widgets';
-import { IDisposable, DisposableDelegate } from '@lumino/disposable';
-import { Drag, IDragEvent } from '@lumino/dragdrop';
+import { IDisposable } from '@lumino/disposable';
 import { LabIcon } from '@jupyterlab/ui-components';
-import {
-  NotebookPanel,
-  INotebookModel,
-  INotebookTracker,
-  NotebookActions
-} from '@jupyterlab/notebook';
-import { CodeCell, MarkdownCell, Cell } from '@jupyterlab/cells';
-import { ICodeMirror } from '@jupyterlab/codemirror';
+import { NotebookPanel, NotebookActions } from '@jupyterlab/notebook';
+import { MarkdownCell } from '@jupyterlab/cells';
 import CodeMirror from 'codemirror';
-import { toArray } from '@lumino/algorithm';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { FloatingWindow } from './floating';
 import { StickyContent, ContentType } from './content';

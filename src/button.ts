@@ -1,18 +1,7 @@
-import {
-  JupyterFrontEnd,
-  JupyterFrontEndPlugin
-} from '@jupyterlab/application';
-import {
-  ICommandPalette,
-  MainAreaWidget,
-  ToolbarButton
-} from '@jupyterlab/apputils';
-import { Widget, BoxLayout } from '@lumino/widgets';
-import { Message } from '@lumino/messaging';
+import { ToolbarButton } from '@jupyterlab/apputils';
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
-import { toArray } from '@lumino/algorithm';
 import { StickyLand } from './stickyland';
 
 export class ButtonExtension

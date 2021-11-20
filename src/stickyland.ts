@@ -1,19 +1,5 @@
-import {
-  JupyterFrontEnd,
-  JupyterFrontEndPlugin
-} from '@jupyterlab/application';
-import {
-  ICommandPalette,
-  MainAreaWidget,
-  ToolbarButton
-} from '@jupyterlab/apputils';
-import { Widget } from '@lumino/widgets';
-import { Message } from '@lumino/messaging';
-import { IDisposable, DisposableDelegate } from '@lumino/disposable';
-import { Drag, IDragEvent } from '@lumino/dragdrop';
-import { DocumentRegistry } from '@jupyterlab/docregistry';
-import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
-import { toArray } from '@lumino/algorithm';
+import { IDragEvent } from '@lumino/dragdrop';
+import { NotebookPanel } from '@jupyterlab/notebook';
 
 import { StickyTab } from './tab';
 import { StickyContent } from './content';
