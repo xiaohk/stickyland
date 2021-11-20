@@ -6,6 +6,13 @@ import { StickyTab, Tab } from './tab';
 import { StickyLand } from './stickyland';
 import { MyIcons } from './icons';
 
+type Position = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
 /**
  * Class that implements the Code cell in StickyLand.
  */
@@ -21,10 +28,14 @@ export class FloatingWindow implements IDisposable {
   isDisposed = false;
   lastMousePos = [0, 0];
 
+  // Properties for FLIP animation
+  startPos: Position | null = null;
+  endPos: Position | null = null;
+
   constructor(cellType: ContentType, stickyCell: StickyCode | StickyMarkdown) {
     // Create the floating window element
     this.node = document.createElement('div');
-    this.node.classList.add('floating-window');
+    this.node.classList.add('floating-window', 'hidden');
     document.querySelector('#jp-main-content-panel')?.appendChild(this.node);
 
     // Add a top header to the window
@@ -106,6 +117,9 @@ export class FloatingWindow implements IDisposable {
       )?.parentElement;
     launchIcon?.classList.add('no-display');
 
+    // Register the start position
+    this.registerStartPos();
+
     // Add the content from the cell to the floating window
     const floatingContent = this.stickyCell.stickyContent.wrapperNode.cloneNode(
       false
@@ -115,9 +129,126 @@ export class FloatingWindow implements IDisposable {
     );
     this.node.append(floatingContent);
 
+    // Register the end position
+    this.registerEndPos();
+
+    // Play the animation
+    this.node.classList.remove('hidden');
+    this.playLaunchingAnimation();
+
     // Add a placeholder in the original sticky content
     this.placeholder = this.addPlaceholder();
   }
+
+  /**
+   * Compute the initial window position + size
+   */
+  registerStartPos = () => {
+    const bbox =
+      this.stickyCell.stickyContent.wrapperNode.getBoundingClientRect();
+
+    const headerHeight = 28;
+
+    this.startPos = {
+      x: bbox.x,
+      y: bbox.y - headerHeight,
+      width: bbox.width,
+      height: bbox.height
+    };
+  };
+
+  /**
+   * Compute the ending floating window position + size
+   */
+  registerEndPos = () => {
+    // pass
+    const bbox = this.node.getBoundingClientRect();
+
+    this.endPos = {
+      x: bbox.x,
+      y: bbox.y,
+      width: bbox.width,
+      height: bbox.height
+    };
+  };
+
+  /**
+   * Animate the launching process of the floating window
+   */
+  playLaunchingAnimation = () => {
+    if (this.startPos && this.endPos) {
+      // Compute the transformation from end to the start
+      const widthScale = this.startPos.width / this.endPos.width;
+      const heightScale = this.startPos.height / this.endPos.height;
+      const xTranslate = this.startPos.x - this.endPos.x;
+      const yTranslate = this.startPos.y - this.endPos.y;
+
+      // Apply the transform
+      this.node.animate(
+        [
+          {
+            transformOrigin: 'top left',
+            transform: `
+            translate(${xTranslate}px, ${yTranslate}px)
+            scale(${widthScale}, ${heightScale})
+          `
+          },
+          {
+            transformOrigin: 'top left',
+            transform: 'none'
+          }
+        ],
+        {
+          duration: 200,
+          easing: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+          fill: 'both'
+        }
+      );
+    }
+  };
+
+  /**
+   * Animate the landing process of the floating window
+   */
+  playLandingAnimation = (callback: () => void) => {
+    if (this.startPos && this.endPos) {
+      this.registerEndPos();
+
+      // Compute the transformation from start to the end
+      const widthScale = this.startPos.width / this.endPos.width;
+      const heightScale = this.startPos.height / this.endPos.height;
+      const xTranslate = this.startPos.x - this.endPos.x;
+      const yTranslate = this.startPos.y - this.endPos.y;
+
+      // Apply the transform
+      const animation = this.node.animate(
+        [
+          {
+            transformOrigin: 'top left',
+            transform: 'none',
+            opacity: 1
+          },
+          {
+            transformOrigin: 'top left',
+            transform: `
+              translate(${xTranslate}px, ${yTranslate}px)
+              scale(${widthScale}, ${heightScale})
+            `,
+            opacity: 0
+          }
+        ],
+        {
+          duration: 350,
+          easing: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
+          fill: 'both'
+        }
+      );
+
+      animation.onfinish = e => {
+        callback();
+      };
+    }
+  };
 
   /**
    * Add a place holder in the content node in StickyLand when the cell is floating
@@ -164,9 +295,13 @@ export class FloatingWindow implements IDisposable {
   landButtonClicked = (e: Event) => {
     e.preventDefault();
     e.stopPropagation();
-
     this.land();
-    this.dispose();
+
+    const callback = () => {
+      this.dispose();
+    };
+
+    this.playLandingAnimation(callback);
   };
 
   /**
@@ -177,15 +312,20 @@ export class FloatingWindow implements IDisposable {
     e.preventDefault();
     e.stopPropagation();
 
-    // First put back the cell
-    this.land();
+    const callback = () => {
+      // First put back the cell
+      this.land();
 
-    // Close the tab
-    if (this.tab) {
-      this.stickyTab.closeTab(this.tab);
-    }
+      // Close the tab
+      if (this.tab) {
+        this.stickyTab.closeTab(this.tab);
+      }
 
-    this.dispose();
+      this.dispose();
+    };
+
+    // We don't need to play animation if user wants to close the cell
+    callback();
   };
 
   /**
