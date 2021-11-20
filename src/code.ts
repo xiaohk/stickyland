@@ -107,7 +107,6 @@ export class StickyCode implements IDisposable {
     // from the original cell, need to reset it here
     // https://codemirror.net/doc/manual.html#setOption
     cd.codemirror.setOption('lineWrapping', false);
-    console.log(cd.codemirror);
 
     cd.executionCount = cd.cell.model.executionCount;
 
@@ -152,8 +151,6 @@ export class StickyCode implements IDisposable {
     placeholderIcon.classList.add('jp-MoreHorizIcon', 'placeholder-icon');
     MyIcons.ellipsesIcon.element({ container: placeholderIcon });
     cd.placeholder.appendChild(placeholderIcon);
-
-    console.log(notebook.model);
 
     return cd;
   }
@@ -442,13 +439,6 @@ export class StickyCode implements IDisposable {
     this.isFloating = true;
   };
 
-  /**
-   * Put the floating window back to StickyLand
-   */
-  land = () => {
-    // Put back the nodes
-  };
-
   runClicked = (event: Event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -462,8 +452,6 @@ export class StickyCode implements IDisposable {
     event.stopPropagation();
 
     this.float();
-
-    console.log('Launch clicked!');
   };
 
   closeClicked = () => {

@@ -246,8 +246,6 @@ export class StickyLand {
     event.preventDefault();
     event.stopPropagation();
 
-    console.log('drag enter');
-
     // Change the view of content
     if (this.stickyContent) {
       this.stickyContent.dragEnterHandler(event);

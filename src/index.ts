@@ -7,7 +7,7 @@ const plugin = {
   autoStart: true,
   requires: [ICommandPalette],
   activate: function (app: JupyterFrontEnd) {
-    console.log('activating button!');
+    console.log('Activating StickyLand.');
     app.docRegistry.addWidgetExtension('Notebook', new ButtonExtension());
   }
 };

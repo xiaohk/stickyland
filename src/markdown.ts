@@ -13,6 +13,7 @@ import { ICodeMirror } from '@jupyterlab/codemirror';
 import CodeMirror from 'codemirror';
 import { toArray } from '@lumino/algorithm';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
+import { FloatingWindow } from './floating';
 import { StickyContent, ContentType } from './content';
 import { MyIcons } from './icons';
 
@@ -30,6 +31,8 @@ export class StickyMarkdown implements IDisposable {
   notebook!: NotebookPanel;
   codemirror!: CodeMirror.Editor;
   isDisposed = false;
+  floatingWindow!: FloatingWindow;
+  isFloating = false;
 
   /**
    * Factory function for StickyMarkdown when creating if from an existing cell
@@ -57,9 +60,6 @@ export class StickyMarkdown implements IDisposable {
       md.originalCell.inputHidden = true;
     }
 
-    console.log(md.originalCell);
-    console.log(md.cell);
-
     // Save a reference to the cell's renderer (private)
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -71,8 +71,6 @@ export class StickyMarkdown implements IDisposable {
     // Need to add tabindex so it can receive keyboard events
     md.node.setAttribute('tabindex', '0');
     md.stickyContent.contentNode.appendChild(md.node);
-
-    console.log(notebook.model);
 
     // Add a toolbar
     md.toolbar = md.createToolbar(md.toolBarItems);
@@ -284,6 +282,18 @@ export class StickyMarkdown implements IDisposable {
     }, timeout);
   };
 
+  /**
+   * Float the current code cell.
+   */
+  float = () => {
+    // Create the floating window and put content from stickyland to the floating
+    // window
+    this.floatingWindow = new FloatingWindow(ContentType.Markdown, this);
+
+    // Finally, toggle the `isFloating` property
+    this.isFloating = true;
+  };
+
   editClicked = (event: Event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -308,7 +318,7 @@ export class StickyMarkdown implements IDisposable {
     event.preventDefault();
     event.stopPropagation();
 
-    console.log('Launch clicked!');
+    this.float();
   };
 
   closeClicked = () => {

@@ -32,9 +32,6 @@ export class ButtonExtension
      * Handler for the click event.
      */
     const onClickHandler = () => {
-      console.log(panel);
-      console.log(context);
-
       // Check if we have already created stickyland
 
       // Create it if we don't have it yet

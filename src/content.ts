@@ -36,7 +36,6 @@ export class StickyContent implements IDisposable {
     this.stickyLand = stickyLand;
 
     // Add the content element
-    console.log('init content!');
     this.wrapperNode = document.createElement('div');
     this.wrapperNode.classList.add('sticky-content');
     this.stickyContainer.appendChild(this.wrapperNode);
@@ -82,7 +81,6 @@ export class StickyContent implements IDisposable {
         break;
 
       case ContentType.Code:
-        console.log('code cell!');
         // Initialize a code cell
         this.curContent = StickyCode.createFromExistingCell(
           this,

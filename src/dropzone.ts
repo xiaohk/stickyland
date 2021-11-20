@@ -114,9 +114,6 @@ export class Dropzone implements IDisposable {
    * @param event Lumino IDragEvent
    */
   dragDropHandler = (event: IDragEvent) => {
-    console.log('drop to dropzone');
-    console.log(event);
-
     // Dehighlight the view
     this.node.classList.remove('drag-over');
     this.doseReceiveDrop = false;
@@ -164,12 +161,10 @@ export class Dropzone implements IDisposable {
     const curOption = <ContentType>this.select.value;
     switch (curOption) {
       case ContentType.Code:
-        console.log('Creating a new code cell!');
         this.stickyContent.swapDropzoneWithNewCell(ContentType.Code);
         break;
 
       case ContentType.Markdown:
-        console.log('Creating a new markdown cell!');
         this.stickyContent.swapDropzoneWithNewCell(ContentType.Markdown);
         break;
 
