@@ -416,6 +416,12 @@ export class StickyCode implements IDisposable {
     this.toggle.value = this.autoRun;
     this.toggle.label = 'auto-run';
 
+    // Add a tooltip title
+    this.toggle.node.setAttribute(
+      'title',
+      'Automatically run this cell after any other cell is executed'
+    );
+
     // Here we are not correctly attach the widget to a layout, so we need to
     // manually trigger the event binding
     const toggleSwitchNode = this.toggle.node.querySelector('.jp-switch');

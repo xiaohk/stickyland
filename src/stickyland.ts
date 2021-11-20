@@ -192,10 +192,20 @@ export class StickyLand {
 
   hide = () => {
     this.node.classList.add('hidden');
+
+    // Also hide all floating windows
+    this.floatingWindows.forEach(d => {
+      d.node.classList.add('hidden');
+    });
   };
 
   show = () => {
     this.node.classList.remove('hidden');
+
+    // Also show all floating windows
+    this.floatingWindows.forEach(d => {
+      d.node.classList.remove('hidden');
+    });
   };
 
   /**
