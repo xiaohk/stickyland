@@ -50,10 +50,14 @@ export class FloatingWindow implements IDisposable {
     this.tab = this.stickyTab.activeTab;
     this.stickyLand = this.stickyCell.stickyContent.stickyLand;
 
+    // We first put the cell on the left edge of the notebook panel
+    const initLeft =
+      this.stickyCell.notebook.node.getBoundingClientRect().x + 10;
+
     // Position the node to the inner region and offset it a little bit when
     // users create multiple windows
     this.node.style.left = `${
-      200 + this.stickyLand.floatingWindows.length * 20
+      initLeft + this.stickyLand.floatingWindows.length * 20
     }px`;
     this.node.style.top = `${
       100 + this.stickyLand.floatingWindows.length * 20

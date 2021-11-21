@@ -163,7 +163,9 @@ export class StickyCode implements IDisposable {
     mutationList.forEach(d => {
       // Remove the prompt area when the output node is updated
       if (d.addedNodes !== null) {
-        this.outputNode?.querySelector('.jp-OutputPrompt')?.remove();
+        this.outputNode
+          ?.querySelectorAll('.jp-OutputPrompt')
+          ?.forEach(d => d.remove());
       }
     });
   };
@@ -331,7 +333,9 @@ export class StickyCode implements IDisposable {
     this.cellNode.querySelector('.jp-Cell-inputCollapser')?.remove();
     this.cellNode.querySelector('.jp-OutputCollapser')?.remove();
     this.cellNode.querySelector('.jp-InputArea-prompt')?.remove();
-    this.cellNode.querySelector('.jp-OutputPrompt')?.remove();
+    this.cellNode
+      .querySelectorAll('.jp-OutputPrompt')
+      ?.forEach(d => d.remove());
     this.cellNode.querySelector('.jp-CellHeader')?.remove();
     this.cellNode.querySelector('.jp-CellFooter')?.remove();
 

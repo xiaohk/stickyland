@@ -1,7 +1,7 @@
 {
   "name": "jupyterlab-stickyland",
   "version": "0.1.0",
-  "description": "Jupyter extension to make cells sticky!",
+  "description": "Break free from the linear presentation of Jupyter Notebooks with sticky cells!",
   "keywords": [
     "jupyter",
     "jupyterlab",
@@ -13,8 +13,8 @@
   },
   "license": "BSD-3-Clause",
   "author": {
-    "name": "Jay Wang & Katie Dai",
-    "email": "jay@zijie.wang & kdai7@gatech.edu"
+    "name": "Jay Wang, Katie Dai",
+    "email": "jay@zijie.wang, kdai7@gatech.edu"
   },
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
