@@ -169,7 +169,7 @@
   color: var(--md-grey-200);
   display: block;
   width: 20px;
-  padding: 3px 0 0 0;
+  padding: 1px 0 0 0;
 }
 
 .sticky-content {
@@ -211,6 +211,10 @@
   overflow: hidden;
   white-space: nowrap;
   flex: 1 1 auto;
+}
+
+.tab.new-update .tab-label {
+  color: var(--md-green-600);
 }
 
 .tab-icon {

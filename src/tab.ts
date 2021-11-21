@@ -1,10 +1,11 @@
 import { IDisposable } from '@lumino/disposable';
 import { NotebookActions } from '@jupyterlab/notebook';
+import { NotebookPanel, Notebook } from '@jupyterlab/notebook';
+import { Cell, ICellModel } from '@jupyterlab/cells';
 import { StickyContent } from './content';
 import { StickyMarkdown } from './markdown';
 import { StickyCode } from './code';
 import { StickyLand } from './stickyland';
-import { NotebookPanel } from '@jupyterlab/notebook';
 import { ContentType } from './content';
 import { MyIcons } from './icons';
 
@@ -13,6 +14,7 @@ export type Tab = {
   cellIndex: number;
   tabNode: HTMLElement;
   tabContent: StickyContent;
+  hasNewUpdate: boolean;
 };
 
 export class StickyTab implements IDisposable {
@@ -25,7 +27,9 @@ export class StickyTab implements IDisposable {
   tabs: Tab[] = [];
 
   autoRunTimeout: number | null = null;
-  autoRunPromises: Promise<boolean>[] = [];
+  autoRunningCellNodes: Set<HTMLElement> = new Set([]);
+  autoRunCells = new Array<StickyCode>();
+  autoRunTabs = new Array<Tab>();
   isDisposed = false;
 
   constructor(
@@ -65,58 +69,116 @@ export class StickyTab implements IDisposable {
      * multiple code cells with auto-run turned on. If each triggers its own
      * listener then there will be a race and infinite auto-runs.
      */
-    NotebookActions.executionScheduled.connect((_, args) => {
-      // Get all the code cells that have auto-run turned on
-      // const autoRunCells = new Set<StickyCode>();
-      const autoRunCells = new Array<StickyCode>();
-      const autoRunCellNodes = new Set<HTMLElement>();
+    NotebookActions.executionScheduled.connect(
+      this.handleExecutionScheduled,
+      this
+    );
+    NotebookActions.executed.connect(this.handleExecuted, this);
+  }
 
-      this.tabs.forEach(d => {
-        if (d.cellType === ContentType.Code) {
-          const curContent = d.tabContent.curContent as StickyCode;
-          if (curContent.autoRun) {
-            autoRunCells.push(curContent);
-            autoRunCellNodes.add(curContent.originalCell.node);
+  /**
+   * Handle the executionScheduled signal.
+   */
+  handleExecutionScheduled = (
+    _: any,
+    args: {
+      notebook: Notebook;
+      cell: Cell<ICellModel>;
+    }
+  ) => {
+    if (this.autoRunningCellNodes.size !== 0) {
+      return;
+    }
+
+    // Get all the code cells that have auto-run turned on
+    const autoRunCells = new Array<StickyCode>();
+    const autoRunTabs = new Array<Tab>();
+
+    this.tabs.forEach(d => {
+      if (d.cellType === ContentType.Code) {
+        const curContent = d.tabContent.curContent as StickyCode;
+        if (curContent.autoRun) {
+          autoRunCells.push(curContent);
+          autoRunTabs.push(d);
+        }
+      }
+    });
+
+    // We need to set a timeout to workaround the current executionScheduled
+    // emit order
+    // https://github.com/jupyterlab/jupyterlab/pull/11453
+
+    // Also users might run multiple cells at one time, we can set a short
+    // timeout so that we only run the sticky code cell once in a series of
+    // other executions of other cells
+    if (this.autoRunTimeout !== null) {
+      clearTimeout(this.autoRunTimeout);
+    }
+
+    this.autoRunTimeout = setTimeout(() => {
+      // Run the auto-run code cells
+      const toRunCells = new Array<StickyCode>();
+
+      autoRunCells.forEach(d => {
+        // If the signal source is the cell itself, we mark it as autoRunScheduled
+        // so we won't run it again after its peers finish running
+        if (d.originalCell.node === args.cell.node) {
+          d.autoRunScheduled = true;
+        } else {
+          if (!d.autoRunScheduled) {
+            d.autoRunScheduled = true;
+
+            // d.execute returns a promise but the promise can be fulfilled before
+            // the cell is executed, so we manually keep a record of all running
+            // cells and resolve them manually
+            toRunCells.push(d);
+            this.autoRunningCellNodes.add(d.originalCell.node);
           }
         }
       });
 
-      // We need to set a timeout to workaround the current executionScheduled
-      // emit order
-      // https://github.com/jupyterlab/jupyterlab/pull/11453
+      toRunCells.forEach(d => d.execute(true));
 
-      // Also users might run multiple cells at one time, we can set a short
-      // timeout so that we only run the sticky code cell once in a series of
-      // other executions of other cells
-      if (this.autoRunTimeout !== null) {
-        clearTimeout(this.autoRunTimeout);
-      }
+      // Move the local autoRunCells/autoRunTabs to object level
+      this.autoRunCells = autoRunCells;
+      this.autoRunTabs = autoRunTabs;
+    }, 200);
+  };
 
-      this.autoRunTimeout = setTimeout(() => {
-        // Run the auto-run code cells
-        this.autoRunPromises = [];
-        autoRunCells.forEach(d => {
-          // If the signal source is the cell itself, we mark it as autoRunScheduled
-          // so we won't run it again after its peers finish running
-          if (d.originalCell.node === args.cell.node) {
-            d.autoRunScheduled = true;
-          } else {
-            if (!d.autoRunScheduled) {
-              d.autoRunScheduled = true;
-              this.autoRunPromises.push(d.execute(true));
-            }
+  /**
+   * Handle the executed signal.
+   */
+  handleExecuted = (
+    _: any,
+    args: {
+      notebook: Notebook;
+      cell: Cell<ICellModel>;
+    }
+  ) => {
+    // Check if the cell that just finishes running is scheduled by us
+    if (this.autoRunningCellNodes.has(args.cell.node)) {
+      // Remove watching this cell
+      this.autoRunningCellNodes.delete(args.cell.node);
+
+      // If all auto-running cells finish running, we allow all these cells to
+      // be auto-run again in the future
+      if (this.autoRunningCellNodes.size === 0) {
+        this.autoRunCells.forEach(d => {
+          d.autoRunScheduled = false;
+        });
+
+        // Also mark the tab to indicate there is new update in this tab
+        this.autoRunTabs.forEach(d => {
+          if (!d.tabNode.classList.contains('current')) {
+            d.tabNode.classList.add('new-update');
           }
         });
 
-        // Flip their runScheduled once this batch is all finished
-        Promise.all(this.autoRunPromises).then(values => {
-          autoRunCells.forEach(d => {
-            d.autoRunScheduled = false;
-          });
-        });
-      }, 200);
-    });
-  }
+        this.autoRunCells = [];
+        this.autoRunTabs = [];
+      }
+    }
+  };
 
   /**
    * Create a tab containing a dropzone content. The tab name is always 'new'
@@ -154,7 +216,8 @@ export class StickyTab implements IDisposable {
       cellType: ContentType.Dropzone,
       cellIndex: 0,
       tabNode: tabNode,
-      tabContent: tabContent
+      tabContent: tabContent,
+      hasNewUpdate: false
     };
 
     // Handle delete icon clicked
@@ -175,6 +238,9 @@ export class StickyTab implements IDisposable {
       // Switch the active tab to the current one
       if (this.activeTab?.tabNode !== tabNode) {
         this.switchActiveTab(newTab);
+
+        // Remove the new update if it's there
+        newTab.tabNode.classList.remove('new-update');
       }
     });
 
@@ -306,5 +372,10 @@ export class StickyTab implements IDisposable {
 
   dispose = () => {
     this.isDisposed = true;
+    NotebookActions.executionScheduled.disconnect(
+      this.handleExecutionScheduled,
+      this
+    );
+    NotebookActions.executed.disconnect(this.handleExecuted, this);
   };
 }
