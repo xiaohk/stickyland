@@ -23,7 +23,7 @@
   overflow: hidden;
 
   --sticky-header-height: 10px;
-  --sticky-tab-height: 23px;
+  --sticky-tab-height: 25px;
 }
 
 .svg-icon {
@@ -54,7 +54,6 @@
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  font-size: 0.6em;
 }
 
 .sticky-container .button:hover {
@@ -67,7 +66,7 @@
 }
 
 .sticky-tab-bar {
-  height: var(--sticky-tab-height);
+  /* height: var(--sticky-tab-height); */
   width: 100%;
   opacity: 1;
   background-color: var(--jp-layout-color3);
@@ -77,7 +76,7 @@
 
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: flex-end;
 }
 
 .sticky-tab button.new-tab {
@@ -128,7 +127,7 @@
 .sticky-tab button {
   background: var(--jp-layout-color2);
   color: var(--jp-ui-font-color0);
-  margin-left: 0;
+  margin: 0;
   text-align: left;
   min-width: 0px;
   padding: 0px 5px;
@@ -205,9 +204,11 @@
 .sticky-tab .tab {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .tab-label {
+  font-size: 13px;
   overflow: hidden;
   white-space: nowrap;
   flex: 1 1 auto;

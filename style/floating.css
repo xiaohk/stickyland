@@ -17,7 +17,7 @@
 }
 
 .floating-window .floating-header {
-  height: 24px;
+  min-height: 24px;
   width: 100%;
   cursor: move;
   background-color: var(--jp-layout-color4);
@@ -28,6 +28,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.floating-window .sticky-content {
+  height: calc(100% - 24px);
 }
 
 .floating-window .button-group {
