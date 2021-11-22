@@ -254,6 +254,7 @@
   height: 20px;
   cursor: nesw-resize;
   overflow: hidden;
+  z-index: 5;
 }
 
 /* Fake the think white border surrounding the lines */

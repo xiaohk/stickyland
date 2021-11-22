@@ -14,6 +14,10 @@
   align-items: center;
 }
 
+.jp-Toolbar-item.no-display {
+  display: none;
+}
+
 .sticky-toolbar svg {
   fill: var(--jp-inverse-layout-color3);
   color: var(--jp-inverse-layout-color3);

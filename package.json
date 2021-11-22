@@ -43,7 +43,8 @@
     "install:extension": "jlpm run build",
     "watch": "run-p watch:src watch:labextension",
     "watch:src": "tsc -w",
-    "watch:labextension": "jupyter labextension watch ."
+    "watch:labextension": "jupyter labextension watch .",
+    "release": "npm version patch && python -m build && twine upload dist/*"
   },
   "dependencies": {
     "@jupyterlab/application": "^3.2.2",
