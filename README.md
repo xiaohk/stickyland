@@ -2,15 +2,15 @@
 
 [![Github Actions Status](https://github.com/xiaohk/stickyland/workflows/Build/badge.svg)](https://github.com/xiaohk/stickyland/actions/workflows/build.yml)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
-[![pypi](https://img.shields.io/pypi/v/jupyterlab-stickyland?color=red)](https://pypi.python.org/pypi/jupyterlab-stickyland)
-[![npm](https://img.shields.io/npm/v/jupyterlab-stickyland?color=red)](https://www.npmjs.com/package/jupyterlab-stickyland)
-[![license](https://img.shields.io/pypi/l/jupyterlab-stickyland?color=blue)](https://github.com/xiaohk/stickyland/blob/master/LICENSE)
+[![pypi](https://img.shields.io/pypi/v/jupyterlab-stickyland?color=blue)](https://pypi.python.org/pypi/jupyterlab-stickyland)
+[![npm](https://img.shields.io/npm/v/jupyterlab-stickyland?color=blue)](https://www.npmjs.com/package/jupyterlab-stickyland)
+[![license](https://img.shields.io/pypi/l/jupyterlab-stickyland?color=orange)](https://github.com/xiaohk/stickyland/blob/master/LICENSE)
 
 Break free from the linear presentation of Jupyter Notebooks with sticky cells!
 
 <img src='https://i.imgur.com/N6li3BG.png'>
 
-## Try it in Your Browser
+## Live Demo
 
 You can try StickyLand directly in your browser without installing anything:
 
@@ -18,7 +18,7 @@ You can try StickyLand directly in your browser without installing anything:
 
 ## Install
 
-First you need to have JupyterLab installed. Then you can install StickyLand with `pip`:
+First you need to install JupyterLab. Then you can install StickyLand with `pip`:
 
 ```bash
 pip install jupyterlab-stickyland
@@ -61,3 +61,11 @@ By default, the `jlpm run build` command generates the source maps for this exte
 ```bash
 jupyter lab build --minimize=False
 ```
+
+## License
+
+The software is available under the [BSD-3-Clause License](https://github.com/xiaohk/stickyland/blob/master/LICENSE).
+
+## Contact
+
+If you have any questions, feel free to [open an issue](https://github.com/xiaohk/stickyland/issues/new) or contact [Jay Wang](https://zijie.wang).
