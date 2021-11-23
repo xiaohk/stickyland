@@ -8,7 +8,7 @@
 
 Break free from the linear presentation of Jupyter Notebooks with sticky cells!
 
-<img src='https://i.imgur.com/N6li3BG.png'>
+<img src='https://i.imgur.com/QgQNMYd.png'>
 
 ## Live Demo
 

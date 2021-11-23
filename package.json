@@ -44,7 +44,7 @@
     "watch": "run-p watch:src watch:labextension",
     "watch:src": "tsc -w",
     "watch:labextension": "jupyter labextension watch .",
-    "release": "npm version patch && python -m build && twine upload dist/*"
+    "release": "npm version patch --sign-git-tag && python -m build && twine upload dist/* && npm publish"
   },
   "dependencies": {
     "@jupyterlab/application": "^3.2.2",
