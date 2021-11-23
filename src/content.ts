@@ -56,6 +56,10 @@ export class StickyContent implements IDisposable {
    */
   showDropzone = () => {
     this.curContent = new Dropzone(this);
+
+    // It only happens when the user closes the last sticky code/md cell
+    // Dehighlight the tab name
+    this.stickyLand.stickyTab.activeTab?.tabNode.classList.remove('new-update');
   };
 
   /**

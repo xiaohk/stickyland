@@ -1,31 +1,28 @@
-# jupyterlab_stickyland
+# StickyLand
 
 [![Github Actions Status](https://github.com/xiaohk/stickyland/workflows/Build/badge.svg)](https://github.com/xiaohk/stickyland/actions/workflows/build.yml)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
+[![pypi](https://img.shields.io/pypi/v/jupyterlab-stickyland?color=red)](https://pypi.python.org/pypi/jupyterlab-stickyland)
+[![npm](https://img.shields.io/npm/v/jupyterlab-stickyland?color=red)](https://www.npmjs.com/package/jupyterlab-stickyland)
+[![license](https://img.shields.io/pypi/l/jupyterlab-stickyland?color=blue)](https://github.com/xiaohk/stickyland/blob/master/LICENSE)
 
-Jupyter extension to make cells sticky!
+Break free from the linear presentation of Jupyter Notebooks with sticky cells!
 
+<img src='https://i.imgur.com/N6li3BG.png'>
 
+## Try it in Your Browser
 
-## Requirements
+You can try StickyLand directly in your browser without installing anything:
 
-* JupyterLab >= 3.0
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
 
 ## Install
 
-To install the extension, execute:
+First you need to have JupyterLab installed. Then you can install StickyLand with `pip`:
 
 ```bash
-pip install jupyterlab_stickyland
+pip install jupyterlab-stickyland
 ```
-
-## Uninstall
-
-To remove the extension, execute:
-
-```bash
-pip uninstall jupyterlab_stickyland
-```
-
 
 ## Contributing
 
@@ -64,17 +61,3 @@ By default, the `jlpm run build` command generates the source maps for this exte
 ```bash
 jupyter lab build --minimize=False
 ```
-
-### Development uninstall
-
-```bash
-pip uninstall jupyterlab_stickyland
-```
-
-In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
-command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `jupyterlab-stickyland` within that folder.
-
-### Packaging the extension
-
-See [RELEASE](RELEASE.md)

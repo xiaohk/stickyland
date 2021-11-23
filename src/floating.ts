@@ -361,6 +361,8 @@ export class FloatingWindow implements IDisposable {
       windowIndex,
       1
     );
+
+    this.stickyCell.isFloating = false;
   };
 
   /**

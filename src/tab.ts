@@ -169,6 +169,7 @@ export class StickyTab implements IDisposable {
 
         // Also mark the tab to indicate there is new update in this tab
         this.autoRunTabs.forEach(d => {
+          // const curCell = d.tabContent.curContent as StickyCode;
           if (!d.tabNode.classList.contains('current')) {
             d.tabNode.classList.add('new-update');
           }
