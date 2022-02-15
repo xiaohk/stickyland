@@ -8,28 +8,25 @@
 
 Break free from the linear presentation of Jupyter Notebooks with sticky cells!
 
-<img src='https://i.imgur.com/QgQNMYd.png'>
+<img src='https://i.imgur.com/FtmHafo.png'>
 
 ## Live Demo
 
 You can try StickyLand directly in your browser without installing anything:
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/anonchi/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
 
 ## Install
 
-First you need to install JupyterLab. Then you can install StickyLand with `pip`:
+First, you need to install JupyterLab. Then you can install StickyLand with `pip`:
 
 ```bash
 pip install jupyterlab-stickyland
 ```
 
-## Contributing
+## Development
 
-### Development install
-
-Note: You will need NodeJS to build the extension package.
-
+You will need NodeJS to build the extension package.
 The `jlpm` command is JupyterLab's pinned version of
 [yarn](https://yarnpkg.com/) that is installed with JupyterLab. You may use
 `yarn` or `npm` in lieu of `jlpm` below.
