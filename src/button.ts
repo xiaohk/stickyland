@@ -7,10 +7,11 @@ import { StickyLand } from './stickyland';
 export class ButtonExtension
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
 {
-  stickyLand: StickyLand | null;
+  // This maps each stickyLand object to a notebook title
+  stickyLandMap: Map<string, StickyLand> | null;
 
   constructor() {
-    this.stickyLand = null;
+    this.stickyLandMap = new Map();
   }
 
   createNew(
@@ -22,17 +23,20 @@ export class ButtonExtension
      */
     const onClickHandler = () => {
       // Check if we have already created stickyland
+      const curPath = context.path;
 
       // Create it if we don't have it yet
-      if (this.stickyLand === null) {
-        this.stickyLand = new StickyLand(panel);
+      if (!this.stickyLandMap?.has(curPath)) {
+        this.stickyLandMap?.set(curPath, new StickyLand(panel));
       }
 
+      const curStickyLand = this.stickyLandMap?.get(curPath);
+
       // Check if we should show or hide this container
-      if (this.stickyLand.isHidden()) {
-        this.stickyLand.show();
+      if (curStickyLand?.isHidden()) {
+        curStickyLand?.show();
       } else {
-        this.stickyLand.hide();
+        curStickyLand?.hide();
       }
 
       // Alternative way to insert StickyLand to the notebook widget (boxLayout)
