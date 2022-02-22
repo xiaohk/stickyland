@@ -6,9 +6,11 @@
 [![npm](https://img.shields.io/npm/v/jupyterlab-stickyland?color=blue)](https://www.npmjs.com/package/jupyterlab-stickyland)
 [![license](https://img.shields.io/pypi/l/jupyterlab-stickyland?color=orange)](https://github.com/xiaohk/stickyland/blob/master/LICENSE)
 
-Break free from the linear presentation of Jupyter Notebooks with sticky cells!
+Break the linear presentation of Jupyter Notebooks with sticky cells!
 
-<img src='https://i.imgur.com/FtmHafo.png'>
+|<img src='https://i.imgur.com/FtmHafo.png'>|
+|:---:|
+|[Demo video](https://youtu.be/OKaPmEBzEX0)|
 
 ## Live Demo
 
@@ -21,8 +23,18 @@ You can try StickyLand directly in your browser without installing anything:
 First, you need to install JupyterLab. Then you can install StickyLand with `pip`:
 
 ```bash
-pip install jupyterlab-stickyland
+pip install stickyland
 ```
+
+## Features
+
+|![](https://user-images.githubusercontent.com/15007159/155228615-04bd45a6-0d85-46a5-abb2-841b440c6871.mp4)|![](https://user-images.githubusercontent.com/15007159/155228628-e17bb6ea-ceae-4f0f-b88e-6573fe081aac.mp4)|
+|:---:|:---:|
+|Drag and drop to create sticky cells|Create sticky cells from scratch|
+
+|![](https://user-images.githubusercontent.com/15007159/155228640-5280ebe8-9b3e-4610-9672-cae20acb3412.mp4)|![](https://user-images.githubusercontent.com/15007159/155233626-19d53769-49b2-4673-8ed1-bcb42172cec3.mp4)|
+|:---:|:---:|
+|Automatically execute sticky cells|Use multiple floating cells to create an interactive dashboard|
 
 ## Development
 
