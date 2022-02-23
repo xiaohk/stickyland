@@ -24,7 +24,7 @@ Break the linear presentation of Jupyter Notebooks with sticky cells!
 
 You can try StickyLand directly in your browser without installing anything:
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/anonchi/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
 
 ## Install
 
@@ -86,7 +86,7 @@ jupyter lab build --minimize=False
 ## Citation
 
 ```bibTeX
-@inproceedings{wangStickyLandBreaking2022,
+@inproceedings{wangStickyLandBreakingLinear2022,
   title = {{{StickyLand}}: {{Breaking}} the {{Linear Presentation}} of {{Computational Notebooks}}},
   shorttitle = {{{StickyLand}}},
   booktitle = {Extended {{Abstracts}} of the 2022 {{CHI Conference}} on {{Human Factors}} in {{Computing Systems}}},
