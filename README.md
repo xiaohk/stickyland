@@ -4,10 +4,8 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
 [![pypi](https://img.shields.io/pypi/v/jupyterlab-stickyland?color=blue)](https://pypi.python.org/pypi/jupyterlab-stickyland)
 [![license](https://img.shields.io/pypi/l/jupyterlab-stickyland?color=orange)](https://github.com/xiaohk/stickyland/blob/master/LICENSE)
+[![arxiv badge](https://img.shields.io/badge/arXiv-2202.11086-red)](https://arxiv.org/abs/2202.11086)
 [![DOI:10.1145/3491101.3519653](https://img.shields.io/badge/DOI-10.1145/3491101.3519653-blue)](https://doi.org/10.1145/3491101.3519653)
-
-<!-- [![npm](https://img.shields.io/npm/v/jupyterlab-stickyland?color=blue)](https://www.npmjs.com/package/jupyterlab-stickyland) -->
-<!-- [![arxiv badge](https://img.shields.io/badge/arXiv-2004.15004-red)](http://arxiv.org/abs/2004.15004) -->
 
 Break the linear presentation of Jupyter Notebooks with sticky cells!
 
@@ -18,7 +16,7 @@ Break the linear presentation of Jupyter Notebooks with sticky cells!
   <tr></tr>
   <tr>
     <td><a href="https://youtu.be/OKaPmEBzEX0">📺 Demo Video</a></td>
-    <td><a href="https://youtu.be/OKaPmEBzEX0">📖 Research Paper: "StickyLand: Breaking the Linear Presentation of Computational Notebooks"</a></td>
+    <td><a href="https://arxiv.org/abs/2202.11086">📖 Paper: "StickyLand: Breaking the Linear Presentation of Computational Notebooks"</a></td>
   </tr>
 </table>
 
@@ -41,11 +39,11 @@ pip install stickyland
 <table>
   <tr></tr>
   <tr></tr>
-  <tr><td style="text-align:center"><b>Drag and drop to create sticky cells</b></td><td><b>Create sticky code and markdown cells from scratch</b></td></tr>
+  <tr><td style="text-align:center"><b>Drag and drop to create sticky cells</b></td><td><b>Create sticky code and markdown from scratch</b></td></tr>
   <tr></tr>
   <tr><th><video src='https://user-images.githubusercontent.com/15007159/155241848-298e593e-de7b-4d6e-be48-fd738c2586e6.mp4' width=180></video></th><th><video src='https://user-images.githubusercontent.com/15007159/155241844-4a5a910d-3cdf-48d2-9c6d-acb9e23fe6a4.mp4' width=180></video></th></tr>
   <tr></tr>
-  <tr><td><b>Automatically execute sticky cells</b></td><td><b>Use multiple floating cells to create an interactive dashboard</b></td></tr>
+  <tr><td><b>Automatically execute sticky cells</b></td><td><b>Use floating cells to create interactive dashboards</b></td></tr>
   <tr></tr>
   <tr><td style="width:20px"><video src='https://user-images.githubusercontent.com/15007159/155242259-925ca910-f1d4-4b8d-b085-5120f1a21da6.mp4' width=180></video></td><td><video src='https://user-images.githubusercontent.com/15007159/155243403-30625bd4-611c-4096-934d-7219fd6be8cb.mp4' width=180></video></td></tr>
 </table>
@@ -85,19 +83,18 @@ By default, the `jlpm run build` command generates the source maps for this exte
 jupyter lab build --minimize=False
 ```
 
-<!-- ## Citation
+## Citation
 
 ```bibTeX
 @inproceedings{wangStickyLandBreaking2022,
-  title = {{{CNN}} 101: {{Interactive Visual Learning}} for {{Convolutional Neural Networks}}},
+  title = {{{StickyLand}}: {{Breaking}} the {{Linear Presentation}} of {{Computational Notebooks}}},
   shorttitle = {{{StickyLand}}},
   booktitle = {Extended {{Abstracts}} of the 2022 {{CHI Conference}} on {{Human Factors}} in {{Computing Systems}}},
-  author = {Wang, Zijie J. and Turko, Robert and Shaikh, Omar and Park, Haekyu and Das, Nilaksh and Hohman, Fred and Kahng, Minsuk and Chau, Duen Horng},
+  author = {Wang, Zijie J. and Dai, Katie and Edwards, W. Keith},
   year = {2022},
   publisher = {{ACM}}
 }
-
-``` -->
+```
 
 ## License
 
