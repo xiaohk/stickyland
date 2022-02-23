@@ -3,14 +3,23 @@
 [![Github Actions Status](https://github.com/xiaohk/stickyland/workflows/Build/badge.svg)](https://github.com/xiaohk/stickyland/actions/workflows/build.yml)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
 [![pypi](https://img.shields.io/pypi/v/jupyterlab-stickyland?color=blue)](https://pypi.python.org/pypi/jupyterlab-stickyland)
-[![npm](https://img.shields.io/npm/v/jupyterlab-stickyland?color=blue)](https://www.npmjs.com/package/jupyterlab-stickyland)
+<!-- [![npm](https://img.shields.io/npm/v/jupyterlab-stickyland?color=blue)](https://www.npmjs.com/package/jupyterlab-stickyland) -->
 [![license](https://img.shields.io/pypi/l/jupyterlab-stickyland?color=orange)](https://github.com/xiaohk/stickyland/blob/master/LICENSE)
+<!-- [![arxiv badge](https://img.shields.io/badge/arXiv-2004.15004-red)](http://arxiv.org/abs/2004.15004) -->
+[![DOI:10.1145/3491101.3519653](https://img.shields.io/badge/DOI-10.1145/3491101.3519653-blue)](https://doi.org/10.1145/3491101.3519653)
 
 Break the linear presentation of Jupyter Notebooks with sticky cells!
 
-|<img src='https://i.imgur.com/FtmHafo.png'>|
-|:---|
-|[Demo video](https://youtu.be/OKaPmEBzEX0)|
+<table>
+  <tr>
+    <td colspan="2"><img src='https://i.imgur.com/FtmHafo.png'></td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td><a href="https://youtu.be/OKaPmEBzEX0">📺 Demo Video</a></td>
+    <td><a href="https://youtu.be/OKaPmEBzEX0">📖 Research Paper: "StickyLand: Breaking the Linear Presentation of Computational Notebooks"</a></td>
+  </tr>
+</table>
 
 ## Live Demo
 
@@ -74,6 +83,20 @@ By default, the `jlpm run build` command generates the source maps for this exte
 ```bash
 jupyter lab build --minimize=False
 ```
+
+<!-- ## Citation
+
+```bibTeX
+@inproceedings{wangStickyLandBreaking2022,
+  title = {{{CNN}} 101: {{Interactive Visual Learning}} for {{Convolutional Neural Networks}}},
+  shorttitle = {{{StickyLand}}},
+  booktitle = {Extended {{Abstracts}} of the 2022 {{CHI Conference}} on {{Human Factors}} in {{Computing Systems}}},
+  author = {Wang, Zijie J. and Turko, Robert and Shaikh, Omar and Park, Haekyu and Das, Nilaksh and Hohman, Fred and Kahng, Minsuk and Chau, Duen Horng},
+  year = {2022},
+  publisher = {{ACM}}
+}
+
+``` -->
 
 ## License
 

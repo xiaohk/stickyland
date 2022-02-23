@@ -1,3 +1,4 @@
+publish-pip.sh
 *.bundle.*
 lib/
 node_modules/
