@@ -9,7 +9,7 @@
 Break the linear presentation of Jupyter Notebooks with sticky cells!
 
 |<img src='https://i.imgur.com/FtmHafo.png'>|
-|:---:|
+|:---|
 |[Demo video](https://youtu.be/OKaPmEBzEX0)|
 
 ## Live Demo
@@ -28,13 +28,17 @@ pip install stickyland
 
 ## Features
 
-|![](https://user-images.githubusercontent.com/15007159/155228615-04bd45a6-0d85-46a5-abb2-841b440c6871.mp4)|![](https://user-images.githubusercontent.com/15007159/155228628-e17bb6ea-ceae-4f0f-b88e-6573fe081aac.mp4)|
-|:---:|:---:|
-|Drag and drop to create sticky cells|Create sticky cells from scratch|
-
-|![](https://user-images.githubusercontent.com/15007159/155228640-5280ebe8-9b3e-4610-9672-cae20acb3412.mp4)|![](https://user-images.githubusercontent.com/15007159/155233626-19d53769-49b2-4673-8ed1-bcb42172cec3.mp4)|
-|:---:|:---:|
-|Automatically execute sticky cells|Use multiple floating cells to create an interactive dashboard|
+<table>
+  <tr></tr>
+  <tr></tr>
+  <tr><td style="text-align:center"><b>Drag and drop to create sticky cells</b></td><td><b>Create sticky code and markdown cells from scratch</b></td></tr>
+  <tr></tr>
+  <tr><th><video src='https://user-images.githubusercontent.com/15007159/155241848-298e593e-de7b-4d6e-be48-fd738c2586e6.mp4' width=180></video></th><th><video src='https://user-images.githubusercontent.com/15007159/155241844-4a5a910d-3cdf-48d2-9c6d-acb9e23fe6a4.mp4' width=180></video></th></tr>
+  <tr></tr>
+  <tr><td><b>Automatically execute sticky cells</b></td><td><b>Use multiple floating cells to create an interactive dashboard</b></td></tr>
+  <tr></tr>
+  <tr><td style="width:20px"><video src='https://user-images.githubusercontent.com/15007159/155242259-925ca910-f1d4-4b8d-b085-5120f1a21da6.mp4' width=180></video></td><td><video src='https://user-images.githubusercontent.com/15007159/155243403-30625bd4-611c-4096-934d-7219fd6be8cb.mp4' width=180></video></td></tr>
+</table>
 
 ## Development
 
