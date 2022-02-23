@@ -3,10 +3,11 @@
 [![Github Actions Status](https://github.com/xiaohk/stickyland/workflows/Build/badge.svg)](https://github.com/xiaohk/stickyland/actions/workflows/build.yml)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
 [![pypi](https://img.shields.io/pypi/v/jupyterlab-stickyland?color=blue)](https://pypi.python.org/pypi/jupyterlab-stickyland)
-<!-- [![npm](https://img.shields.io/npm/v/jupyterlab-stickyland?color=blue)](https://www.npmjs.com/package/jupyterlab-stickyland) -->
 [![license](https://img.shields.io/pypi/l/jupyterlab-stickyland?color=orange)](https://github.com/xiaohk/stickyland/blob/master/LICENSE)
-<!-- [![arxiv badge](https://img.shields.io/badge/arXiv-2004.15004-red)](http://arxiv.org/abs/2004.15004) -->
 [![DOI:10.1145/3491101.3519653](https://img.shields.io/badge/DOI-10.1145/3491101.3519653-blue)](https://doi.org/10.1145/3491101.3519653)
+
+<!-- [![npm](https://img.shields.io/npm/v/jupyterlab-stickyland?color=blue)](https://www.npmjs.com/package/jupyterlab-stickyland) -->
+<!-- [![arxiv badge](https://img.shields.io/badge/arXiv-2004.15004-red)](http://arxiv.org/abs/2004.15004) -->
 
 Break the linear presentation of Jupyter Notebooks with sticky cells!
 
