@@ -48,6 +48,18 @@ pip install stickyland
   <tr><td style="width:20px"><video src='https://user-images.githubusercontent.com/15007159/155242259-925ca910-f1d4-4b8d-b085-5120f1a21da6.mp4' width=180></video></td><td><video src='https://user-images.githubusercontent.com/15007159/155243403-30625bd4-611c-4096-934d-7219fd6be8cb.mp4' width=180></video></td></tr>
 </table>
 
+With multiple floating cells, you can create a fully-fledged interactive dashboard. For example, an machine learning engineer can use StickyLand to build an ML Error Analysis Dashboard (shown below) through simple drag-and-drop.
+
+<table>
+  <tr><td><img src="https://i.imgur.com/KN51RQV.png"></td></tr>
+  <tr></tr>
+  <tr><td>The <b>ML Error Analysis Dashboard</b> consists of: <b>(A)</b> markdown text describing the dashboard, <b>(B)</b>
+input field to specify a feature to diagnose, <b>(C)</b> auto-run chart showing the distribution of the specified feature, <b>(D)</b> second
+input field to further specify the range within the feature to diagnose, <b>(E)</b> auto-run table displaying all samples that meet the
+criteria, <b>(F)</b> auto-run <a href="https://github.com/interpretml/interpret/">visualization</a> explaining how the ML model makes decision on these samples, <b>(G)</b> <a href="https://github.com/interpretml/gam-changer/">interactive tool</a> allowing
+the ML engineer to fix the ML model by editing its parameters based on their error analysis.</td></tr>
+</table>
+
 ## Development
 
 You will need NodeJS to build the extension package.
