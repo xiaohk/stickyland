@@ -50,7 +50,7 @@ pip install stickyland
 
 ---
 
-With multiple floating cells, users can create a fully-fledged interactive dashboard. For example, an machine learning engineer can build an ML Error Analysis Dashboard (shown below) through simple drag-and-drop.
+With multiple floating cells, users can create a fully-fledged interactive dashboard. For example, a machine learning engineer can build an ML Error Analysis Dashboard (shown below) through simple drag-and-drop.
 
 <table>
   <tr><td><img src="https://i.imgur.com/KN51RQV.png"></td></tr>
