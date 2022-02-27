@@ -36,7 +36,7 @@ pip install stickyland
 
 ## Features
 
-![feature-gif](https://user-images.githubusercontent.com/15007159/155828752-af883f7d-e9ac-48d5-8231-087f62582d98.gif)
+![feature-gif](https://user-images.githubusercontent.com/15007159/155863418-c4e616fa-a003-4d6c-ba12-74cdb22d9bf4.gif)
 
 <details>
   <summary>Show details</summary>
