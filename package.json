@@ -1,85 +1,47 @@
 {
-  "name": "jupyterlab-stickyland",
-  "version": "0.1.5",
-  "description": "Break free from the linear presentation of Jupyter Notebooks with sticky cells!",
-  "keywords": [
-    "jupyter",
-    "jupyterlab",
-    "jupyterlab-extension"
-  ],
-  "homepage": "https://github.com/xiaohk/stickyland",
+  "name": "@jupyterlite/app",
+  "version": "0.1.0-beta.1",
+  "homepage": "https://github.com/jupyterlite/jupyterlite",
   "bugs": {
-    "url": "https://github.com/xiaohk/stickyland/issues"
+    "url": "https://github.com/jupyterlite/jupyterlite/issues"
   },
-  "license": "BSD-3-Clause",
-  "author": {
-    "name": "Jay Wang, Katie Dai",
-    "email": "jay@zijie.wang, kdai7@gatech.edu"
-  },
-  "files": [
-    "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
-    "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
-    "style/img/*.{svg}"
-  ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "style": "style/index.css",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xiaohk/stickyland.git"
+    "url": "https://github.com/jupyterlite/jupyterlite"
   },
+  "license": "BSD-3-Clause",
+  "author": "JupyterLite Contributors",
   "scripts": {
-    "build": "jlpm run build:lib && jlpm run build:labextension:dev",
-    "build:prod": "jlpm run clean && jlpm run build:lib && jlpm run build:labextension",
-    "build:labextension": "jupyter labextension build .",
-    "build:labextension:dev": "jupyter labextension build --development True .",
-    "build:lib": "tsc",
-    "clean": "jlpm run clean:lib",
-    "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
-    "clean:labextension": "rimraf jupyterlab_stickyland/labextension",
-    "clean:all": "jlpm run clean:lib && jlpm run clean:labextension",
-    "eslint": "eslint . --ext .ts,.tsx --fix",
-    "eslint:check": "eslint . --ext .ts,.tsx",
-    "install:extension": "jlpm run build",
-    "watch": "run-p watch:src watch:labextension",
-    "watch:src": "tsc -w",
-    "watch:labextension": "jupyter labextension watch .",
-    "release": "npm version patch --sign-git-tag && python -m build && twine upload dist/* && npm publish"
-  },
-  "dependencies": {
-    "@jupyterlab/application": "^3.2.2",
-    "@jupyterlab/apputils": "^3.2.2",
-    "@jupyterlab/notebook": "^3.2.2"
+    "build": "webpack",
+    "build:prod": "yarn clean && yarn build --mode=production",
+    "clean": "rimraf build **/build",
+    "watch": "webpack --config webpack.config.watch.js"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^3.1.0",
-    "@types/codemirror": "^5.60.5",
-    "@typescript-eslint/eslint-plugin": "^5.3.0",
-    "@typescript-eslint/parser": "^5.3.0",
-    "eslint": "^8.1.0",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.1.1"
+    "@jupyterlab/builder": "^3.3.0",
+    "css-loader": "^6.6.0",
+    "file-loader": "^6.2.0",
+    "fs-extra": "^9.0.1",
+    "glob": "^7.2.0",
+    "handlebars": "^4.5.3",
+    "html-webpack-plugin": "^5.5.0",
+    "ignore-loader": "^0.1.2",
+    "mini-css-extract-plugin": "^2.5.3",
+    "raw-loader": "^4.0.2",
+    "rimraf": "^3.0.2",
+    "style-loader": "^3.3.1",
+    "svg-url-loader": "^7.1.1",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.68.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.8.0"
   },
-  "sideEffects": [
-    "style/*.css",
-    "style/index.js"
-  ],
-  "styleModule": "style/index.js",
-  "publishConfig": {
-    "access": "public"
-  },
-  "jupyterlab": {
-    "extension": true,
-    "outputDir": "jupyterlab_stickyland/labextension"
-  },
-  "jupyter-releaser": {
-    "hooks": {
-      "before-build-npm": [
-        "python -m pip install jupyterlab~=3.1",
-        "jlpm"
-      ]
-    }
+  "jupyterlite": {
+    "apps": [
+      "lab",
+      "repl",
+      "retro"
+    ]
   }
 }
