@@ -1,0 +1,106 @@
+{
+  "ipykernel": {
+    "releases": {
+      "5.5.5": [
+        {
+          "comment_text": "",
+          "digests": {
+            "md5": "b69a41f625ae477efb2e3dd1c8884ee2",
+            "sha256": "707cacc1c1f427d6e57f191600a84e3c93684d6508db5d3daf11428fbac3b24d"
+          },
+          "downloads": -1,
+          "filename": "ipykernel-5.5.5-py3-none-any.whl",
+          "has_sig": false,
+          "md5_digest": "b69a41f625ae477efb2e3dd1c8884ee2",
+          "packagetype": "bdist_wheel",
+          "python_version": "py3",
+          "requires_python": ">=3.6",
+          "size": 3086,
+          "upload_time": "2022-03-04T17:07:10.179824Z",
+          "upload_time_iso_8601": "2022-03-04T17:07:10.179824Z",
+          "url": "./ipykernel-5.5.5-py3-none-any.whl",
+          "yanked": false,
+          "yanked_reason": null
+        }
+      ]
+    }
+  },
+  "piplite": {
+    "releases": {
+      "0.1.0b1": [
+        {
+          "comment_text": "",
+          "digests": {
+            "md5": "0fb794210a46bcc4d8cfa6d6a6405293",
+            "sha256": "ce1ab9ca84bfe1b29739039acd9c6c12a2527588e2a49903199944b2fab9453d"
+          },
+          "downloads": -1,
+          "filename": "piplite-0.1.0b1-py3-none-any.whl",
+          "has_sig": false,
+          "md5_digest": "0fb794210a46bcc4d8cfa6d6a6405293",
+          "packagetype": "bdist_wheel",
+          "python_version": "py3",
+          "requires_python": ">=3.6",
+          "size": 3076,
+          "upload_time": "2022-03-04T17:07:09.955810Z",
+          "upload_time_iso_8601": "2022-03-04T17:07:09.955810Z",
+          "url": "./piplite-0.1.0b1-py3-none-any.whl",
+          "yanked": false,
+          "yanked_reason": null
+        }
+      ]
+    }
+  },
+  "pyolite": {
+    "releases": {
+      "0.1.0b1": [
+        {
+          "comment_text": "",
+          "digests": {
+            "md5": "8b949f9d56acda275434793bf2e97ba4",
+            "sha256": "93dd7704396ddb7c4e9fe8d86e0d3c56be14ee2d3ac98730c6078ed09e02ed36"
+          },
+          "downloads": -1,
+          "filename": "pyolite-0.1.0b1-py3-none-any.whl",
+          "has_sig": false,
+          "md5_digest": "8b949f9d56acda275434793bf2e97ba4",
+          "packagetype": "bdist_wheel",
+          "python_version": "py3",
+          "requires_python": ">=3.6",
+          "size": 5533,
+          "upload_time": "2022-03-04T17:07:09.727795Z",
+          "upload_time_iso_8601": "2022-03-04T17:07:09.727795Z",
+          "url": "./pyolite-0.1.0b1-py3-none-any.whl",
+          "yanked": false,
+          "yanked_reason": null
+        }
+      ]
+    }
+  },
+  "widgetsnbextension": {
+    "releases": {
+      "3.5.0": [
+        {
+          "comment_text": "",
+          "digests": {
+            "md5": "cc54e18c2eb11739dcea94baf201583e",
+            "sha256": "c1f4e4d5910b275cc9ac88a32ae6953f12715bd9c8a0467e7a1315d23d57c438"
+          },
+          "downloads": -1,
+          "filename": "widgetsnbextension-3.5.0-py3-none-any.whl",
+          "has_sig": false,
+          "md5_digest": "cc54e18c2eb11739dcea94baf201583e",
+          "packagetype": "bdist_wheel",
+          "python_version": "py3",
+          "requires_python": ">=3.6",
+          "size": 1137,
+          "upload_time": "2022-03-04T17:07:10.403838Z",
+          "upload_time_iso_8601": "2022-03-04T17:07:10.403838Z",
+          "url": "./widgetsnbextension-3.5.0-py3-none-any.whl",
+          "yanked": false,
+          "yanked_reason": null
+        }
+      ]
+    }
+  }
+}

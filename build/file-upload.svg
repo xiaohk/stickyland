@@ -1,0 +1,1 @@
+module.exports = "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' viewBox='0 0 24 24'%3e %3cg class='jp-icon3' fill='%23616161'%3e %3cpath d='M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z'/%3e %3c/g%3e %3c/svg%3e"
