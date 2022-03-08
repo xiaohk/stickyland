@@ -2,8 +2,9 @@
 
 [![Github Actions Status](https://github.com/xiaohk/stickyland/workflows/Build/badge.svg)](https://github.com/xiaohk/stickyland/actions/workflows/build.yml)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
+[![Lite](https://gist.githubusercontent.com/xiaohk/9b9f7c8fa162b2c3bc3251a5c9a799b2/raw/c3438b4c49d89e4c367f581520ddd4cf8dac0f41/lite-badge-launch-small.svg)](https://xiaohk.github.io/stickyland/)
 [![pypi](https://img.shields.io/pypi/v/jupyterlab-stickyland?color=blue)](https://pypi.python.org/pypi/jupyterlab-stickyland)
-[![license](https://img.shields.io/pypi/l/jupyterlab-stickyland?color=orange)](https://github.com/xiaohk/stickyland/blob/master/LICENSE)
+[![license](https://img.shields.io/badge/License-BSD3-orange)](https://github.com/xiaohk/stickyland/blob/master/LICENSE)
 [![arxiv badge](https://img.shields.io/badge/arXiv-2202.11086-red)](https://arxiv.org/abs/2202.11086)
 [![DOI:10.1145/3491101.3519653](https://img.shields.io/badge/DOI-10.1145/3491101.3519653-blue)](https://doi.org/10.1145/3491101.3519653)
 
@@ -24,7 +25,9 @@ Break the linear presentation of Jupyter Notebooks with sticky cells!
 
 You can try StickyLand directly in your browser without installing anything:
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
+|Fast loading|Full functionality|
+|:---:|:---:|
+|[![Lite](https://gist.githubusercontent.com/xiaohk/9b9f7c8fa162b2c3bc3251a5c9a799b2/raw/c3438b4c49d89e4c367f581520ddd4cf8dac0f41/lite-badge-launch-small.svg)](https://xiaohk.github.io/stickyland/)|[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)|
 
 ## Install
 
