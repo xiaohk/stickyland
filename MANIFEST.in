@@ -2,6 +2,9 @@ include LICENSE
 include *.md
 include pyproject.toml
 
+examples/requirements.txt
+
+recursive-include examples *.txt
 recursive-exclude examples *.ipynb
 
 include package.json
