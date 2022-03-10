@@ -13,12 +13,13 @@ Break the linear presentation of Jupyter Notebooks with sticky cells!
 
 <table>
   <tr>
-    <td colspan="2"><img src='https://i.imgur.com/FtmHafo.png'></td>
+    <td colspan="3"><img src='https://i.imgur.com/FtmHafo.png'></td>
   </tr>
   <tr></tr>
   <tr>
-    <td><a href="https://youtu.be/OKaPmEBzEX0">📺 Demo Video</a></td>
-    <td><a href="https://arxiv.org/abs/2202.11086">📖 Paper: "StickyLand: Breaking the Linear Presentation of Computational Notebooks"</a></td>
+    <td><a href="https://youtu.be/EQflkVIIARY">👨🏻‍🏫 Talk</a></td>
+    <td><a href="https://youtu.be/OKaPmEBzEX0">📺 Video</a></td>
+    <td><a href="https://arxiv.org/abs/2202.11086">📖 Paper "StickyLand: Breaking the Linear Presentation of Computational Notebooks"</a></td>
   </tr>
 </table>
 
