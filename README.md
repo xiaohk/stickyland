@@ -19,7 +19,7 @@ Break the linear presentation of Jupyter Notebooks with sticky cells!
   <tr>
     <td><a href="https://youtu.be/EQflkVIIARY">👨🏻‍🏫 Talk</a></td>
     <td><a href="https://youtu.be/OKaPmEBzEX0">📺 Video</a></td>
-    <td><a href="https://arxiv.org/abs/2202.11086">📖 Paper "StickyLand: Breaking the Linear Presentation of Computational Notebooks"</a></td>
+    <td><a href="https://arxiv.org/abs/2202.11086">📖 Paper 'StickyLand: Breaking the Linear Presentation of Computational Notebooks'</a></td>
   </tr>
 </table>
 
