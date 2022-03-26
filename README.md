@@ -19,7 +19,7 @@ Break the linear presentation of Jupyter Notebooks with sticky cells!
   <tr>
     <td><a href="https://youtu.be/EQflkVIIARY">👨🏻‍🏫 Talk</a></td>
     <td><a href="https://youtu.be/OKaPmEBzEX0">📺 Video</a></td>
-    <td><a href="https://arxiv.org/abs/2202.11086">📖 Paper 'StickyLand: Breaking the Linear Presentation of Computational Notebooks'</a></td>
+    <td><a href="https://arxiv.org/abs/2202.11086">📖 "StickyLand: breaking the linear presentation of computational Notebooks"</a></td>
   </tr>
 </table>
 
@@ -61,7 +61,7 @@ pip install stickyland
 
 ---
 
-With multiple floating cells, users can create a fully-fledged interactive dashboard. For example, a machine learning engineer can build an ML Error Analysis Dashboard (shown below) through simple drag-and-drop.
+With multiple floating cells, users can create a full-fledged interactive dashboard. For example, a machine learning engineer can build an ML Error Analysis Dashboard (shown below) through simple drag-and-drop.
 
 <table>
   <tr><td><img src="https://i.imgur.com/KN51RQV.png"></td></tr>

@@ -36,7 +36,13 @@ export class FloatingWindow implements IDisposable {
     // Create the floating window element
     this.node = document.createElement('div');
     this.node.classList.add('floating-window', 'hidden');
-    document.querySelector('#jp-main-content-panel')?.appendChild(this.node);
+
+    // Append the floating window to different elements for notebook/lab
+    if (document.querySelector('#jp-main-content-panel') !== null) {
+      document.querySelector('#jp-main-content-panel')?.appendChild(this.node);
+    } else {
+      document.querySelector('#main-panel')?.appendChild(this.node);
+    }
 
     // Add a top header to the window
     this.header = document.createElement('div');
@@ -133,6 +139,15 @@ export class FloatingWindow implements IDisposable {
     );
     this.node.append(floatingContent);
 
+    // Set the initial width to fit the codemirror default width
+    const cmSizer = this.node.querySelector(
+      '.CodeMirror-sizer'
+    ) as HTMLElement | null;
+
+    if (cmSizer !== null) {
+      this.node.style.width = `${parseInt(cmSizer.style.minWidth) + 20}px`;
+    }
+
     // Register the end position
     this.registerEndPos();
 
@@ -204,8 +219,7 @@ export class FloatingWindow implements IDisposable {
         ],
         {
           duration: 200,
-          easing: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
-          fill: 'both'
+          easing: 'cubic-bezier(0.4, 0.0, 0.2, 1)'
         }
       );
     }
@@ -243,8 +257,7 @@ export class FloatingWindow implements IDisposable {
         ],
         {
           duration: 350,
-          easing: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
-          fill: 'both'
+          easing: 'cubic-bezier(0.0, 0.0, 0.2, 1)'
         }
       );
 
