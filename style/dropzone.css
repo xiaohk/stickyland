@@ -10,7 +10,7 @@
   width: 100%;
   margin: 10px;
   flex-grow: 1;
-  border: 3px dashed var(--md-grey-400);
+  border: 3px dashed var(--jp-border-color0);
   border-radius: 12px;
   transition: border 300ms ease-in-out;
 }
@@ -22,7 +22,7 @@
 .dropzone .dropzone-label {
   text-align: center;
   margin: 10px 10px 30px 10px;
-  color: var(--md-grey-700);
+  color: var(--jp-inverse-layout-color3);
   /* Avoid triggering drag over */
   pointer-events: none;
 }
@@ -30,7 +30,7 @@
 .dropzone .svg-icon {
   width: 2em;
   height: 2em;
-  fill: var(--md-grey-400);
+  fill: var(--jp-border-color0);
   pointer-events: none;
 }
 
@@ -42,7 +42,7 @@
 }
 
 .dropzone-bottom-container .button {
-  border: 1px solid hsl(0, 0%, 85.9%);
+  border: 1px solid var(--jp-border-color2);
   height: 22px;
 }
 
@@ -59,8 +59,8 @@
 
 /* Use a slightly modified select style from jupyter lab toolbar */
 .dropzone-select-container select {
-  background-color: white;
-  border: 1px solid hsl(0, 0%, 85.9%);
+  background-color: var(--jp-layout-color1);
+  border: 1px solid var(--jp-border-color2);
   border-radius: 0.375em;
   box-shadow: none;
   color: var(--jp-ui-font-color0);
@@ -76,10 +76,9 @@
 }
 
 .dropzone-select-container select:hover {
-  border-color: hsl(0, 0%, 71%);
+  border-color: var(--jp-border-color0);
 }
 
 .dropzone-select-container select:active {
-  background-color: var(--md-grey-100);
-  border-color: hsl(0, 0%, 40%);
+  border-color: var(--jp-border-color0);
 }

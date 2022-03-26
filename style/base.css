@@ -41,7 +41,8 @@
 
 .sticky-container .button {
   color: var(--jp-ui-font-color0);
-  background-color: white;
+  background-color: var(--jp-layout-color1);
+  border: 1px solid var(--jp-layout-color1);
   cursor: pointer;
 
   padding: 0px 5px;
@@ -57,12 +58,7 @@
 }
 
 .sticky-container .button:hover {
-  border-color: hsl(0, 0%, 71%);
-}
-
-.sticky-container .button:active {
-  border-color: hsl(0, 0%, 40%);
-  background-color: var(--md-grey-100);
+  background-color: var(--jp-layout-color2);
 }
 
 .sticky-tab-bar {
@@ -149,7 +145,7 @@
 }
 
 .sticky-tab button:hover {
-  background: white;
+  background: var(--jp-layout-color1);
 }
 
 .sticky-header {
@@ -178,6 +174,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  z-index: 1;
 }
 
 .sticky-content .header {
@@ -188,7 +185,7 @@
 .sticky-content .content {
   flex-grow: 1;
   width: 100%;
-  background-color: white;
+  background-color: var(--jp-layout-color1);
   padding-bottom: 5px;
 
   display: flex;
@@ -262,7 +259,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 1px solid white;
+  border: 1px solid var(--jp-layout-color1);
   content: '';
   bottom: 0px;
   left: 0px;
