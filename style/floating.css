@@ -14,6 +14,7 @@
   min-width: 270px;
   min-height: 140px;
   resize: both;
+  cursor: initial;
 }
 
 .floating-window .floating-header {
@@ -24,6 +25,9 @@
   color: var(--md-grey-200);
   border: 1px solid var(--jp-layout-color4);
 
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+
   position: relative;
   display: flex;
   justify-content: center;
@@ -32,6 +36,9 @@
 
 .floating-window .sticky-content {
   height: calc(100% - 24px);
+
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .floating-window .button-group {
