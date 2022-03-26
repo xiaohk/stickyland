@@ -47,12 +47,12 @@
     "release": "npm version patch --sign-git-tag && python -m build && twine upload dist/* && npm publish"
   },
   "dependencies": {
-    "@jupyterlab/application": "^4.0.0-alpha.7",
-    "@jupyterlab/apputils": "^4.0.0-alpha.7",
-    "@jupyterlab/notebook": "^4.0.0-alpha.7"
+    "@jupyterlab/application": "^3.2.2",
+    "@jupyterlab/apputils": "^3.2.2",
+    "@jupyterlab/notebook": "^3.2.2"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^4.0.0-alpha.7",
+    "@jupyterlab/builder": "^3.1.0",
     "@types/codemirror": "^5.60.5",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
     "@typescript-eslint/parser": "^5.3.0",
