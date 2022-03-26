@@ -13,10 +13,19 @@ type Position = {
   height: number;
 };
 
+type Size = {
+  width: number;
+  height: number;
+};
+
+const WINDOW_GAP = 5;
+
 /**
  * Class that implements the Code cell in StickyLand.
  */
 export class FloatingWindow implements IDisposable {
+  container: HTMLElement | null;
+  containerSize: Size;
   node: HTMLElement;
   stickyCell: StickyCode | StickyMarkdown;
   stickyTab: StickyTab;
@@ -39,9 +48,27 @@ export class FloatingWindow implements IDisposable {
 
     // Append the floating window to different elements for notebook/lab
     if (document.querySelector('#jp-main-content-panel') !== null) {
-      document.querySelector('#jp-main-content-panel')?.appendChild(this.node);
+      this.container = document.querySelector('#jp-main-content-panel');
     } else {
-      document.querySelector('#main-panel')?.appendChild(this.node);
+      this.container = document.querySelector('#main-panel');
+    }
+    this.container?.appendChild(this.node);
+
+    if (this.container === null) {
+      console.warn(
+        'StickyLand: Cannot find container to inject the floating cell!'
+      );
+    }
+
+    // Set max size to bound the floating window
+    this.containerSize = {
+      width: 2000,
+      height: 1500
+    };
+    if (this.container !== null) {
+      const containerBBox = this.container.getBoundingClientRect();
+      this.containerSize.width = containerBBox.width;
+      this.containerSize.height = containerBBox.height;
     }
 
     // Add a top header to the window
@@ -62,11 +89,16 @@ export class FloatingWindow implements IDisposable {
 
     // Position the node to the inner region and offset it a little bit when
     // users create multiple windows
-    this.node.style.left = `${
-      initLeft + this.stickyLand.floatingWindows.length * 20
+    const curLeft = initLeft + this.stickyLand.floatingWindows.length * 20;
+    const curTop = 100 + this.stickyLand.floatingWindows.length * 20;
+    this.node.style.left = `${curLeft}px`;
+    this.node.style.top = `${curTop}px`;
+
+    this.node.style.maxWidth = `${
+      this.containerSize.width - curLeft - WINDOW_GAP
     }px`;
-    this.node.style.top = `${
-      100 + this.stickyLand.floatingWindows.length * 20
+    this.node.style.maxHeight = `${
+      this.containerSize.height - curTop - WINDOW_GAP
     }px`;
 
     // Query the cell index for this cell
@@ -128,7 +160,7 @@ export class FloatingWindow implements IDisposable {
     launchIcon?.classList.add('no-display');
 
     // Register the start position
-    this.registerStartPos();
+    this.startPos = this.registerStartPos();
 
     // Add the content from the cell to the floating window
     const floatingContent = this.stickyCell.stickyContent.wrapperNode.cloneNode(
@@ -149,7 +181,10 @@ export class FloatingWindow implements IDisposable {
     }
 
     // Register the end position
-    this.registerEndPos();
+    this.endPos = this.registerEndPos();
+
+    // Override the auto height from code mirror
+    this.node.style.height = `${this.endPos.height}px`;
 
     // Play the animation
     this.node.classList.remove('hidden');
@@ -168,7 +203,7 @@ export class FloatingWindow implements IDisposable {
 
     const headerHeight = 28;
 
-    this.startPos = {
+    return {
       x: bbox.x,
       y: bbox.y - headerHeight,
       width: bbox.width,
@@ -183,7 +218,7 @@ export class FloatingWindow implements IDisposable {
     // pass
     const bbox = this.node.getBoundingClientRect();
 
-    this.endPos = {
+    return {
       x: bbox.x,
       y: bbox.y,
       width: bbox.width,
@@ -412,16 +447,38 @@ export class FloatingWindow implements IDisposable {
       e.stopPropagation();
       const mouseEvent = e as MouseEvent;
 
-      const newX =
-        this.node.offsetLeft + mouseEvent.pageX - this.lastMousePos[0];
-      const newY =
-        this.node.offsetTop + mouseEvent.pageY - this.lastMousePos[1];
+      let newX = this.node.offsetLeft + mouseEvent.pageX - this.lastMousePos[0];
+      let newY = this.node.offsetTop + mouseEvent.pageY - this.lastMousePos[1];
 
       this.lastMousePos[0] = mouseEvent.pageX;
       this.lastMousePos[1] = mouseEvent.pageY;
 
+      const nodeBBox = this.node.getBoundingClientRect();
+
+      // Bound x and y so the window is not out of its container
+      const maxNewX = this.containerSize.width - nodeBBox.width - WINDOW_GAP;
+      newX = Math.max(0, newX);
+      newX = Math.min(maxNewX, newX);
+
+      const maxNewY = this.containerSize.height - nodeBBox.height - WINDOW_GAP;
+      newY = Math.max(0, newY);
+      newY = Math.min(maxNewY, newY);
+
       this.node.style.left = `${newX}px`;
       this.node.style.top = `${newY}px`;
+
+      // Also bound the max width and max height to avoid resize overflow
+      if (newX !== maxNewX) {
+        this.node.style.maxWidth = `${
+          this.containerSize.width - newX - WINDOW_GAP
+        }px`;
+      }
+
+      if (newY !== maxNewY) {
+        this.node.style.maxHeight = `${
+          this.containerSize.height - newY - WINDOW_GAP
+        }px`;
+      }
     };
 
     const mouseUpHandler = () => {
