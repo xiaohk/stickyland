@@ -8,6 +8,13 @@ import { MyIcons } from './icons';
 
 const MIN_WIDTH = 235;
 const MIN_HEIGHT = 240;
+const WINDOW_GAP = 29;
+
+type ContainerPos = {
+  width: number;
+  height: number;
+  y: number;
+};
 
 export class StickyLand {
   node: HTMLElement;
@@ -15,6 +22,7 @@ export class StickyLand {
   stickyTab: StickyTab;
   stickyContent: StickyContent | null = null;
   floatingWindows: FloatingWindow[] = [];
+  containerSize: ContainerPos;
 
   constructor(panel: NotebookPanel) {
     this.node = document.createElement('div');
@@ -29,6 +37,23 @@ export class StickyLand {
     this.header = document.createElement('div');
     this.header.classList.add('sticky-header');
     this.node.appendChild(this.header);
+
+    // Bound the window position inside its parent when dragging the header
+    if (this.node.parentElement) {
+      const containerBBox = this.node.parentElement.getBoundingClientRect();
+      this.containerSize = {
+        width: containerBBox.width,
+        height: containerBBox.height,
+        y: containerBBox.y
+      };
+    } else {
+      console.warn('Could not find stickyland container parent.');
+      this.containerSize = {
+        width: 2000,
+        height: 1500,
+        y: 0
+      };
+    }
 
     this.initHeader();
 
@@ -166,10 +191,14 @@ export class StickyLand {
       e.preventDefault();
       e.stopPropagation();
       const mouseEvent = e as MouseEvent;
-
       const newTop = mouseEvent.pageY + yOffset;
 
-      this.node.style.top = `${newTop}px`;
+      const nodeBBox = this.node.getBoundingClientRect();
+      const maxNewY = this.containerSize.height - nodeBBox.height;
+      let newY = Math.max(WINDOW_GAP, newTop);
+      newY = Math.min(maxNewY, newY);
+
+      this.node.style.top = `${newY}px`;
     };
 
     const mouseUpHandler = () => {

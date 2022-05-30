@@ -1,11 +1,10 @@
-
 .sticky-button.jp-Button.minimal .jp-Icon {
   color: var(--jp-inverse-layout-color3);
 }
 
 .sticky-container {
   position: absolute;
-  z-index: 5;
+  z-index: 7;
   right: 0px;
   opacity: 0.97;
 
@@ -13,7 +12,7 @@
   border-bottom-left-radius: 5px;
 
   box-shadow: -1px 1px 3px hsla(0, 0%, 0%, 0.15),
-  -1px 1px 20px hsla(0, 0%, 0%, 0.1);
+    -1px 1px 20px hsla(0, 0%, 0%, 0.1);
   width: 300px;
   height: 300px;
 
@@ -48,7 +47,7 @@
   padding: 0px 5px;
   text-align: center;
   white-space: nowrap;
-  border-radius: .375em;
+  border-radius: 0.375em;
   box-shadow: none;
 
   display: inline-flex;
@@ -87,7 +86,7 @@
   text-align: left;
   min-width: 40px;
 
-  border-top: 2px solid #1976D2;
+  border-top: 2px solid #1976d2;
   border-radius: 0;
 
   position: relative;
@@ -111,7 +110,7 @@
   min-height: 20px;
 }
 
-.sticky-tab button.add-tab svg{
+.sticky-tab button.add-tab svg {
   fill: var(--jp-inverse-layout-color3);
   color: var(--jp-inverse-layout-color3);
   display: block;
