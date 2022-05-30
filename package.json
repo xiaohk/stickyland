@@ -1,6 +1,6 @@
 {
   "name": "jupyterlab-stickyland",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Break free from the linear presentation of Jupyter Notebooks with sticky cells!",
   "keywords": [
     "jupyter",
