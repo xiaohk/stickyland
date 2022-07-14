@@ -36,7 +36,7 @@ You can try StickyLand directly in your browser without installing anything:
 First, you need to install JupyterLab. Then you can install StickyLand with `pip`:
 
 ```bash
-pip install stickyland
+pip install jupyterlab-stickyland
 ```
 
 ## Features
