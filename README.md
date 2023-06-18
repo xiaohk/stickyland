@@ -39,6 +39,9 @@ First, you need to install JupyterLab. Then you can install StickyLand with `pip
 pip install stickyland
 ```
 
+> **Note**
+> StickyLand only supports `JupyterLab <= 3.6.4`. In June 2023, `JupyterLab 4.0` was released with a lot of breaking changes. I will update StickyLand to support `JupyterLab 4.0` when the official extension documentation is more polished. Any contribution to the [`lab4`](https://github.com/xiaohk/stickyland/tree/lab4) branch is greatly appreciated!
+
 ## Features
 
 ![feature-gif](https://user-images.githubusercontent.com/15007159/155863418-c4e616fa-a003-4d6c-ba12-74cdb22d9bf4.gif)
