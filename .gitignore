@@ -115,3 +115,4 @@ dmypy.json
 # OSX files
 .DS_Store
 lite/
+.yarn/

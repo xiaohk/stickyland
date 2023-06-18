@@ -1,17 +1,58 @@
+import { JupyterFrontEnd } from '@jupyterlab/application';
 import { ToolbarButton } from '@jupyterlab/apputils';
+import { IDocumentManager } from '@jupyterlab/docmanager';
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
-import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
+import { Widget } from '@lumino/widgets';
+import {
+  NotebookPanel,
+  INotebookModel,
+  INotebookTracker
+} from '@jupyterlab/notebook';
 import { StickyLand } from './stickyland';
 
 export class ButtonExtension
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
 {
   // This maps each stickyLand object to a notebook title
-  stickyLandMap: Map<string, StickyLand> | null;
+  stickyLandMap: Map<string, StickyLand>;
+  shell: JupyterFrontEnd.IShell;
+  notebookTracker: INotebookTracker;
+  documentManager: IDocumentManager;
 
-  constructor() {
-    this.stickyLandMap = new Map();
+  constructor(
+    shell: JupyterFrontEnd.IShell,
+    notebookTracker: INotebookTracker,
+    documentManager: IDocumentManager
+  ) {
+    this.shell = shell;
+    this.stickyLandMap = new Map<string, StickyLand>();
+    this.notebookTracker = notebookTracker;
+    this.documentManager = documentManager;
+
+    // Listen to the notebook tracker to update stickyLandMap when a user closes
+    // a notebook
+    this.notebookTracker.currentChanged.connect((sender, panel) => {
+      setTimeout(() => {
+        const widgetIter = this.shell.widgets();
+        const openPaths: Set<string> = new Set();
+        let nextWidget = widgetIter.next();
+        while (nextWidget !== undefined) {
+          const context = this.documentManager.contextForWidget(nextWidget);
+          if (context !== undefined) {
+            openPaths.add(context.path);
+          }
+          nextWidget = widgetIter.next();
+        }
+
+        // Remove stickylands where their associated notebooks are closed
+        for (const path of this.stickyLandMap.keys()) {
+          if (!openPaths.has(path)) {
+            this.stickyLandMap.delete(path);
+          }
+        }
+      }, 500);
+    });
   }
 
   createNew(
