@@ -78,7 +78,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.10'
           architecture: 'x64'
       - uses: actions/download-artifact@v2
         with:
@@ -91,5 +91,5 @@ jobs:
           sudo rm -rf $(which node)
           pip install myextension.tar.gz
           pip install jupyterlab
-          jupyter labextension list 2>&1 | grep -ie "jupyterlab-stickyland.*OK"
           python -m jupyterlab.browser_check --no-chrome-test
+          jupyter labextension list 2>&1 | grep -ie "jupyterlab-stickyland.*OK"
