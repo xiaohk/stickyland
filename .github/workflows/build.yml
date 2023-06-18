@@ -90,6 +90,6 @@ jobs:
           sudo rm -rf $(which node)
           sudo rm -rf $(which node)
           pip install myextension.tar.gz
-          pip install jupyterlab<=3.6.4
+          pip install "jupyterlab<=3.6.4"
           python -m jupyterlab.browser_check --no-chrome-test
           jupyter labextension list 2>&1 | grep -ie "jupyterlab-stickyland.*OK"
