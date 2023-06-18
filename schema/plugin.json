@@ -1,0 +1,15 @@
+{
+  "jupyter.lab.toolbars": {
+    "Notebook": [
+      {
+        "name": "clear-all-outputs",
+        "command": "notebook:clear-all-cell-outputs"
+      }
+    ]
+  },
+  "title": "jupyterlab-stickyland",
+  "description": "jupyterlab-stickyland settings.",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}

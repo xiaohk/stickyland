@@ -1,0 +1,15 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.0.5
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: jay@zijie.wang, kdai7@gatech.edu
+author_name: Jay Wang, Katie Dai
+has_binder: false
+has_settings: false
+kind: frontend
+labextension_name: jupyterlab-stickyland
+project_short_description: Break free from the linear presentation of Jupyter Notebooks
+    with sticky cells!
+python_name: jupyterlab_stickyland
+repository: https://github.com/xiaohk/stickyland.git
+test: false
+

@@ -462,7 +462,7 @@ export class StickyCode implements IDisposable {
     this.notebook.content.activeCellIndex = cellIndex;
 
     // Blur the focused editor
-    this.cell.editor.blur();
+    this.cell.editor?.blur();
 
     // Run the active cell
     const runPromise = NotebookActions.run(

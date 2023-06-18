@@ -233,8 +233,8 @@ export class StickyMarkdown implements IDisposable {
     this.cell.rendered = false;
 
     // Move the cursor on the first line before the first character
-    this.cell.editor.focus();
-    this.cell.editor.setCursorPosition({ line: 0, column: 0 });
+    this.cell.editor?.focus();
+    this.cell.editor?.setCursorPosition({ line: 0, column: 0 });
   };
 
   /**

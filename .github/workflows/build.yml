@@ -2,71 +2,53 @@ name: Build
 
 on:
   push:
-    branches: master
+    branches: main
   pull_request:
     branches: '*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
-    - name: Install node
-      uses: actions/setup-node@v1
-      with:
-       node-version: '14.x'
-    - name: Install Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
-        architecture: 'x64'
+      uses: actions/checkout@v3
 
-    - name: Setup pip cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.cache/pip
-        key: pip-3.8-${{ hashFiles('package.json') }}
-        restore-keys: |
-          pip-3.8-
-          pip-
-
-    - name: Get yarn cache directory path
-      id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
-    - name: Setup yarn cache
-      uses: actions/cache@v2
-      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-      with:
-        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          yarn-
+    - name: Base Setup
+      uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
 
     - name: Install dependencies
-      run: python -m pip install -U jupyterlab~=3.1 check-manifest
-    - name: Build the extension
+      run: python -m pip install -U "jupyterlab>=4.0.0,<5"
+
+    - name: Lint the extension
       run: |
         set -eux
         jlpm
-        jlpm run eslint:check
-        python -m pip install .
+        jlpm run lint:check
 
+    - name: Build the extension
+      run: |
+        set -eux
+        python -m pip install .[test]
+
+        jupyter labextension list
         jupyter labextension list 2>&1 | grep -ie "jupyterlab-stickyland.*OK"
         python -m jupyterlab.browser_check
 
-        check-manifest -v
+    - name: Package the extension
+      run: |
+        set -eux
 
         pip install build
-        python -m build --sdist
-        cp dist/*.tar.gz myextension.tar.gz
-        pip uninstall -y myextension jupyterlab
-        rm -rf myextension
+        python -m build
+        pip uninstall -y "jupyterlab_stickyland" jupyterlab
 
-    - uses: actions/upload-artifact@v2
+    - name: Upload extension packages
+      uses: actions/upload-artifact@v3
       with:
-        name: myextension-sdist
-        path: myextension.tar.gz
+        name: extension-artifacts
+        path: dist/jupyterlab_stickyland*
+        if-no-files-found: error
 
   test_isolated:
     needs: build
@@ -74,22 +56,35 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Install Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
-        python-version: '3.8'
+        python-version: '3.9'
         architecture: 'x64'
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v3
       with:
-        name: myextension-sdist
+        name: extension-artifacts
     - name: Install and Test
       run: |
         set -eux
         # Remove NodeJS, twice to take care of system and locally installed node versions.
         sudo rm -rf $(which node)
         sudo rm -rf $(which node)
-        pip install myextension.tar.gz
-        pip install jupyterlab
+
+        pip install "jupyterlab>=4.0.0,<5" jupyterlab_stickyland*.whl
+
+
+        jupyter labextension list
         jupyter labextension list 2>&1 | grep -ie "jupyterlab-stickyland.*OK"
-        python -m jupyterlab.browser_check --no-chrome-test
+        python -m jupyterlab.browser_check --no-browser-test
+
+
+  check_links:
+    name: Check Links
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v3
+      - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
+      - uses: jupyterlab/maintainer-tools/.github/actions/check-links@v1

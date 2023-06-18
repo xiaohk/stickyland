@@ -14,12 +14,13 @@
   "license": "BSD-3-Clause",
   "author": {
     "name": "Jay Wang, Katie Dai",
-    "email": "jay@zijie.wang, kdai7@gatech.edu"
+    "email": "jay@zijie.wang"
   },
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
     "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
-    "style/img/*.{svg}"
+    "style/img/*.{svg}",
+    "style/index.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -29,38 +30,60 @@
     "url": "https://github.com/xiaohk/stickyland.git"
   },
   "scripts": {
-    "build": "jlpm run build:lib && jlpm run build:labextension:dev",
-    "build:prod": "jlpm run clean && jlpm run build:lib && jlpm run build:labextension",
+    "build": "jlpm build:lib && jlpm build:labextension:dev",
     "build:labextension": "jupyter labextension build .",
     "build:labextension:dev": "jupyter labextension build --development True .",
-    "build:lib": "tsc",
-    "clean": "jlpm run clean:lib",
+    "build:lib": "tsc --sourceMap",
+    "build:lib:prod": "tsc",
+    "build:prod": "jlpm clean && jlpm build:lib:prod && jlpm build:labextension",
+    "clean": "jlpm clean:lib",
+    "clean:all": "jlpm clean:lib && jlpm clean:labextension && jlpm clean:lintcache",
+    "clean:labextension": "rimraf jupyterlab_stickyland/labextension jupyterlab_stickyland/_version.py",
     "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
-    "clean:labextension": "rimraf jupyterlab_stickyland/labextension",
-    "clean:all": "jlpm run clean:lib && jlpm run clean:labextension",
-    "eslint": "eslint . --ext .ts,.tsx --fix",
-    "eslint:check": "eslint . --ext .ts,.tsx",
-    "install:extension": "jlpm run build",
+    "clean:lintcache": "rimraf .eslintcache .stylelintcache",
+    "eslint": "jlpm eslint:check --fix",
+    "eslint:check": "eslint . --cache --ext .ts,.tsx",
+    "install:extension": "jlpm build",
+    "lint": "jlpm stylelint && jlpm prettier && jlpm eslint",
+    "lint:check": "jlpm stylelint:check && jlpm prettier:check && jlpm eslint:check",
+    "prettier": "jlpm prettier:base --write --list-different",
+    "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
+    "prettier:check": "jlpm prettier:base --check",
+    "release": "npm version patch --sign-git-tag && python -m build && twine upload dist/* && npm publish",
+    "stylelint": "jlpm stylelint:check --fix",
+    "stylelint:check": "stylelint --cache \"style/**/*.css\"",
     "watch": "run-p watch:src watch:labextension",
-    "watch:src": "tsc -w",
     "watch:labextension": "jupyter labextension watch .",
-    "release": "npm version patch --sign-git-tag && python -m build && twine upload dist/* && npm publish"
+    "watch:src": "tsc -w --sourceMap"
   },
   "dependencies": {
-    "@jupyterlab/application": "^3.2.2",
-    "@jupyterlab/apputils": "^3.2.2",
-    "@jupyterlab/notebook": "^3.2.2"
+    "@jupyterlab/application": "^4.0.2",
+    "@jupyterlab/apputils": "^4.1.2",
+    "@jupyterlab/notebook": "^4.0.2"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^3.1.0",
-    "@types/codemirror": "^5.60.5",
-    "@typescript-eslint/eslint-plugin": "^5.3.0",
-    "@typescript-eslint/parser": "^5.3.0",
-    "eslint": "^8.1.0",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.1.4",
+    "@jupyterlab/builder": "^4.0.0",
+    "@types/codemirror": "^5.60.8",
+    "@types/json-schema": "^7.0.11",
+    "@types/react": "^18.0.26",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.1.1"
+    "prettier": "^2.8.7",
+    "rimraf": "^4.4.1",
+    "source-map-loader": "^1.0.2",
+    "style-loader": "^3.3.1",
+    "stylelint": "^14.9.1",
+    "stylelint-config-prettier": "^9.0.4",
+    "stylelint-config-recommended": "^8.0.0",
+    "stylelint-config-standard": "^26.0.0",
+    "stylelint-prettier": "^2.0.0",
+    "typescript": "~5.0.2",
+    "yjs": "^13.5.40"
   },
   "sideEffects": [
     "style/*.css",
