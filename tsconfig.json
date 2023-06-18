@@ -18,7 +18,8 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ESNext",
-    "types": []
+    "types": [],
+    "skipLibCheck": true
   },
   "include": ["src/*"]
 }
