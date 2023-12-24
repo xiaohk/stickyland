@@ -1,6 +1,7 @@
 # StickyLand
 
 <!-- [![Lite](https://gist.githubusercontent.com/xiaohk/9b9f7c8fa162b2c3bc3251a5c9a799b2/raw/c3438b4c49d89e4c367f581520ddd4cf8dac0f41/lite-badge-launch-small.svg)](https://xiaohk.github.io/stickyland/) -->
+
 [![Github Actions Status](https://github.com/xiaohk/stickyland/workflows/Build/badge.svg)](https://github.com/xiaohk/stickyland/actions/workflows/build.yml)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)
 [![Lite](https://gist.githubusercontent.com/xiaohk/9b9f7c8fa162b2c3bc3251a5c9a799b2/raw/a7fca1d0a2d62c2b49f60c0217dffbd0fe404471/lite-badge-launch-small.svg)](https://xiaohk.github.io/stickyland/)
@@ -27,9 +28,9 @@ Break the linear presentation of Jupyter Notebooks with sticky cells!
 
 You can try StickyLand directly in your browser without installing anything:
 
-|Fast loading|Full functionality|
-|:---:|:---:|
-|[![Lite](https://gist.githubusercontent.com/xiaohk/9b9f7c8fa162b2c3bc3251a5c9a799b2/raw/a7fca1d0a2d62c2b49f60c0217dffbd0fe404471/lite-badge-launch-small.svg)](https://xiaohk.github.io/stickyland/)|[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb)|
+|                                                                                             Fast loading                                                                                             |                                                                 Full functionality                                                                  |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------: |
+| [![Lite](https://gist.githubusercontent.com/xiaohk/9b9f7c8fa162b2c3bc3251a5c9a799b2/raw/a7fca1d0a2d62c2b49f60c0217dffbd0fe404471/lite-badge-launch-small.svg)](https://xiaohk.github.io/stickyland/) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/xiaohk/stickyland/master?urlpath=lab/tree/examples/example-adult.ipynb) |
 
 ## Install
 
@@ -40,7 +41,7 @@ pip install stickyland
 ```
 
 > **Note**
-> StickyLand only supports `JupyterLab <= 3.6.4`. In June 2023, `JupyterLab 4.0` was released with a lot of breaking changes. I will update StickyLand to support `JupyterLab 4.0` when the official extension documentation is more polished. Any contribution to the [`lab4`](https://github.com/xiaohk/stickyland/tree/lab4) branch is greatly appreciated!
+> StickyLand only supports `JupyterLab < 4`. In June 2023, `JupyterLab 4.0` was released with a lot of breaking changes. I will update StickyLand to support `JupyterLab 4.0` when the official extension documentation is more polished. Any contribution to the [`lab4`](https://github.com/xiaohk/stickyland/tree/lab4) branch is greatly appreciated!
 
 ## Features
 
